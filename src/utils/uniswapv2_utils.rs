@@ -1,0 +1,80 @@
+use crate::crypto_pair::CryptoPair;
+use crate::dex_pool::DexPool;
+use crate::graphql_uniswapv2;
+use crate::utils::common::dec_to_int;
+use rayon::prelude::*;
+use std::collections::HashMap;
+use std::str::FromStr;
+use std::sync::Arc;
+
+use ethereum_types::{Address, U256};
+use rayon::collections::hash_map;
+
+use crate::uniswapv2_pairs::uniswap_pairs::UniswapPairsPairsTokens;
+
+pub fn uniswapv2_unpack_pairs(
+    pairs: graphql_client::Response<graphql_uniswapv2::uniswap_pairs::ResponseData>,
+    pair_map: &mut HashMap<Address, Arc<CryptoPair>>,
+    dex: String,
+    router: Address,
+) {
+    for pair in pairs.data.unwrap().pairs {
+        let uni_pair = DexPool {
+            token0: UniswapPairsPairsTokens {
+                id: Address::from_str(&*pair.token0.id.clone()).unwrap(),
+                name: pair.token0.name.clone(),
+                decimals: pair.token0.decimals.parse::<i32>().unwrap(),
+                symbol: pair.token0.symbol.clone(),
+                reserve: U256::from_dec_str(&pair.reserve0.to_string()).unwrap(),
+            },
+            token1: UniswapPairsPairsTokens {
+                id: Address::from_str(&*pair.token1.id.clone()).unwrap(),
+                name: pair.token1.name.clone(),
+                decimals: pair.token1.decimals.parse::<i32>().unwrap(),
+                symbol: pair.token1.symbol.clone(),
+                reserve: U256::from_dec_str(&pair.reserve1.to_string()).unwrap(),
+            },
+            id: Address::from_str(&pair.id).unwrap(),
+            sqrt_price: Default::default(),
+            liquidity: Default::default(),
+            tick: Default::default(),
+            dex: dex.clone(),
+            router,
+            fee_tier: Default::default(),
+        };
+
+        if !pair_map.contains_key::<Address>(&uni_pair.id) {
+            let pair = Arc::new(CryptoPair::new(uni_pair.clone()));
+            pair_map.insert(uni_pair.id.clone(), pair);
+        } else {
+            let mut pair = pair_map.get_key_value(&uni_pair.id).unwrap();
+            pair_map.insert(uni_pair.id.clone(), Arc::new(CryptoPair::new(uni_pair)));
+        }
+    }
+}
+
+pub fn populate_uniswapv2_pairs(pair_map: &mut HashMap<Address, Arc<CryptoPair>>) {
+    let pairs =
+        graphql_uniswapv2::get_pairs("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2")
+            .unwrap();
+    //dbg!("uniswap - {#:?}", &pairs);
+    uniswapv2_unpack_pairs(
+        pairs,
+        pair_map,
+        " - univ2".to_string(),
+        Address::from_str("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D").unwrap(),
+    );
+}
+
+pub fn populate_sushiswap_pairs(pair_map: &mut HashMap<Address, Arc<CryptoPair>>) {
+    let pairs =
+        graphql_uniswapv2::get_pairs("https://api.thegraph.com/subgraphs/name/sushiswap/exchange")
+            .unwrap();
+    //dbg!("sushi - {#:?}", pairs);
+    uniswapv2_unpack_pairs(
+        pairs,
+        pair_map,
+        " - sushi".to_string(),
+        Address::from_str("0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F").unwrap(),
+    );
+}

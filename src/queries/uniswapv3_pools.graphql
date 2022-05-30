@@ -1,0 +1,23 @@
+query UniswapPools{
+    pools(first: 100, where: {volumeUSD_gt: "500000"}, orderBy: liquidity, orderDirection: desc) {
+        id
+        sqrtPrice
+        liquidity
+        feeTier,
+        token0Price
+        token1Price
+        tick,
+        token0 {
+            id
+            name
+            symbol
+            decimals
+        }
+        token1 {
+            id
+            name
+            symbol
+            decimals
+        }
+    }
+}

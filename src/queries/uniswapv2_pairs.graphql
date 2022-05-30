@@ -1,0 +1,26 @@
+query UniswapPairs {
+    pairs(first:100, where: {volumeUSD_gt: "10000", reserve0_gt: "0", reserve1_gt: "0"}, orderBy: reserveUSD, orderDirection: desc) {
+        id
+        reserveUSD
+        volumeUSD
+        reserve0
+        reserve1
+        reserveETH
+        token0Price
+        token1Price
+        token0 {
+            id
+            name
+            decimals
+            symbol
+
+        }
+        token1 {
+            id
+            name
+            decimals
+            symbol
+
+        }
+    }
+}

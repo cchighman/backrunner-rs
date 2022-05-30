@@ -1,0 +1,1 @@
+Maximize\n  obj: deltaAa - delta_a\n\nSubject To\n  c1: 1096.7 delta_a - delta_b = 1099000\n  c2: R1a + 897.3 delta_b - delta_c - 900 R1a = -0\n  c3: R2a + 797.6 delta_c - deltaAa - R2a R1a = -0\n\nBounds\n  0 <= delta_a\n\nGenerals\n  R2a deltaAa delta_b delta_c delta_a R1a \n\nEnd\n

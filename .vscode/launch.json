@@ -1,0 +1,135 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "lldb",
+			"request": "attach",
+			"program": "${workspaceRoot}/target/debug/backrunner-rs.exe",
+			"name": "Attach",
+            "cwd": "${workspaceRoot}/target/debug/",
+            "sourceLanguages": ["rust"]
+		},
+
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Rust Debug Launch",
+            "program": "${workspaceRoot}/target/debug/backrunner-rs.exe",
+            "args": [],
+            "cwd": "c:/Users/chhighma/source/repos/mev-determined/",
+            "sourceLanguages": ["rust"]
+        },
+		
+
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Debug unit tests in library 'backrunner-rs'",
+			"cargo": {
+				"args": [
+					"test",
+					"--no-run",
+					"--lib",
+					"--package=backrunner-rs"
+				],
+				"filter": {
+					"name": "backrunner-rs",
+					"kind": "lib"
+				}
+			},
+			"args": [],
+			"cwd": "${workspaceFolder}"
+		},
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Debug executable 'backrunner-rs'",
+			"cargo": {
+				"args": [
+					"build",
+					"--bin=backrunner-rs",
+					"--package=backrunner-rs"
+				],
+				"filter": {
+					"name": "backrunner-rs",
+					"kind": "bin"
+				}
+			},
+			"args": [],
+			"cwd": "${workspaceFolder}"
+		},
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Debug unit tests in executable 'backrunner-rs'",
+			"cargo": {
+				"args": [
+					"test",
+					"--no-run",
+					"--bin=backrunner-rs",
+					"--package=backrunner-rs"
+				],
+				"filter": {
+					"name": "backrunner-rs",
+					"kind": "bin"
+				}
+			},
+			"args": [],
+			"cwd": "${workspaceFolder}"
+		},
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Debug example 'convex_solver'",
+			"cargo": {
+				"args": [
+					"build",
+					"--example=convex_solver",
+					"--package=backrunner-rs"
+				],
+				"filter": {
+					"name": "convex_solver",
+					"kind": "example"
+				}
+			},
+			"args": [],
+			"cwd": "${workspaceFolder}"
+		},
+		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "Debug unit tests in example 'convex_solver'",
+			"cargo": {
+				"args": [
+					"test",
+					"--no-run",
+					"--example=convex_solver",
+					"--package=backrunner-rs"
+				],
+				"filter": {
+					"name": "convex_solver",
+					"kind": "example"
+				}
+			},
+			"args": [],
+			"cwd": "${workspaceFolder}"
+		},
+		{
+    "type": "lldb",
+    "request": "launch",
+    "name": "Debug Cargo LLDB",
+    "sourceLanguages": ["rust"],
+    "cargo": {
+        "args": [
+            "+stable-i686-pc-windows-gnu",
+            "build"
+        ]
+    },
+    "program": "${cargo:program}",
+    "args": []
+}
+	]
+}
