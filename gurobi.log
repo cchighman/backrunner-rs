@@ -1,0 +1,2222 @@
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:18:34 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file Optimal Amounts_3537fe9e-6581-432b-ac38-858550bf338d.lp at line 9
+Malformed term in expression
+Neighboring tokens: " - R2a R1a = -0 c4: delta_a >= -0 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:20:08 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:20:51 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:21:01 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:21:10 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:24:57 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file Optimal Amounts_5203f5bb-e44b-4132-8bb8-c83eb8e6771b.lp at line 9
+Malformed term in expression
+Neighboring tokens: " - R2a R1a = -0 c4: delta_a >= -0 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:26:22 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file Optimal Amounts_04b7d49a-b25e-47c6-992b-c1500b2cb310.lp at line 11
+Malformed term in expression
+Neighboring tokens: " - R2a R1a = -0 Bounds 0 <= "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:30:01 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file Optimal Amounts_d925f81b-a341-4fbc-bc63-0efd2b6fe8a7.lp at line 11
+Malformed term in expression
+Neighboring tokens: " - R2a R1a = -0 Bounds 0 <= "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:33:05 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file r.lp at line 1
+LP format file must begin with a keyword
+Neighboring tokens: " " "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:33:30 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file r.lp
+Reading time = 0.01 seconds
+: 0 rows, 0 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 0 columns and 0 nonzeros
+Model fingerprint: 0xf9715da1
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   0.000000e+00   0.000000e+00      0s
+
+Solved in 0 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  0.000000000e+00
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:34:34 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file Optimal Amounts_035c4725-45d0-44ec-b01e-3bb850bf3223.lp at line 11
+Malformed term in expression
+Neighboring tokens: " - R2a R1a = -0 Bounds 0 <= "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:35:27 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file Optimal Amounts_5d406d68-5c5f-41f3-ae4a-f160128f594e.lp at line 7
+Malformed term in expression
+Neighboring tokens: " - 0.997 delta_a delta_b = -0 c2: 900 R1a "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:37:17 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file t.lp at line 0
+LP format file must begin with a keyword
+Neighboring tokens: " "  "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:37:25 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file t.lp at line 0
+LP format file must begin with a keyword
+Neighboring tokens: "  "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:37:35 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file t.lp at line 0
+LP format file must begin with a keyword
+Neighboring tokens: "  "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:38:02 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file t.lp at line 0
+LP format file must begin with a keyword
+Neighboring tokens: "  "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:38:16 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file t.lp at line 0
+LP format file must begin with a keyword
+Neighboring tokens: "  "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:38:22 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file t.lp
+Reading time = 0.00 seconds
+: 0 rows, 1 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 1 columns and 0 nonzeros
+Model fingerprint: 0xb569a9c0
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Presolve time: 0.01s
+
+Solved in 0 iterations and 0.01 seconds (0.00 work units)
+Unbounded model
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:40:02 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file Optimal Amounts_a7006923-2c9e-494b-95ba-bb5db4036f23.lp at line 7
+Malformed term in expression
+Neighboring tokens: " - 0.997 delta_a delta_b = -0 c2: 900 R1a "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:42:11 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file Optimal Amounts_6d842dd2-4830-4719-9c17-80c11d9f47b7.lp at line 7
+Malformed term in expression
+Neighboring tokens: " - 0.997 delta_a delta_b = -0 c2: 900 R1a "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:43:02 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 1
+Malformed term in expression
+Neighboring tokens: " thread 'ArbitragePath :: check' panicked at "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:44:35 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file e.lp
+Reading time = 0.00 seconds
+: 0 rows, 1 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 1 columns and 0 nonzeros
+Model fingerprint: 0xb569a9c0
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Presolve time: 0.00s
+
+Solved in 0 iterations and 0.00 seconds (0.00 work units)
+Unbounded model
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:53:53 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file Optimal Amounts_1145b9ab-77da-4f23-8f2a-11184301a6a9.lp at line 7
+Malformed term in expression
+Neighboring tokens: " - 0.997 delta_a delta_b = -0 c2: 90 R1a "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:54:52 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 0
+LP format file must begin with a keyword
+Neighboring tokens: "  "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:55:00 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file e.lp
+Reading time = 0.00 seconds
+: 0 rows, 1 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 1 columns and 0 nonzeros
+Model fingerprint: 0xb569a9c0
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Presolve time: 0.01s
+
+Solved in 0 iterations and 0.01 seconds (0.00 work units)
+Unbounded model
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:56:14 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file Optimal Amounts_9433170b-c59c-4369-aee5-87db63425e70.lp at line 7
+Malformed term in expression
+Neighboring tokens: " - 0.997 delta_a delta_b = -0 c2: 90 R1a "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 00:56:51 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file e.lp
+Reading time = 0.00 seconds
+: 0 rows, 1 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 1 columns and 0 nonzeros
+Model fingerprint: 0xb569a9c0
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Presolve time: 0.00s
+
+Solved in 0 iterations and 0.00 seconds (0.00 work units)
+Unbounded model
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 01:07:21 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 7
+Malformed term in expression
+Neighboring tokens: " - R2a R1a = -0 c4: delta_a >= -0 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 01:09:51 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 7
+Malformed term in expression
+Neighboring tokens: " - R2a R1a = 0 c4: delta_a >= -0 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 01:33:55 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file Optimal Amounts_5d68663e-910f-46bf-9f78-d5afc13ce04a.lp at line 7
+Malformed term in expression
+Neighboring tokens: " - 0.997 delta_a delta_b = -0 c2: 71144800000000 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 01:39:28 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 4
+LP format file must begin with a keyword
+Neighboring tokens: " Optimal Amounts Maximize obj: deltaAa - delta_a "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 01:39:59 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed term in expression
+Neighboring tokens: " - 0.997 delta_a delta_b = 0 c2: 71144800000000 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 01:45:03 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file Optimal Amounts_abd0a0e4-a5fb-4c61-ba1f-200c66922f1b.lp at line 7
+Malformed term in expression
+Neighboring tokens: " - 0.997 delta_a delta_b = -0 c2: 99.7 delta_b "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 01:45:40 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed term in expression
+Neighboring tokens: " - 0.997 delta_a delta_b = -0 c2: 99.7 delta_b "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 01:45:45 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed term in expression
+Neighboring tokens: " - 0.997 delta_a delta_b = -0 c2: 99.7 delta_b "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:11:44 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file Optimal Amounts_70a4d8d4-1a36-468c-a686-200aa5948650.lp at line 6
+Malformed term in expression
+Neighboring tokens: " 0.997 delta_a delta_b + 89.73 delta_a - 100 delta_b "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:11:56 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed term in expression
+Neighboring tokens: " - 0.997 delta_a delta_b = -0 c2: 99.7 delta_b "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:12:40 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 4
+Malformed term in expression
+Neighboring tokens: " 0.997 delta_a delta_b + 89.73 delta_a - 100 delta_b "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:14:13 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 4
+Malformed term in expression
+Neighboring tokens: " 0.997 delta_a delta_b + 89.73 delta_a - 100 delta_b "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:14:24 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 4
+Malformed term in expression
+Neighboring tokens: " 0.997 delta_a * delta_b + 89.73 delta_a - 100 delta_b "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:15:05 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed term in expression
+Neighboring tokens: " 0.997 delta_b delta_c + 99.7 delta_b - 90 delta_c "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:16:10 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 4
+Malformed term in expression
+Neighboring tokens: " 0.997 delta_a * 1deltaB + 89.73 delta_a - 100 delta_b "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:16:16 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 4
+Malformed term in expression
+Neighboring tokens: " 0.997 delta_a * 1 delta_b + 89.73 delta_a - 100 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:16:24 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed term in expression
+Neighboring tokens: " 0.997 delta_b delta_c + 99.7 delta_b - 90 delta_c "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:19:16 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 4
+Malformed term in expression
+Neighboring tokens: " 0.997 delta_a * delta_b + 89.73 delta_a - 100 delta_b "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:21:17 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 4
+Malformed term in expression
+Neighboring tokens: " 0.997 delta_a * 1deltaB + 89.73 delta_a - 100 delta_b "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:21:29 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 4
+Malformed term in expression
+Neighboring tokens: " 0.997 delta_a delta_b + 89.73 delta_a - 100 delta_b "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:21:46 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 4
+Malformed term in expression
+Neighboring tokens: " 0.997 delta_a * delta_b + 89.73 delta_a - 100 delta_b "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:22:48 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 4
+Missing space after opening bracket in quadratic expression
+Neighboring tokens: " [-0.997 delta_a * delta_b + 89.73 delta_a - 100 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:23:03 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " + 89.73 delta_a - 100 delta_b ] = 0 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:23:23 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed term in expression
+Neighboring tokens: " 0.997 delta_b * delta_c + 99.7 delta_b - 90 delta_c "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:24:03 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 7
+Malformed quadratic term in expression
+Neighboring tokens: " + 79.76 * delta_c] = 0 c1: delta_a >= "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:24:04 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 7
+Malformed quadratic term in expression
+Neighboring tokens: " + 79.76 * delta_c] = 0 c1: delta_a >= "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:24:49 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 7
+Malformed quadratic term in expression
+Neighboring tokens: " + 79.76 * delta_c] = 0 c1: delta_a >= "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:26:01 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 7
+Malformed quadratic term in expression
+Neighboring tokens: " + 79.76 * delta_c] = 0 c0: delta_a >= "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:26:18 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 7
+Malformed quadratic term in expression
+Neighboring tokens: " + 79.76 * delta_c] = 0 c0: delta_a >= "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:26:27 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Warning: Numeric variable name in LP file ('89.73') - often the result
+         of a constant term in the left-hand side of a constraint.
+
+Read LP format model from file e.lp
+Reading time = 0.02 seconds
+obj: 4 rows, 8 columns, 4 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 4 rows, 8 columns and 4 nonzeros
+Model fingerprint: 0x604ac00e
+Model has 2 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Presolve time: 0.02s
+
+Barrier solved model in 0 iterations and 0.02 seconds (0.00 work units)
+Model is infeasible or unbounded
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:27:27 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " + 79.76 * delta_c] = 0 qc1: [ -0.997 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:32:10 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " + 79.76 * delta_c] = 0 qc1: [ -0.997 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:35:24 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " + 79.76 * delta_c] > 0 qc1: [ -0.997 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:36:51 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " - 100 * deltaAa] = -79.76 * delta_c qc1: "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:38:14 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " - 100 * deltaAa] = 79.76 * delta_c qc1: "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:38:32 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " 100 * deltaAa] = 79.76 * delta_c qc1: [ "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:39:02 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " 79.76 * delta_c] = 0 qc1: [ -0.997 delta_a "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:39:30 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " 79.76 * delta_c] = 0 qc1: [ -0.997 delta_a "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:39:53 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " 79.76 delta_c] = 0 qc1: [ -0.997 delta_a * "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:40:25 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file t.lp
+Reading time = 0.01 seconds
+: 0 rows, 1 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 1 columns and 0 nonzeros
+Model fingerprint: 0xb569a9c0
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Presolve time: 0.01s
+
+Solved in 0 iterations and 0.01 seconds (0.00 work units)
+Unbounded model
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:41:04 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file t.lp
+Reading time = 0.00 seconds
+: 0 rows, 1 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 1 columns and 0 nonzeros
+Model fingerprint: 0xb569a9c0
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Presolve time: 0.02s
+
+Solved in 0 iterations and 0.02 seconds (0.00 work units)
+Unbounded model
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:41:31 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file t.lp
+Reading time = 0.00 seconds
+: 0 rows, 1 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 1 columns and 0 nonzeros
+Model fingerprint: 0xb569a9c0
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Presolve time: 0.01s
+
+Solved in 0 iterations and 0.01 seconds (0.00 work units)
+Unbounded model
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:41:52 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file t.lp
+Reading time = 0.00 seconds
+: 0 rows, 1 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 1 columns and 0 nonzeros
+Model fingerprint: 0xb569a9c0
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Presolve time: 0.01s
+
+Solved in 0 iterations and 0.01 seconds (0.00 work units)
+Unbounded model
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:50:41 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " + 89.73 delta_a -100 delta_b ] = 0 qc2: "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:50:54 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " + 89.73 delta_a - 100 delta_b ] = 0 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:51:17 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " + 89.73 delta_a - 100 delta_b ] = 0 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:52:05 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 5
+Malformed quadratic term in expression
+Neighboring tokens: " + 89.73 delta_a - 100 delta_b ] = 0 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:54:10 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 6
+Malformed quadratic term in expression
+Neighboring tokens: " + 99.7 delta_b - 90 delta_c ] = 0 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:54:32 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 6
+Malformed term in expression
+Neighboring tokens: " - 90 delta_c ] = 0 qc0: [ -0.997 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:54:51 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file e.lp
+Reading time = 0.00 seconds
+obj: 4 rows, 4 columns, 4 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 4 rows, 4 columns and 4 nonzeros
+Model fingerprint: 0xeaf5e5ab
+Model has 3 quadratic constraints
+Variable types: 0 continuous, 4 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [8e+01, 1e+02]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Found heuristic solution: objective -0.0000000
+Presolve removed 4 rows and 4 columns
+Presolve time: 0.00s
+Presolve: All rows and columns removed
+
+Explored 0 nodes (0 simplex iterations) in 0.01 seconds (0.00 work units)
+Thread count was 1 (of 8 available processors)
+
+Solution count 1: -0 
+No other solutions better than -0
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -0.000000000000e+00, best bound -0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 02:58:46 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file e.lp
+Reading time = 0.00 seconds
+obj: 4 rows, 4 columns, 4 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 4 rows, 4 columns and 4 nonzeros
+Model fingerprint: 0xfa39d5aa
+Model has 3 quadratic constraints
+Variable types: 0 continuous, 4 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [8e+01, 1e+02]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Found heuristic solution: objective -0.0000000
+Presolve removed 4 rows and 0 columns
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 1 (of 8 available processors)
+
+Solution count 1: -0 
+No other solutions better than 0
+
+Best objective -0.000000000000e+00, best bound -, gap -
+
+Error 10021: Quadratic equality constraints are non-convex. Set NonConvex parameter to 2 to solve model.
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:13:21 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file i.lp at line 5
+Malformed term in expression
+Neighboring tokens: " - delta_a) * (3 + 0.997 delta_b) = k "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:14:19 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file i.lp at line 4
+Malformed quadratic term in expression
+Neighboring tokens: " 4 - delta_a * 3 + 0.997 delta_b ] = "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:15:00 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file i.lp at line 4
+Malformed quadratic term in expression
+Neighboring tokens: " ( 4 - delta_a ) * ( 3 + 0.997 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:15:01 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file i.lp at line 4
+Malformed quadratic term in expression
+Neighboring tokens: " ( 4 - delta_a ) * ( 3 + 0.997 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:15:03 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file i.lp at line 4
+Malformed quadratic term in expression
+Neighboring tokens: " ( 4 - delta_a ) * ( 3 + 0.997 "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:20:36 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file i.lp at line 4
+Malformed quadratic term in expression
+Neighboring tokens: " 4 - delta_a * 3 + 0.997 delta_b ] = "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:29:55 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file i.lp
+Reading time = 0.00 seconds
+obj: 0 rows, 2 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 2 columns and 0 nonzeros
+Model fingerprint: 0xbd3b6448
+Model has 1 quadratic constraint
+Variable types: 0 continuous, 2 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [3e+00, 4e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Found heuristic solution: objective -0.0000000
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 1 (of 8 available processors)
+
+Solution count 1: -0 
+No other solutions better than 0
+
+Best objective -0.000000000000e+00, best bound -, gap -
+
+Error 10021: Quadratic equality constraints are non-convex. Set NonConvex parameter to 2 to solve model.
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:31:25 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Set parameter NonConvex to value 2
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file i.lp
+Reading time = 0.00 seconds
+obj: 0 rows, 2 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 2 columns and 0 nonzeros
+Model fingerprint: 0xbd3b6448
+Model has 1 quadratic constraint
+Variable types: 0 continuous, 2 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [3e+00, 4e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Found heuristic solution: objective -0.0000000
+Presolve time: 0.00s
+Presolved: 4 rows, 3 columns, 5 nonzeros
+Presolved model has 1 bilinear constraint(s)
+Variable types: 1 continuous, 2 integer (0 binary)
+
+Root relaxation: unbounded, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     2  postponed    0        -0.00000          -      -     -    0s
+*    3     2               2    1196.0000000          -      -   0.3    0s
+
+Explored 47 nodes (3 simplex iterations) in 0.03 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 2: 1196 -0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.196000000000e+03, best bound 1.196000000000e+03, gap 0.0000%
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:32:35 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Set parameter NonConvex to value 2
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file i.lp
+Reading time = 0.00 seconds
+obj: 0 rows, 2 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 2 columns and 0 nonzeros
+Model fingerprint: 0x2d247e4f
+Model has 1 quadratic constraint
+Variable types: 0 continuous, 2 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [3e+00, 4e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Found heuristic solution: objective -0.0000000
+Presolve time: 0.00s
+Presolved: 4 rows, 3 columns, 5 nonzeros
+Presolved model has 1 bilinear constraint(s)
+Variable types: 1 continuous, 2 integer (0 binary)
+
+Root relaxation: unbounded, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  postponed    0        -0.00000          -      -     -    0s
+     0     0  postponed    0        -0.00000          -      -     -    0s
+     0     2  postponed    0        -0.00000          -      -     -    0s
+
+Explored 38 nodes (23 simplex iterations) in 0.03 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: -0 
+No other solutions better than -0
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -0.000000000000e+00, best bound -0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:34:13 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Set parameter NonConvex to value 2
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file i.lp
+Reading time = 0.00 seconds
+obj: 0 rows, 3 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 3 columns and 0 nonzeros
+Model fingerprint: 0x107df74d
+Model has 2 quadratic constraints
+Variable types: 0 continuous, 3 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [3e+00, 4e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Found heuristic solution: objective -0.0000000
+Presolve time: 0.00s
+Presolved: 8 rows, 4 columns, 10 nonzeros
+Presolved model has 2 bilinear constraint(s)
+Variable types: 1 continuous, 3 integer (0 binary)
+
+Root relaxation: unbounded, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     2  postponed    0        -0.00000          -      -     -    0s
+
+Explored 51 nodes (2 simplex iterations) in 0.02 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: -0 
+No other solutions better than -0
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -0.000000000000e+00, best bound -0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:34:22 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file i.lp
+Reading time = 0.00 seconds
+obj: 0 rows, 3 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 3 columns and 0 nonzeros
+Model fingerprint: 0x107df74d
+Model has 2 quadratic constraints
+Variable types: 0 continuous, 3 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [3e+00, 4e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Found heuristic solution: objective -0.0000000
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.01 seconds (0.00 work units)
+Thread count was 1 (of 8 available processors)
+
+Solution count 1: -0 
+No other solutions better than 0
+
+Best objective -0.000000000000e+00, best bound -, gap -
+
+Error 10021: Quadratic equality constraints are non-convex. Set NonConvex parameter to 2 to solve model.
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:34:25 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Set parameter NonConvex to value 2
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file i.lp
+Reading time = 0.00 seconds
+obj: 0 rows, 3 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 3 columns and 0 nonzeros
+Model fingerprint: 0x107df74d
+Model has 2 quadratic constraints
+Variable types: 0 continuous, 3 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [3e+00, 4e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Found heuristic solution: objective -0.0000000
+Presolve time: 0.00s
+Presolved: 8 rows, 4 columns, 10 nonzeros
+Presolved model has 2 bilinear constraint(s)
+Variable types: 1 continuous, 3 integer (0 binary)
+
+Root relaxation: unbounded, 0 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     2  postponed    0        -0.00000          -      -     -    0s
+
+Explored 51 nodes (2 simplex iterations) in 0.02 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: -0 
+No other solutions better than -0
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -0.000000000000e+00, best bound -0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:34:38 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Set parameter NonConvex to value 2
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file i.lp
+Reading time = 0.00 seconds
+obj: 0 rows, 3 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 3 columns and 0 nonzeros
+Model fingerprint: 0xdea3eda5
+Model has 2 quadratic constraints
+Variable types: 0 continuous, 3 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [3e+00, 4e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Found heuristic solution: objective -0.0000000
+Presolve time: 0.00s
+Presolved: 8 rows, 4 columns, 10 nonzeros
+Presolved model has 2 bilinear constraint(s)
+Variable types: 1 continuous, 3 integer (0 binary)
+
+Root relaxation: unbounded, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  postponed    0        -0.00000          -      -     -    0s
+     0     0  postponed    0        -0.00000          -      -     -    0s
+     0     2  postponed    0        -0.00000          -      -     -    0s
+
+Explored 32 nodes (13 simplex iterations) in 0.02 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: -0 
+No other solutions better than -0
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -0.000000000000e+00, best bound -0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:35:15 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Set parameter NonConvex to value 2
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file i.lp
+Reading time = 0.00 seconds
+obj: 0 rows, 3 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 3 columns and 0 nonzeros
+Model fingerprint: 0x16b2b737
+Model has 2 quadratic constraints
+Variable types: 0 continuous, 3 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [3e+00, 4e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+  QRHS range       [1e+01, 1e+01]
+Presolve time: 0.00s
+Presolved: 8 rows, 4 columns, 10 nonzeros
+Presolved model has 2 bilinear constraint(s)
+Variable types: 1 continuous, 3 integer (0 binary)
+
+Root relaxation: unbounded, 2 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  postponed    0               -          -      -     -    0s
+     0     0  postponed    0               -          -      -     -    0s
+Exploring 100 nodes in MinRel heuristic
+No solution found by MinRel heuristic
+     0     2  postponed    0               -          -      -     -    0s
+
+Explored 5 nodes (9 simplex iterations) in 0.03 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 0
+No other solutions better than -1e+100
+
+Model is infeasible or unbounded
+Best objective -, best bound -, gap -
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:35:21 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Set parameter NonConvex to value 2
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file i.lp
+Reading time = 0.00 seconds
+obj: 0 rows, 3 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 3 columns and 0 nonzeros
+Model fingerprint: 0x16b2b737
+Model has 2 quadratic constraints
+Variable types: 0 continuous, 3 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [3e+00, 4e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+  QRHS range       [1e+01, 1e+01]
+Presolve time: 0.00s
+Presolved: 8 rows, 4 columns, 10 nonzeros
+Presolved model has 2 bilinear constraint(s)
+Variable types: 1 continuous, 3 integer (0 binary)
+
+Root relaxation: unbounded, 2 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  postponed    0               -          -      -     -    0s
+     0     0  postponed    0               -          -      -     -    0s
+Exploring 100 nodes in MinRel heuristic
+No solution found by MinRel heuristic
+     0     2  postponed    0               -          -      -     -    0s
+
+Explored 5 nodes (9 simplex iterations) in 0.01 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 0
+No other solutions better than -1e+100
+
+Model is infeasible or unbounded
+Best objective -, best bound -, gap -
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:35:25 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file i.lp
+Reading time = 0.00 seconds
+obj: 0 rows, 3 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 3 columns and 0 nonzeros
+Model fingerprint: 0x16b2b737
+Model has 2 quadratic constraints
+Variable types: 0 continuous, 3 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [3e+00, 4e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+  QRHS range       [1e+01, 1e+01]
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 1 (of 8 available processors)
+
+Solution count 0
+
+Best objective -, best bound -, gap -
+
+Error 10021: Quadratic equality constraints are non-convex. Set NonConvex parameter to 2 to solve model.
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:37:19 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file i.lp
+Reading time = 0.00 seconds
+obj: 0 rows, 3 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 3 columns and 0 nonzeros
+Model fingerprint: 0xdea3eda5
+Model has 2 quadratic constraints
+Variable types: 0 continuous, 3 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [3e+00, 4e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Found heuristic solution: objective -0.0000000
+Presolve time: 0.00s
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds (0.00 work units)
+Thread count was 1 (of 8 available processors)
+
+Solution count 1: -0 
+No other solutions better than 0
+
+Best objective -0.000000000000e+00, best bound -, gap -
+
+Error 10021: Quadratic equality constraints are non-convex. Set NonConvex parameter to 2 to solve model.
+
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:37:28 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Set parameter NonConvex to value 2
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file i.lp
+Reading time = 0.00 seconds
+obj: 0 rows, 3 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 3 columns and 0 nonzeros
+Model fingerprint: 0xdea3eda5
+Model has 2 quadratic constraints
+Variable types: 0 continuous, 3 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [3e+00, 4e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Found heuristic solution: objective -0.0000000
+Presolve time: 0.00s
+Presolved: 8 rows, 4 columns, 10 nonzeros
+Presolved model has 2 bilinear constraint(s)
+Variable types: 1 continuous, 3 integer (0 binary)
+
+Root relaxation: unbounded, 1 iterations, 0.00 seconds (0.00 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  postponed    0        -0.00000          -      -     -    0s
+     0     0  postponed    0        -0.00000          -      -     -    0s
+     0     2  postponed    0        -0.00000          -      -     -    0s
+
+Explored 32 nodes (13 simplex iterations) in 0.01 seconds (0.00 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: -0 
+No other solutions better than -0
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -0.000000000000e+00, best bound -0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Mon Apr 11 03:54:30 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Error reading LP format file e.lp at line 2
+Missing space after opening bracket in quadratic expression
+Neighboring tokens: " [[1. 0. 0.] [0. 1. 0.] [0. 0. "
+
+
+Error 10012: Unable to read file
+
+
+Gurobi 9.5.1 (win64, Python) logging started Fri Apr 15 21:05:07 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Fri Apr 15 21:06:32 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi 9.5.1 (win64, gurobi_cl) logging started Fri Apr 15 21:06:37 2022
+
+Set parameter Username
+Set parameter LogFile to value "gurobi.log"
+Academic license - for non-commercial use only - expires 2022-05-07
+Using license file C:\Users\chhighma\gurobi.lic
+
+Gurobi Optimizer version 9.5.1 build v9.5.1rc2 (win64)
+Copyright (c) 2022, Gurobi Optimization, LLC
+
+Read LP format model from file i.lp
+Reading time = 0.02 seconds
+obj: 0 rows, 3 columns, 0 nonzeros
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 0 rows, 3 columns and 0 nonzeros
+Model fingerprint: 0xdea3eda5
+Model has 2 quadratic constraints
+Variable types: 0 continuous, 3 integer (0 binary)
+Coefficient statistics:
+  Matrix range     [0e+00, 0e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [3e+00, 4e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [0e+00, 0e+00]
+  RHS range        [0e+00, 0e+00]
+Found heuristic solution: objective -0.0000000
+Presolve time: 0.02s
+
+Explored 0 nodes (0 simplex iterations) in 0.05 seconds (0.00 work units)
+Thread count was 1 (of 8 available processors)
+
+Solution count 1: -0 
+No other solutions better than 0
+
+Best objective -0.000000000000e+00, best bound -, gap -
+
+Error 10021: Quadratic equality constraints are non-convex. Set NonConvex parameter to 2 to solve model.
+

@@ -1,0 +1,58 @@
+[package]
+name = "backrunner-rs"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+serde = { version = "1.0.136", features = ["derive"] }
+tokio = { version = "*", features = ["full"] }
+tokio-util = { version = "*", features = ["full"] }
+async-std = {version = "*", features = ["attributes"]}
+chrono = "0"
+serde_json = "1"
+once_cell = "*"
+rand = "0.8.4"
+tracing = "0.1.26"
+futures = { version = "0.3.21", features = ["thread-pool"]}
+futures-util = "*"
+tracing-subscriber = {version ="0.2.19", features = ["fmt"]}
+tracing-appender = "0.1.2"
+blocknative = {path = "../../blocknative-rs", version = "0.1.0" }
+petgraph = {path = "../../petgraph", version = "0.6.0" }
+rayon = "*"
+graphql_client = { version="*", features = ["reqwest-blocking"] }
+#moka = "*"
+futures-signals = "*"
+#eventbus = "*"
+#criterion = "*"
+num-bigint ={ version = "*", features = ["serde"] }
+bigdecimal = { version = "*", features = ["serde"] }
+anyhow = "*"
+reqwest = { version = "^0.11", features = ["json", "blocking"] }
+prettytable-rs = "^0.7"
+clap = { version = "^3.0", features = ["derive"] }
+log = "^0.4"
+sim = "*"
+muldiv = "*"
+env_logger = "^0.5"
+dashmap = "*"
+crypto-bigint = "*"
+itertools = "0.10.3"
+#crossbeam = "*"
+#tokio-console = "*"
+# sage - knowledge graph
+#asyncplusplus= "*"
+#thread_id = "*"
+arcstr = "*"
+ethereum-types = "*"
+num-rational = "*"
+num-traits = "*"
+gurobi = "*"
+libmath = "*"
+ethabi = "*"
+lazy_static = "*"
+grafana-plugin-sdk = "*"
+modulo= "*"
+#ethers-flashbots = "*"
+ethers = { git = "https://github.com/gakonst/ethers-rs", features = ["legacy"] }
