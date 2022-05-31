@@ -14,7 +14,7 @@ use crate::uniswapv2_pairs::uniswap_pairs::UniswapPairsPairsTokens;
 
 pub fn uniswapv2_unpack_pairs(
     pairs: graphql_client::Response<graphql_uniswapv2::uniswap_pairs::ResponseData>,
-    pair_map: &mut HashMap<Address, Arc<CryptoPair>>,
+    pair_map: &mut HashMap<Address, CryptoPair>,
     dex: String,
     router: Address,
 ) {
@@ -25,14 +25,14 @@ pub fn uniswapv2_unpack_pairs(
                 name: pair.token0.name.clone(),
                 decimals: pair.token0.decimals.parse::<i32>().unwrap(),
                 symbol: pair.token0.symbol.clone(),
-                reserve: U256::from_dec_str(&pair.reserve0.to_string()).unwrap(),
+                reserve: pair.reserve0.to_string().parse::<f64>().unwrap(),
             },
             token1: UniswapPairsPairsTokens {
                 id: Address::from_str(&*pair.token1.id.clone()).unwrap(),
                 name: pair.token1.name.clone(),
                 decimals: pair.token1.decimals.parse::<i32>().unwrap(),
                 symbol: pair.token1.symbol.clone(),
-                reserve: U256::from_dec_str(&pair.reserve1.to_string()).unwrap(),
+                reserve: pair.reserve1.to_string().parse::<f64>().unwrap(),
             },
             id: Address::from_str(&pair.id).unwrap(),
             sqrt_price: Default::default(),
@@ -44,16 +44,16 @@ pub fn uniswapv2_unpack_pairs(
         };
 
         if !pair_map.contains_key::<Address>(&uni_pair.id) {
-            let pair = Arc::new(CryptoPair::new(uni_pair.clone()));
+            let pair = CryptoPair::new(uni_pair.clone());
             pair_map.insert(uni_pair.id.clone(), pair);
         } else {
             let mut pair = pair_map.get_key_value(&uni_pair.id).unwrap();
-            pair_map.insert(uni_pair.id.clone(), Arc::new(CryptoPair::new(uni_pair)));
+            pair_map.insert(uni_pair.id.clone(), CryptoPair::new(uni_pair));
         }
     }
 }
 
-pub fn populate_uniswapv2_pairs(pair_map: &mut HashMap<Address, Arc<CryptoPair>>) {
+pub fn populate_uniswapv2_pairs(pair_map: &mut HashMap<Address, CryptoPair>) {
     let pairs =
         graphql_uniswapv2::get_pairs("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2")
             .unwrap();
@@ -66,7 +66,7 @@ pub fn populate_uniswapv2_pairs(pair_map: &mut HashMap<Address, Arc<CryptoPair>>
     );
 }
 
-pub fn populate_sushiswap_pairs(pair_map: &mut HashMap<Address, Arc<CryptoPair>>) {
+pub fn populate_sushiswap_pairs(pair_map: &mut HashMap<Address, CryptoPair>) {
     let pairs =
         graphql_uniswapv2::get_pairs("https://api.thegraph.com/subgraphs/name/sushiswap/exchange")
             .unwrap();

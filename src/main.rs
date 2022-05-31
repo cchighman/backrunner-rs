@@ -50,6 +50,7 @@ use std::sync::Arc;
 use utils::uniswapv2_utils::{populate_sushiswap_pairs, populate_uniswapv2_pairs};
 use utils::uniswapv3_utils::populate_uniswapv3_pools;
 
+use crate::utils::common::{cyclic_order, is_arbitrage_pair};
 use rayon::collections::hash_map;
 
 /*
@@ -72,23 +73,24 @@ async fn main() {
      */
 
     let mut crypto_pairs: HashMap<Address, Arc<CryptoPair>> = HashMap::new();
+    let mut crypto_pairs_unsafe: HashMap<Address, CryptoPair> = HashMap::new();
     let mut arb_paths: Vec<Arc<ArbitragePath>> = Default::default();
     println!("Test - ");
     /* 1.) Populate a map of all possible crypto pairs */
-    populate_uniswapv2_pairs(&mut crypto_pairs);
+    populate_uniswapv2_pairs(&mut crypto_pairs_unsafe);
     // populate_uniswapv3_pools(&mut crypto_pairs);
-    populate_sushiswap_pairs(&mut crypto_pairs);
+    populate_sushiswap_pairs(&mut crypto_pairs_unsafe);
 
     /* 2) Load some source to populate and init arb paths */
     /* 3.) Begin listening to pending / completed tx */
     /*
-        let paths = ArbitragePaths::new();
+    let paths = ArbitragePaths::new();
         paths
             .generate_arbitrage_paths(&crypto_pairs, &mut arb_paths)
             .await;
     */
     /*
-        let x = crypto_pairs
+        let x = crypto_pairs_unsafe
             .values()
             .collect::<Vec<_>>()
             .into_iter()
@@ -102,62 +104,19 @@ async fn main() {
 
         for crypto_paths in t.clone() {
             let mut y = Vec::default();
-            let a1_b3 = crypto_paths[0][0].left_symbol() == crypto_paths[2][0].right_symbol();
-            let b1_a2 = crypto_paths[0][0].right_symbol() == crypto_paths[1][0].left_symbol();
-            let b2_a3 = crypto_paths[1][0].right_symbol() == crypto_paths[2][0].left_symbol();
-            let a1_a2 = crypto_paths[0][0].left_symbol() == crypto_paths[1][0].left_symbol();
-            let b1_b3 = crypto_paths[0][0].right_symbol() == crypto_paths[2][0].right_symbol();
-            let b1_b2 = crypto_paths[0][0].right_symbol() == crypto_paths[1][0].right_symbol();
-            let a2_a3 = crypto_paths[1][0].left_symbol() == crypto_paths[2][0].left_symbol();
-            let a1_b2 = crypto_paths[0][0].left_symbol() == crypto_paths[1][0].right_symbol();
-            let b1_a3 = crypto_paths[0][0].right_symbol() == crypto_paths[2][0].left_symbol();
-            let b2_b3 = crypto_paths[1][0].right_symbol() == crypto_paths[2][0].right_symbol();
-            let a1_a3 = crypto_paths[0][0].left_symbol() == crypto_paths[2][0].left_symbol();
-            let a2_b3 = crypto_paths[1][0].left_symbol() == crypto_paths[2][0].right_symbol();
 
-            let scenario_1 = a1_b3 && b1_a2 && b2_a3;
-            let scenario_2 = a1_a2 && b1_b3 && b2_a3;
-            let scenario_3 = a1_b3 && b1_b2 && a2_a3;
-            let scenario_4 = a1_b2 && b1_b3 && a2_a3;
-            let scenario_5 = a1_a2 && b1_a3 && b2_b3;
-            let scenario_6 = a1_a3 && b1_a2 && b2_b3;
-            let scenario_7 = a1_a3 && b1_b2 && a2_b3;
-            let scenario_8 = a1_b2 && b1_a3 && a2_b3;
-
-            if scenario_1
-                || scenario_2
-                || scenario_3
-                || scenario_4
-                || scenario_5
-                || scenario_6
-                || scenario_7
-                || scenario_8
-            {
-                dbg!(
-                    crypto_paths[0][0].left_symbol(),
-                    crypto_paths[0][0].right_symbol(),
-                    crypto_paths[1][0].left_symbol(),
-                    crypto_paths[1][0].right_symbol(),
-                    crypto_paths[2][0].left_symbol(),
-                    crypto_paths[2][0].right_symbol(),
-                );
-
-                y.push(crypto_paths[0][0].clone());
-                y.push(crypto_paths[1][0].clone());
-                y.push(crypto_paths[2][0].clone());
-
+            y.push(crypto_paths[0].clone());
+            y.push(crypto_paths[1].clone());
+            y.push(crypto_paths[2].clone());
+            if is_arbitrage_pair(&y) {
                 let mut y_2 = Vec::default();
-                y_2.push((*crypto_paths[0][0]).clone());
-                y_2.push((*crypto_paths[1][0]).clone());
-                y_2.push((*crypto_paths[2][0]).clone());
+                y_2.push(crypto_paths[0].clone());
+                y_2.push(crypto_paths[1].clone());
+                y_2.push(crypto_paths[2].clone());
                 ser_pairs.pairs.push(y_2);
-
-                let arb_path = ArbitragePath::new(y.clone());
-                arb_paths.push(arb_path.clone());
-                arb_path.init(arb_path.clone()).await;
             }
         }
-
+        println!("ser_pairs: {}", ser_pairs.pairs.len());
         let file = File::create("pairs.json").unwrap();
         let mut writer = BufWriter::new(file);
 
@@ -166,7 +125,7 @@ async fn main() {
     */
 
     /* Read Pairs from file */
-    let file = File::open("pairs_500.json").unwrap();
+    let file = File::open("pairs_600.json").unwrap();
     let mut reader = BufReader::new(file);
     let cached_pairs: CryptoPairs = serde_json::from_reader(reader).unwrap();
 
@@ -189,12 +148,16 @@ async fn main() {
 
     /*
     Next we want to create arbitrage paths based on the contents of the serialized vector, except we will instead look to the map map above for references.
-
      */
+    for unordered_pair in cached_pairs.pairs.iter() {
+        let sequence = cyclic_order(unordered_pair.clone(), &crypto_pairs).unwrap();
+        let arb_path = ArbitragePath::new(sequence);
+        arb_path.init(arb_path.clone()).await;
+        arb_paths.push(arb_path);
+    }
 
+    println!("pairs: {}, paths: {}", crypto_pairs.len(), arb_paths.len());
     use std::{thread, time};
-
-    println!("pairs: {} paths: {}", crypto_pairs.len(), arb_paths.len());
 
     loop {
         let ten = time::Duration::from_millis(10000);

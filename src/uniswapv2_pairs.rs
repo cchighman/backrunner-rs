@@ -62,7 +62,7 @@ pub mod uniswap_pairs {
         pub symbol: String,
         pub name: String,
         pub decimals: i32,
-        pub reserve: U256,
+        pub reserve: f64,
     }
 }
 /*

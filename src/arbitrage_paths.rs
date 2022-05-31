@@ -27,6 +27,7 @@ impl ArbitragePaths {
         pair_map: &HashMap<String, Vec<Arc<CryptoPair>>>,
         arb_paths: &mut Vec<Arc<ArbitragePath>>,
     ) {
+        /*
         let mut g: Graph<String, String> = Graph::new();
 
         let mut symbol_map: HashMap<_, _> = HashMap::<_, _>::new();
@@ -323,6 +324,8 @@ impl ArbitragePaths {
                 ii += 1;
             }
         }
+
+         */
     }
 }
 pub struct ArbitragePaths {}

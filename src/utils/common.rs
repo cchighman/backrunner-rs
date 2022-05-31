@@ -64,11 +64,11 @@ impl SequenceToken {
         &self.id
     }
 
-    pub fn get_reserve(&self) -> U256 {
+    pub fn get_reserve(&self) -> f64 {
         self.token.get_reserve(self.token_direction.clone())
     }
 
-    pub fn get_signal(&self) -> &MutableSignal<U256> {
+    pub fn get_signal(&self) -> MutableSignal<f64> {
         self.token.get_signal(self.token_direction.clone())
     }
 
@@ -172,7 +172,7 @@ pub fn is_arbitrage_pair(crypto_path: &Vec<CryptoPair>) -> bool {
 
 pub fn cyclic_order(
     crypto_path: Vec<CryptoPair>,
-    crypto_pairs: HashMap<Address, Arc<CryptoPair>>,
+    crypto_pairs: &HashMap<Address, Arc<CryptoPair>>,
 ) -> Option<ThreePathSequence> {
     let a1_b3 = crypto_path[0].left_symbol() == crypto_path[2].right_symbol();
     let b1_a2 = crypto_path[0].right_symbol() == crypto_path[1].left_symbol();
@@ -486,7 +486,7 @@ pub fn test_cyclic_order() {
     crypto_pairs.insert(pair2.pair_id().clone(), Arc::new(pair2.clone()));
     crypto_pairs.insert(pair3.pair_id().clone(), Arc::new(pair3.clone()));
 
-    let ordered = cyclic_order(crypto_paths, crypto_pairs.clone()).unwrap();
+    let ordered = cyclic_order(crypto_paths, &crypto_pairs).unwrap();
 
     println!(
         "a1: {}, b1: {}, a2: {}, b2: {}, a3: {}, b3: {}",
