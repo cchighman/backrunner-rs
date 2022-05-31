@@ -1,17 +1,18 @@
-use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
-use crate::crypto_pair::CryptoPair;
-use crate::uniswap_providers::ROPSTEN_PROVIDER;
-use ethabi::{Bytes, Token};
+use std::str::FromStr;
+use std::sync::Arc;
+use std::time::{SystemTime, UNIX_EPOCH};
+
+use ethabi::Token;
 use ethereum_types::{Address, U256};
 use ethers::prelude::k256::ecdsa::SigningKey;
 use ethers::prelude::SignerMiddleware;
 use ethers::providers::{Http, Provider};
 use ethers::signers::Wallet;
 use once_cell::sync::Lazy;
-use std::ops::Deref;
-use std::str::FromStr;
-use std::sync::Arc;
-use std::time::{SystemTime, UNIX_EPOCH};
+
+use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
+use crate::crypto_pair::CryptoPair;
+use crate::uniswap_providers::ROPSTEN_PROVIDER;
 
 static TIMESTAMP_SEED: u128 = 30000_u128;
 static MAX_AMOUNT: Lazy<U256> =

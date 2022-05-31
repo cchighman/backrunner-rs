@@ -1,10 +1,12 @@
 pub use arbitrageswap_mod::*;
+
 #[allow(clippy::too_many_arguments)]
 mod arbitrageswap_mod {
     #![allow(clippy::enum_variant_names)]
     #![allow(dead_code)]
     #![allow(clippy::type_complexity)]
     #![allow(unused_imports)]
+
     use ethers::contract::{
         builders::{ContractCall, Event},
         Contract, Lazy,
@@ -16,6 +18,7 @@ mod arbitrageswap_mod {
     use ethers::providers::Middleware;
     #[doc = "ArbitrageSwap was auto-generated with ethers-rs Abigen. More information at: https://github.com/gakonst/ethers-rs"]
     use std::sync::Arc;
+
     pub static ARBITRAGESWAP_ABI: ethers::contract::Lazy<ethers::core::abi::Abi> =
         ethers::contract::Lazy::new(|| {
             serde_json :: from_str ("[{\"type\":\"constructor\",\"inputs\":[{\"internalType\":\"address payable\",\"name\":\"_weth\",\"type\":\"address\"}]},{\"type\":\"function\",\"name\":\"swap\",\"inputs\":[{\"internalType\":\"contract IUniswapV2Pair\",\"name\":\"pool_a\",\"type\":\"address\"},{\"internalType\":\"contract IUniswapV2Pair\",\"name\":\"pool_b\",\"type\":\"address\"},{\"internalType\":\"contract IERC20\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"intermediate_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"profit\",\"type\":\"uint256\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"payable\"},{\"type\":\"receive\"}]") . expect ("invalid abi")

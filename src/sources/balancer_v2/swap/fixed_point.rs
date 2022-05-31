@@ -3,8 +3,6 @@
 //! found at:
 //! https://github.com/balancer-labs/balancer-v2-monorepo/blob/6c9e24e22d0c46cca6dd15861d3d33da61a60b98/pkg/solidity-utils/contracts/math/FixedPoint.sol
 
-use super::error::Error;
-use crate::conversions::{big_int_to_u256, u256_to_big_int};
 use anyhow::{anyhow, bail, ensure, Result};
 use ethcontract::U256;
 use lazy_static::lazy_static;
@@ -14,6 +12,10 @@ use std::{
     fmt::{self, Debug, Formatter},
     str::FromStr,
 };
+
+use crate::conversions::{big_int_to_u256, u256_to_big_int};
+
+use super::error::Error;
 
 mod logexpmath;
 
@@ -188,8 +190,9 @@ impl Bfp {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use num::{BigInt, One, Zero};
+
+    use super::*;
 
     #[test]
     fn parsing() {

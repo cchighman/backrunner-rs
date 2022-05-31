@@ -7,18 +7,20 @@
 //! This abstraction is provided in a way to simplify adding new Balancer pool
 //! types by just implementing the required `BalancerFactory` trait.
 
+use anyhow::Result;
+use ethcontract::{BlockId, H256};
+use futures::future::BoxFuture;
+
+use crate::Web3CallBatch;
+
+use super::graph_api::PoolData;
+
 pub mod common;
 pub mod liquidity_bootstrapping;
 pub mod no_protocol_fee_liquidity_bootstrapping;
 pub mod stable;
 pub mod weighted;
 pub mod weighted_2token;
-
-use super::graph_api::PoolData;
-use crate::Web3CallBatch;
-use anyhow::Result;
-use ethcontract::{BlockId, H256};
-use futures::future::BoxFuture;
 
 /// A Balancer pool.
 #[derive(Clone, Debug, Eq, PartialEq)]

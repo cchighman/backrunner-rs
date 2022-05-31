@@ -2,9 +2,10 @@
 //! smart contract. The original contract code can be found at:
 //! https://github.com/balancer-labs/balancer-v2-monorepo/blob/6c9e24e22d0c46cca6dd15861d3d33da61a60b98/pkg/core/contracts/pools/weighted/WeightedMath.sol
 
-use super::{error::Error, fixed_point::Bfp};
 use ethcontract::U256;
 use lazy_static::lazy_static;
+
+use super::{error::Error, fixed_point::Bfp};
 
 // https://github.com/balancer-labs/balancer-v2-monorepo/blob/6c9e24e22d0c46cca6dd15861d3d33da61a60b98/pkg/core/contracts/pools/weighted/WeightedMath.sol#L36-L37
 lazy_static! {

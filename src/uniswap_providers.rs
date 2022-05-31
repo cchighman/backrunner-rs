@@ -1,10 +1,11 @@
+use std::ops::Deref;
+use std::sync::Arc;
+
 use ethers::core::k256::ecdsa::SigningKey;
 use ethers::prelude::*;
 use ethers::providers::{Http, Provider};
 use ethers::signers::{coins_bip39::English, MnemonicBuilder};
 use once_cell::sync::Lazy;
-use std::ops::Deref;
-use std::sync::Arc;
 
 pub(crate) static ROPSTEN_WALLET: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
     MnemonicBuilder::<English>::default()

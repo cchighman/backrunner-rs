@@ -9,8 +9,9 @@ impl_uniswap_like_liquidity! {
 
 #[cfg(test)]
 mod tests {
-    use crate::token_pair::TokenPair;
     use ethcontract_mock::Mock;
+
+    use crate::token_pair::TokenPair;
 
     #[tokio::test]
     async fn test_create2_sushiswap() {

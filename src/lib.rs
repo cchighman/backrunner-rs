@@ -4,6 +4,8 @@
 #![allow(unused_variables, unused_assignments, unused_must_use)]
 #![recursion_limit = "512"]
 
+use std::fmt;
+
 pub mod arb_signal;
 pub mod arbitrage_path;
 pub mod call_julia;
@@ -23,8 +25,6 @@ pub mod uniswap_transaction;
 pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
 pub mod utils;
-
-use std::fmt;
 
 #[cfg(feature = "bindgen")]
 include!(concat!("lib" "/bindings.rs"));

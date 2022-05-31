@@ -341,7 +341,9 @@ impl DynPack for StableCurve {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use proptest::prelude::*;
+    use sim::StableSwapModel;
+
     use crate::curve::calculator::{
         test::{
             check_curve_value_from_swap, check_deposit_token_conversion,
@@ -351,8 +353,8 @@ mod tests {
         },
         RoundDirection, INITIAL_SWAP_POOL_AMOUNT,
     };
-    use proptest::prelude::*;
-    use sim::StableSwapModel;
+
+    use super::*;
 
     #[test]
     fn initial_pool_amount() {

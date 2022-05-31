@@ -16,11 +16,6 @@
 //!     information in data structures that provide efficient lookup searching for pools based
 //!     on token pairs.
 
-use crate::token_pair::TokenPair;
-use crate::{
-    event_handling::{BlockNumber, EventStoring},
-    sources::balancer_v2::pools::{common, FactoryIndexing, PoolIndexing},
-};
 use anyhow::{anyhow, Result};
 use contracts::balancer_v2_base_pool_factory::{
     event_data::PoolCreated, Event as BasePoolFactoryEvent,
@@ -31,6 +26,12 @@ use std::{
     collections::{HashMap, HashSet},
     ops::RangeInclusive,
     sync::Arc,
+};
+
+use crate::token_pair::TokenPair;
+use crate::{
+    event_handling::{BlockNumber, EventStoring},
+    sources::balancer_v2::pools::{common, FactoryIndexing, PoolIndexing},
 };
 
 /// PoolStorage represents in-memory storage of all deployed Balancer Pools
@@ -216,13 +217,15 @@ where
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use maplit::{hashmap, hashset};
+    use mockall::predicate::eq;
+
     use crate::sources::balancer_v2::{
         pools::{common::MockPoolInfoFetching, weighted, MockFactoryIndexing},
         swap::fixed_point::Bfp,
     };
-    use maplit::{hashmap, hashset};
-    use mockall::predicate::eq;
+
+    use super::*;
 
     pub type PoolInitData = (
         Vec<H256>,

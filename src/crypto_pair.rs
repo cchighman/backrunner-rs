@@ -1,14 +1,11 @@
-use crate::dex_pool::DexPool;
-use crate::utils::common::{ThreePathSequence, DIRECTION};
+use std::fmt;
 
-use bigdecimal::BigDecimal;
-use ethereum_types::{Address, U256};
+use ethereum_types::Address;
 use futures_signals::signal::{Mutable, MutableSignal};
 use serde::{Deserialize, Serialize};
-use std::fmt;
-use std::ops::Mul;
-use std::str::FromStr;
-use std::sync::Arc;
+
+use crate::dex_pool::DexPool;
+use crate::utils::common::DIRECTION;
 
 pub struct PairUpdateParams {}
 fn string_to_static_str(s: String) -> &'static str {

@@ -1,10 +1,12 @@
 pub use context_mod::*;
+
 #[allow(clippy::too_many_arguments)]
 mod context_mod {
     #![allow(clippy::enum_variant_names)]
     #![allow(dead_code)]
     #![allow(clippy::type_complexity)]
     #![allow(unused_imports)]
+
     use ethers::contract::{
         builders::{ContractCall, Event},
         Contract, Lazy,
@@ -16,6 +18,7 @@ mod context_mod {
     use ethers::providers::Middleware;
     #[doc = "Context was auto-generated with ethers-rs Abigen. More information at: https://github.com/gakonst/ethers-rs"]
     use std::sync::Arc;
+
     pub static CONTEXT_ABI: ethers::contract::Lazy<ethers::core::abi::Abi> =
         ethers::contract::Lazy::new(|| serde_json::from_str("[]").expect("invalid abi"));
     #[derive(Clone)]

@@ -1,9 +1,3 @@
-use super::pair_provider::PairProvider;
-use crate::token_pair::TokenPair;
-use crate::{
-    baseline_solver::BaselineSolvable, ethcontract_error::EthcontractErrorType,
-    recent_block_cache::Block, sources::MAX_BATCH_SIZE, Web3, Web3CallBatch,
-};
 use anyhow::Result;
 use contracts::{IUniswapLikePair, ERC20};
 use ethcontract::{errors::MethodError, BlockId, H160, U256};
@@ -13,6 +7,14 @@ use futures::{
 };
 use num::rational::Ratio;
 use std::collections::HashSet;
+
+use crate::token_pair::TokenPair;
+use crate::{
+    baseline_solver::BaselineSolvable, ethcontract_error::EthcontractErrorType,
+    recent_block_cache::Block, sources::MAX_BATCH_SIZE, Web3, Web3CallBatch,
+};
+
+use super::pair_provider::PairProvider;
 
 const POOL_SWAP_GAS_COST: usize = 60_000;
 
@@ -317,8 +319,9 @@ fn handle_results(fetched_pool: FetchedPool) -> Result<Option<Pool>> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::ethcontract_error;
+
+    use super::*;
 
     #[test]
     fn test_get_amounts_out() {

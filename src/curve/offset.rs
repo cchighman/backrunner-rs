@@ -185,7 +185,8 @@ impl DynPack for OffsetCurve {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use proptest::prelude::*;
+
     use crate::curve::calculator::{
         test::{
             check_curve_value_from_swap, check_deposit_token_conversion,
@@ -195,7 +196,8 @@ mod tests {
         },
         INITIAL_SWAP_POOL_AMOUNT,
     };
-    use proptest::prelude::*;
+
+    use super::*;
 
     #[test]
     fn pack_curve() {

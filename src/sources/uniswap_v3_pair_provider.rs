@@ -1,7 +1,8 @@
-use crate::token_pair::TokenPair;
 use ethcontract::H160;
 use hex_literal::hex;
 use web3::signing::keccak256;
+
+use crate::token_pair::TokenPair;
 
 /// Calculates deterministic Uniswapv3 pool address.
 /// https://github.com/Uniswap/v3-periphery/blob/main/contracts/libraries/PoolAddress.sol

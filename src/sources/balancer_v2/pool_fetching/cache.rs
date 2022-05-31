@@ -3,7 +3,10 @@
 //!
 //! This allows us to turn cache a pool registry.
 
-use super::internal::InternalPoolFetching;
+use anyhow::Result;
+use ethcontract::H256;
+use std::{collections::HashSet, sync::Arc};
+
 use crate::{
     current_block::CurrentBlockStream,
     maintenance::Maintaining,
@@ -13,9 +16,8 @@ use crate::{
     sources::balancer_v2::pools::Pool,
     token_pair::TokenPair,
 };
-use anyhow::Result;
-use ethcontract::H256;
-use std::{collections::HashSet, sync::Arc};
+
+use super::internal::InternalPoolFetching;
 
 /// Trait used for Balancer pool cache metrics.
 pub trait BalancerPoolCacheMetrics: Send + Sync {

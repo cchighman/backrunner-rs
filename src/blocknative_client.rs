@@ -9,13 +9,15 @@
     unused_mut
 )]
 
+use std::collections::HashMap;
+
 use futures_util::StreamExt;
 
 use blocknative::{
     models::Blockchain,
     ws::{models::WatchConfig, ws::Ws},
 };
-use std::collections::HashMap;
+
 async fn initialize() {
     println!("Connecting to blocknative..");
     let ws = Ws::connect(

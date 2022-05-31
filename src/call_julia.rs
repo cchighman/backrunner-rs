@@ -1,4 +1,3 @@
-use ethereum_types::{Address, U256};
 use std::process::Command;
 
 pub fn route_cfmms(cfmms: &Vec<String>) -> Vec<String> {

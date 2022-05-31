@@ -1,8 +1,9 @@
-use crate::uniswapv2_pairs;
 use ethereum_types::{Address, U256};
 use serde::{Deserialize, Serialize};
 
 use uniswapv2_pairs::uniswap_pairs::UniswapPairsPairsTokens;
+
+use crate::uniswapv2_pairs;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DexPool {

@@ -1,5 +1,11 @@
 //! A pool state reading implementation specific to Swapr.
 
+use anyhow::Result;
+use contracts::ISwaprPair;
+use ethcontract::{errors::MethodError, BlockId};
+use futures::{future::BoxFuture, FutureExt as _};
+use num::rational::Ratio;
+
 use crate::token_pair::TokenPair;
 use crate::{
     sources::uniswap_v2::{
@@ -8,11 +14,6 @@ use crate::{
     },
     Web3, Web3CallBatch,
 };
-use anyhow::Result;
-use contracts::ISwaprPair;
-use ethcontract::{errors::MethodError, BlockId};
-use futures::{future::BoxFuture, FutureExt as _};
-use num::rational::Ratio;
 
 /// A specialized Uniswap-like pool reader for DXdao Swapr pools.
 ///
@@ -59,13 +60,15 @@ fn handle_results(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use ethcontract::H160;
+    use maplit::hashset;
+
     use crate::{
         ethcontract_error, recent_block_cache::Block, sources::swapr,
         transport::create_env_test_transport, Web3,
     };
-    use ethcontract::H160;
-    use maplit::hashset;
+
+    use super::*;
 
     #[test]
     fn sets_fee() {

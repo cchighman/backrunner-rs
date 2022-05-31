@@ -2,10 +2,11 @@
 // The original contract code can be found at:
 // https://github.com/balancer-labs/balancer-v2-monorepo/blob/6c9e24e22d0c46cca6dd15861d3d33da61a60b98/pkg/solidity-utils/contracts/math/LogExpMath.sol
 
-use super::super::error::Error;
 use ethcontract::{I256, U256};
 use lazy_static::lazy_static;
 use std::convert::TryFrom;
+
+use super::super::error::Error;
 
 /// Fixed point number stored in a type of bit size 256 that stores exactly 18
 /// decimal digits.
@@ -208,8 +209,9 @@ fn _ln_36(mut x: I256) -> I256 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use regex::Regex;
+
+    use super::*;
 
     // Compare computed constants with smart contract code.
     fn logexpmath_contract_constants(

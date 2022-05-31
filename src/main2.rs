@@ -1,5 +1,14 @@
 extern crate petgraph;
 
+use arbitrage_path::ArbitragePath;
+use bigdecimal::BigDecimal;
+use crypto_pair::CryptoPair;
+use dashmap::DashMap;
+use utils::uniswapv2_utils::{populate_sushiswap_pairs, populate_uniswapv2_pairs};
+use utils::uniswapv3_utils::populate_uniswapv3_pools;
+
+use crate::arbitrage_paths::ArbitragePaths;
+
 pub mod arbitrage_path;
 pub mod arbitrage_paths;
 mod blocknative_client;
@@ -10,15 +19,6 @@ pub mod graphql_uniswapv3;
 pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
 pub mod utils;
-
-use crate::arbitrage_paths::ArbitragePaths;
-use arbitrage_path::ArbitragePath;
-use bigdecimal::BigDecimal;
-use crypto_pair::CryptoPair;
-use dashmap::DashMap;
-
-use utils::uniswapv2_utils::{populate_sushiswap_pairs, populate_uniswapv2_pairs};
-use utils::uniswapv3_utils::populate_uniswapv3_pools;
 
 #[allow(dead_code)]
 #[async_std::main]

@@ -1,7 +1,13 @@
 //! A pool registry for a single pool factory that is generic on its type of
 //! pool.
 
-use super::{internal::InternalPoolFetching, pool_storage::PoolStorage};
+use anyhow::Result;
+use contracts::{balancer_v2_base_pool_factory, BalancerV2BasePoolFactory};
+use ethcontract::{errors::MethodError, BlockId, Instance, H256};
+use futures::future;
+use std::{collections::HashSet, sync::Arc};
+use tokio::sync::Mutex;
+
 use crate::token_pair::TokenPair;
 use crate::{
     ethcontract_error::EthcontractErrorType,
@@ -15,12 +21,8 @@ use crate::{
     },
     Web3, Web3CallBatch, Web3Transport,
 };
-use anyhow::Result;
-use contracts::{balancer_v2_base_pool_factory, BalancerV2BasePoolFactory};
-use ethcontract::{errors::MethodError, BlockId, Instance, H256};
-use futures::future;
-use std::{collections::HashSet, sync::Arc};
-use tokio::sync::Mutex;
+
+use super::{internal::InternalPoolFetching, pool_storage::PoolStorage};
 
 impl_event_retrieving! {
     pub BasePoolFactoryContract for balancer_v2_base_pool_factory
@@ -139,7 +141,6 @@ fn is_contract_error(err: &anyhow::Error) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::{
         ethcontract_error,
         sources::balancer_v2::{
@@ -147,6 +148,8 @@ mod tests {
             swap::fixed_point::Bfp,
         },
     };
+
+    use super::*;
 
     #[tokio::test]
     async fn collecting_results_filters_paused_pools_and_contract_errors() {

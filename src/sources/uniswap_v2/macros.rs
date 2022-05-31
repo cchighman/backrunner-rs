@@ -1,5 +1,7 @@
 //! Macros for implementing Uniswap-like liquidity.
 
+pub(crate) use impl_uniswap_like_liquidity;
+
 macro_rules! impl_uniswap_like_liquidity {
     (
         factory: $factory:ty,
@@ -42,5 +44,3 @@ macro_rules! impl_uniswap_like_liquidity {
         }
     };
 }
-
-pub(crate) use impl_uniswap_like_liquidity;

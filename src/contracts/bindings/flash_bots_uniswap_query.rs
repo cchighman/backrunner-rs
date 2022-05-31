@@ -1,10 +1,12 @@
 pub use flashbotsuniswapquery_mod::*;
+
 #[allow(clippy::too_many_arguments)]
 mod flashbotsuniswapquery_mod {
     #![allow(clippy::enum_variant_names)]
     #![allow(dead_code)]
     #![allow(clippy::type_complexity)]
     #![allow(unused_imports)]
+
     use ethers::contract::{
         builders::{ContractCall, Event},
         Contract, Lazy,
@@ -16,6 +18,7 @@ mod flashbotsuniswapquery_mod {
     use ethers::providers::Middleware;
     #[doc = "FlashBotsUniswapQuery was auto-generated with ethers-rs Abigen. More information at: https://github.com/gakonst/ethers-rs"]
     use std::sync::Arc;
+
     pub static FLASHBOTSUNISWAPQUERY_ABI: ethers::contract::Lazy<ethers::core::abi::Abi> =
         ethers::contract::Lazy::new(|| {
             serde_json :: from_str ("[{\"type\":\"function\",\"name\":\"getPairsByIndexRange\",\"inputs\":[{\"internalType\":\"contract IUniswapV2Factory\",\"name\":\"_uniswapFactory\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_start\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_stop\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"address[3][]\",\"name\":\"\",\"type\":\"address[3][]\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getReservesByPairs\",\"inputs\":[{\"internalType\":\"contract IUniswapV2Pair[]\",\"name\":\"_pairs\",\"type\":\"address[]\"}],\"outputs\":[{\"internalType\":\"uint256[3][]\",\"name\":\"\",\"type\":\"uint256[3][]\"}],\"constant\":false,\"stateMutability\":\"view\"}]") . expect ("invalid abi")

@@ -3,16 +3,32 @@
 //! their `token_balances` and the `PoolFetcher` returns all up-to-date `Weighted` and `Stable`
 //! pools to be consumed by external users (e.g. Price Estimators and Solvers).
 
-mod aggregate;
-mod cache;
-mod internal;
-mod pool_storage;
-mod registry;
-
-pub use self::cache::{BalancerPoolCacheMetrics, NoopBalancerPoolCacheMetrics};
-use self::{
-    aggregate::Aggregate, cache::Cache, internal::InternalPoolFetching, registry::Registry,
+use anyhow::Result;
+use clap::ArgEnum;
+pub use common::TokenState;
+use contracts::{
+    BalancerV2LiquidityBootstrappingPoolFactory,
+    BalancerV2NoProtocolFeeLiquidityBootstrappingPoolFactory, BalancerV2StablePoolFactory,
+    BalancerV2Vault, BalancerV2WeightedPool2TokensFactory, BalancerV2WeightedPoolFactory,
 };
+use ethcontract::{Instance, H160, H256};
+use reqwest::Client;
+pub use stable::AmplificationParameter;
+use std::{
+    collections::{HashMap, HashSet},
+    sync::Arc,
+};
+pub use weighted::TokenState as WeightedTokenState;
+
+use crate::token_pair::TokenPair;
+use crate::{
+    current_block::CurrentBlockStream,
+    maintenance::Maintaining,
+    recent_block_cache::{Block, CacheConfig},
+    token_info::TokenInfoFetching,
+    Web3, Web3Transport,
+};
+
 use super::{
     graph_api::{BalancerSubgraphClient, RegisteredPools},
     pool_init::PoolInitializing,
@@ -22,31 +38,18 @@ use super::{
     },
     swap::fixed_point::Bfp,
 };
-use crate::token_pair::TokenPair;
-use crate::{
-    current_block::CurrentBlockStream,
-    maintenance::Maintaining,
-    recent_block_cache::{Block, CacheConfig},
-    token_info::TokenInfoFetching,
-    Web3, Web3Transport,
-};
-use anyhow::Result;
-use clap::ArgEnum;
-use contracts::{
-    BalancerV2LiquidityBootstrappingPoolFactory,
-    BalancerV2NoProtocolFeeLiquidityBootstrappingPoolFactory, BalancerV2StablePoolFactory,
-    BalancerV2Vault, BalancerV2WeightedPool2TokensFactory, BalancerV2WeightedPoolFactory,
-};
-use ethcontract::{Instance, H160, H256};
-use reqwest::Client;
-use std::{
-    collections::{HashMap, HashSet},
-    sync::Arc,
+
+pub use self::cache::{BalancerPoolCacheMetrics, NoopBalancerPoolCacheMetrics};
+use self::{
+    aggregate::Aggregate, cache::Cache, internal::InternalPoolFetching, registry::Registry,
 };
 
-pub use common::TokenState;
-pub use stable::AmplificationParameter;
-pub use weighted::TokenState as WeightedTokenState;
+mod aggregate;
+mod cache;
+mod internal;
+mod pool_storage;
+mod registry;
+
 pub trait BalancerPoolEvaluating {
     fn properties(&self) -> CommonPoolState;
 }
@@ -349,7 +352,8 @@ fn pool_address_from_id(pool_id: H256) -> H160 {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use hex_literal::hex;
+
     use crate::{
         sources::balancer_v2::{
             graph_api::{BalancerSubgraphClient, PoolData, PoolType},
@@ -358,7 +362,8 @@ mod tests {
         token_info::TokenInfoFetcher,
         transport,
     };
-    use hex_literal::hex;
+
+    use super::*;
 
     #[test]
     fn can_extract_address_from_pool_id() {

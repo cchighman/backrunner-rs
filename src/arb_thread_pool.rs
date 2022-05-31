@@ -1,5 +1,6 @@
-use once_cell::sync::Lazy;
 use std::future::Future;
+
+use once_cell::sync::Lazy;
 use tokio_util::context::TokioContext;
 
 pub fn spawn(f: impl Future<Output = ()> + Send + 'static) {

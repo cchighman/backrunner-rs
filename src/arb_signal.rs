@@ -1,32 +1,3 @@
-use crate::arb_thread_pool::spawn;
-use crate::call_julia::route_cfmms;
-use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
-use crate::crypto_math::*;
-use crate::crypto_pair::CryptoPair;
-use crate::swap_route::route_calldata;
-use crate::swap_route::{SwapRoute, TO_ADDRESS};
-use crate::uniswap_providers::ROPSTEN_PROVIDER;
-
-use bigdecimal::BigDecimal;
-use ethabi::Token;
-use ethereum_types::{Address, U256, U512};
-use ethers::prelude::Bytes;
-use ethers::prelude::*;
-use future::ready;
-
-use futures::{executor, future, StreamExt};
-use futures_signals::internal::{Map2, MapPair};
-use futures_signals::signal::{Mutable, MutableSignal};
-use futures_signals::{
-    map_mut, map_ref,
-    signal::{Signal, SignalExt},
-};
-
-use futures_util::Future;
-use num_traits::{FromPrimitive, ToPrimitive};
-use rayon::prelude::*;
-use std::sync::Arc;
-
 /*
 
 

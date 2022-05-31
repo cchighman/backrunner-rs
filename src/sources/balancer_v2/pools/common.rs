@@ -1,6 +1,12 @@
 //! Module with data types and logic common to multiple Balancer pool types
 
-use super::{FactoryIndexing, Pool, PoolIndexing as _, PoolStatus};
+use anyhow::{anyhow, ensure, Result};
+use contracts::{BalancerV2BasePool, BalancerV2Vault};
+use ethcontract::{BlockId, Bytes, H160, H256, U256};
+use futures::{future::BoxFuture, FutureExt as _};
+use std::{collections::BTreeMap, future::Future, sync::Arc};
+use tokio::sync::oneshot;
+
 use crate::{
     sources::balancer_v2::{
         graph_api::{PoolData, PoolType},
@@ -9,12 +15,8 @@ use crate::{
     token_info::TokenInfoFetching,
     Web3CallBatch,
 };
-use anyhow::{anyhow, ensure, Result};
-use contracts::{BalancerV2BasePool, BalancerV2Vault};
-use ethcontract::{BlockId, Bytes, H160, H256, U256};
-use futures::{future::BoxFuture, FutureExt as _};
-use std::{collections::BTreeMap, future::Future, sync::Arc};
-use tokio::sync::oneshot;
+
+use super::{FactoryIndexing, Pool, PoolIndexing as _, PoolStatus};
 
 /// Trait for fetching pool data that is generic on a factory type.
 #[mockall::automock]
@@ -341,14 +343,6 @@ fn share_common_pool_state(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::{
-        sources::balancer_v2::{
-            graph_api::{PoolType, Token},
-            pools::{weighted, MockFactoryIndexing, PoolKind},
-        },
-        token_info::{MockTokenInfoFetching, TokenInfo},
-    };
     use anyhow::bail;
     use contracts::BalancerV2WeightedPool;
     use ethcontract::U256;
@@ -356,6 +350,16 @@ mod tests {
     use futures::future;
     use maplit::{btreemap, hashmap};
     use mockall::predicate;
+
+    use crate::{
+        sources::balancer_v2::{
+            graph_api::{PoolType, Token},
+            pools::{weighted, MockFactoryIndexing, PoolKind},
+        },
+        token_info::{MockTokenInfoFetching, TokenInfo},
+    };
+
+    use super::*;
 
     #[tokio::test]
     async fn fetch_common_pool_info() {

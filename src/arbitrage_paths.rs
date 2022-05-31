@@ -1,21 +1,12 @@
 extern crate petgraph;
 
-use crate::crypto_pair::CryptoPair;
-use itertools::Itertools;
-use petgraph::algo;
-use petgraph::dot::Dot;
-use petgraph::graph::{Graph, NodeIndex};
-use petgraph::matrix_graph::Nullable;
-use rayon::prelude::*;
 use std::borrow::Borrow;
 use std::collections::HashMap;
-use std::future::ready;
-
-use crate::arbitrage_path::ArbitragePath;
-
-use rayon::{ThreadPool, ThreadPoolBuilder};
 use std::string::String;
 use std::sync::Arc;
+
+use crate::arbitrage_path::ArbitragePath;
+use crate::crypto_pair::CryptoPair;
 
 impl ArbitragePaths {
     pub fn new() -> ArbitragePaths {

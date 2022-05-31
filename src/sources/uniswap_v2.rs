@@ -1,11 +1,11 @@
 //! Uniswap V2 baseline liquidity source implementation.
 
+use macros::impl_uniswap_like_liquidity;
+
 pub mod macros;
 pub mod pair_provider;
 pub mod pool_cache;
 pub mod pool_fetching;
-
-use macros::impl_uniswap_like_liquidity;
 
 impl_uniswap_like_liquidity! {
     factory: contracts::UniswapV2Factory,
@@ -14,8 +14,9 @@ impl_uniswap_like_liquidity! {
 
 #[cfg(test)]
 mod tests {
-    use crate::token_pair::TokenPair;
     use ethcontract_mock::Mock;
+
+    use crate::token_pair::TokenPair;
 
     #[tokio::test]
     async fn test_create2_mainnet() {

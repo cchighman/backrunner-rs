@@ -1,12 +1,10 @@
-use std::str::FromStr;
-use std::sync::Arc;
-
 use ethers::prelude::{
     Address, Contract, Http, LocalWallet, Middleware, Provider, SignerMiddleware,
     TransactionRequest, I256,
 };
 use ethers::types::U256;
-
+use std::str::FromStr;
+use std::sync::Arc;
 use tracing::instrument;
 
 use crate::util;

@@ -5,10 +5,13 @@ pub struct UniswapPools;
 pub mod uniswap_pools {
     #![allow(dead_code)]
 
+    use serde::{Deserialize, Serialize};
+
+    use super::*;
+
     pub const OPERATION_NAME: &str = "UniswapPools";
     pub const QUERY : & str = "query UniswapPools {\r\n  pools(first: 100, where: {volumeUSD_gt: \"50000\"}, orderBy: reserveUSD, orderDirection: desc) {\r\n    id\r\n    token0 {\r\n      id\r\n      symbol\r\n      name\r\n      decimals\r\n\r\n    }\r\n    token1 {\r\n      id\r\n      symbol\r\n      name\r\n      decimals\r\n    }\r\n    reserveUSD\r\n    volumeUSD\r\n    reserve0\r\n    reserve1\r\n    reserveETH\r\n    token0price\r\n    token1price\r\n\r\n  }\r\n}\r\n" ;
-    use super::*;
-    use serde::{Deserialize, Serialize};
+
     #[allow(dead_code)]
     type Boolean = bool;
     #[allow(dead_code)]

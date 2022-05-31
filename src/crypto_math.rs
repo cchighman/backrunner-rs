@@ -1,17 +1,14 @@
-use crate::arbitrage_path::ArbitragePath;
-use crate::call_julia::route_cfmms;
-use crate::crypto_pair::CryptoPair;
-use bigdecimal::BigDecimal;
-use bigdecimal::FromPrimitive;
-use crypto_bigint::MulMod;
-use ethereum_types::{H256, U256, U512};
-use modulo::Mod;
-use num_traits::real::Real;
-use num_traits::{Pow, ToPrimitive};
-use sim::utils::usize_sqrt;
 use std::ops::{Add, Div, Mul, Sub};
 use std::str::FromStr;
 use std::sync::Arc;
+
+use bigdecimal::BigDecimal;
+use ethereum_types::{U256, U512};
+use num_traits::real::Real;
+use num_traits::{Pow, ToPrimitive};
+
+use crate::call_julia::route_cfmms;
+use crate::crypto_pair::CryptoPair;
 
 // given an input amount of an asset and pair reserves, returns the maximum output amount of the other asset
 pub fn get_amount_out(amountIn: U512, reserveIn: U512, reserveOut: U512) -> U512 {
@@ -602,13 +599,14 @@ fn test1() {
         before_arb_sushi_0.clone(),
         before_arb_sushi_1.clone(),
     );
-    */ /*
-       cfmm_route(
-           before_arb_uni_0.clone(),
-           before_arb_uni_1.clone(),
-           before_arb_sushi_0.clone(),
-           before_arb_sushi_1.clone(),
-       );*/
+    */
+ /*
+ cfmm_route(
+     before_arb_uni_0.clone(),
+     before_arb_uni_1.clone(),
+     before_arb_sushi_0.clone(),
+     before_arb_sushi_1.clone(),
+ );*/
     println!(
         "get_amount_out: 1.94 WETH for {} ALPHA",
         get_amount_out_2(

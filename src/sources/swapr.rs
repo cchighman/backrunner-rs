@@ -1,8 +1,8 @@
 //! Swapr baseline liquidity source implementation.
 
-mod reader;
-
 use super::uniswap_v2::macros::impl_uniswap_like_liquidity;
+
+mod reader;
 
 impl_uniswap_like_liquidity! {
     factory: contracts::SwaprFactory,
@@ -12,8 +12,9 @@ impl_uniswap_like_liquidity! {
 
 #[cfg(test)]
 mod tests {
-    use crate::token_pair::TokenPair;
     use ethcontract_mock::Mock;
+
+    use crate::token_pair::TokenPair;
 
     #[tokio::test]
     async fn test_create2_xdai() {

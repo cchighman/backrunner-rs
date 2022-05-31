@@ -1,15 +1,11 @@
+use std::collections::HashMap;
+use std::str::FromStr;
+
+use ethereum_types::Address;
+
 use crate::crypto_pair::CryptoPair;
 use crate::dex_pool::DexPool;
 use crate::graphql_uniswapv2;
-use crate::utils::common::dec_to_int;
-use rayon::prelude::*;
-use std::collections::HashMap;
-use std::str::FromStr;
-use std::sync::Arc;
-
-use ethereum_types::{Address, U256};
-use rayon::collections::hash_map;
-
 use crate::uniswapv2_pairs::uniswap_pairs::UniswapPairsPairsTokens;
 
 pub fn uniswapv2_unpack_pairs(

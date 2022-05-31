@@ -1,7 +1,3 @@
-use ethers::prelude::coins_bip39::English;
-use ethers::prelude::k256::ecdsa::SigningKey;
-use ethers::prelude::*;
-use ethers::types::transaction::eip2718::TypedTransaction;
 //use ethers_flashbots::*;
 /*
 pub(crate) static GOERLI_WALLET: Lazy<Wallet<SigningKey>> = Lazy::new(|| {

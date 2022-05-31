@@ -1,10 +1,12 @@
 pub use iweth9_mod::*;
+
 #[allow(clippy::too_many_arguments)]
 mod iweth9_mod {
     #![allow(clippy::enum_variant_names)]
     #![allow(dead_code)]
     #![allow(clippy::type_complexity)]
     #![allow(unused_imports)]
+
     use ethers::contract::{
         builders::{ContractCall, Event},
         Contract, Lazy,
@@ -16,6 +18,7 @@ mod iweth9_mod {
     use ethers::providers::Middleware;
     #[doc = "IWETH9 was auto-generated with ethers-rs Abigen. More information at: https://github.com/gakonst/ethers-rs"]
     use std::sync::Arc;
+
     pub static IWETH9_ABI: ethers::contract::Lazy<ethers::core::abi::Abi> =
         ethers::contract::Lazy::new(|| {
             serde_json :: from_str ("[{\"type\":\"function\",\"name\":\"deposit\",\"inputs\":[],\"outputs\":[],\"constant\":false,\"stateMutability\":\"payable\"},{\"type\":\"function\",\"name\":\"transfer\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"withdraw\",\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"}]") . expect ("invalid abi")

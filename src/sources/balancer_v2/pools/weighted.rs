@@ -1,6 +1,11 @@
 //! Module implementing weighted pool specific indexing logic.
 
-use super::{common, FactoryIndexing, PoolIndexing};
+use anyhow::{anyhow, Result};
+use contracts::{BalancerV2WeightedPool, BalancerV2WeightedPoolFactory};
+use ethcontract::{BlockId, H160};
+use futures::{future::BoxFuture, FutureExt as _};
+use std::collections::BTreeMap;
+
 use crate::{
     sources::balancer_v2::{
         graph_api::{PoolData, PoolType},
@@ -8,11 +13,8 @@ use crate::{
     },
     Web3CallBatch,
 };
-use anyhow::{anyhow, Result};
-use contracts::{BalancerV2WeightedPool, BalancerV2WeightedPoolFactory};
-use ethcontract::{BlockId, H160};
-use futures::{future::BoxFuture, FutureExt as _};
-use std::collections::BTreeMap;
+
+use super::{common, FactoryIndexing, PoolIndexing};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct PoolInfo {
@@ -101,12 +103,14 @@ impl FactoryIndexing for BalancerV2WeightedPoolFactory {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::sources::balancer_v2::graph_api::Token;
     use ethcontract::{H160, H256};
     use ethcontract_mock::Mock;
     use futures::future;
     use maplit::btreemap;
+
+    use crate::sources::balancer_v2::graph_api::Token;
+
+    use super::*;
 
     #[test]
     fn convert_graph_pool_to_weighted_pool_info() {

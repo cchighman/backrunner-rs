@@ -1,3 +1,6 @@
+use anyhow::Result;
+use std::{collections::HashSet, sync::Arc};
+
 use crate::token_pair::TokenPair;
 use crate::{
     current_block::CurrentBlockStream,
@@ -7,8 +10,6 @@ use crate::{
     },
     sources::uniswap_v2::pool_fetching::{Pool, PoolFetching},
 };
-use anyhow::Result;
-use std::{collections::HashSet, sync::Arc};
 
 pub trait PoolCacheMetrics: Send + Sync {
     fn pools_fetched(&self, cache_hits: usize, cache_misses: usize);

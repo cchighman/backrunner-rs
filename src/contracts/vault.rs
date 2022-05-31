@@ -1,7 +1,8 @@
 //! Module containing utilities for interfacing with the Balancer V2 Vault contract.
 
-use crate::{BalancerV2Authorizer, BalancerV2Vault};
 use ethcontract::{common::FunctionExt as _, errors::MethodError, web3::signing, Bytes, H160};
+
+use crate::{BalancerV2Authorizer, BalancerV2Vault};
 
 fn role_id(target: H160, function_name: &str) -> Bytes<[u8; 32]> {
     let function = match BalancerV2Vault::raw_contract().abi.function(function_name) {
@@ -35,8 +36,9 @@ pub async fn grant_required_roles(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use ethcontract::H256;
+
+    use super::*;
 
     #[test]
     fn role_ids() {

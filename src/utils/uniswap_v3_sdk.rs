@@ -1,10 +1,3 @@
-use bigdecimal::BigDecimal;
-use dashmap::DashMap;
-use ethereum_types::U256;
-use lazy_static::lazy_static;
-use math::round::ceil;
-use math::round::floor;
-
 use std::ops::Div;
 use std::str::FromStr;
 use std::{
@@ -12,6 +5,12 @@ use std::{
     ops::{Mul, Rem},
 };
 
+use bigdecimal::BigDecimal;
+use dashmap::DashMap;
+use ethereum_types::U256;
+use lazy_static::lazy_static;
+use math::round::ceil;
+use math::round::floor;
 use num_bigint::{BigInt, ToBigInt};
 use num_rational::BigRational;
 use num_traits::{FromPrimitive, One, Signed, ToPrimitive, Zero};
@@ -649,10 +648,12 @@ pub fn apply_sqrt_ratio_bips_hundredths_delta(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use std::assert_eq;
+
     use num_bigint::ToBigInt;
     use num_rational::BigRational;
-    use std::assert_eq;
+
+    use super::*;
 
     #[test]
     fn encode_price_sqrt_1() {

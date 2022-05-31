@@ -1,27 +1,20 @@
-use super::CryptoPair;
-use crate::contracts::bindings::ierc20::IERC20;
-use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
-use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
-use crate::contracts::bindings::uniswap_v3_router;
-use crate::swap_route::SwapRoute;
-use arcstr::literal;
-use bigdecimal::BigDecimal;
-use ethabi::Bytes;
-use ethereum_types::{Address, H160, U256};
-use ethers::abi::Tokenize;
-use ethers::contract::Abigen;
-use ethers::contract::Contract;
-use ethers::prelude::*;
-use ethers::providers::{Http, Provider};
-use ethers::signers::{coins_bip39::English, MnemonicBuilder};
-use ethers::utils::hex::FromHexError;
-use futures::{executor, future, StreamExt};
-use num_traits::FromPrimitive;
-use serde_json::to_string;
 use std::ops::Div;
 use std::str::FromStr;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
+
+use ethereum_types::{Address, U256};
+use ethers::abi::Tokenize;
+use ethers::contract::Abigen;
+use ethers::prelude::*;
+use ethers::providers::{Http, Provider};
+use ethers::signers::{coins_bip39::English, MnemonicBuilder};
+use futures::StreamExt;
+use num_traits::FromPrimitive;
+
+use crate::contracts::bindings::ierc20::IERC20;
+use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
+use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
 
 pub fn get_valid_timestamp(future_millis: U256) -> U256 {
     let start = SystemTime::now();

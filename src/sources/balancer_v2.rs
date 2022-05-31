@@ -32,13 +32,13 @@
 //! Once should think of `PoolStorage` as a type of Database for which one is not concerned
 //! with how it maintains itself.
 
+pub use self::{
+    pool_fetching::{BalancerFactoryKind, BalancerPoolFetcher, BalancerPoolFetching},
+    pools::{Pool, PoolKind},
+};
+
 mod graph_api;
 pub mod pool_fetching;
 mod pool_init;
 pub mod pools;
 pub mod swap;
-
-pub use self::{
-    pool_fetching::{BalancerFactoryKind, BalancerPoolFetcher, BalancerPoolFetching},
-    pools::{Pool, PoolKind},
-};

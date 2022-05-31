@@ -1,20 +1,18 @@
-use crate::crypto_pair::CryptoPair;
-use crate::dex_pool::DexPool;
-use crate::graphql_uniswapv3;
+use std::ops::Div;
+use std::str::FromStr;
+use std::sync::Arc;
 
 use bigdecimal::BigDecimal;
 use dashmap::DashMap;
 use ethereum_types::{Address, U256};
 use num_bigint::BigInt;
-use std::ops::Div;
 
-use std::str::FromStr;
-use std::sync::Arc;
-
-use crate::utils::uniswap_v3_sdk::{get_amounts_for_liquidity, get_sqrt_ratio_at_tick, tick_range};
-
+use crate::crypto_pair::CryptoPair;
+use crate::dex_pool::DexPool;
+use crate::graphql_uniswapv3;
 use crate::uniswapv2_pairs::uniswap_pairs::UniswapPairsPairsTokens;
 use crate::uniswapv3_pools::uniswap_pools::{UniswapPoolsPoolsToken0, UniswapPoolsPoolsToken1};
+use crate::utils::uniswap_v3_sdk::{get_amounts_for_liquidity, get_sqrt_ratio_at_tick, tick_range};
 
 #[derive(Clone)]
 pub struct UniswapPool {

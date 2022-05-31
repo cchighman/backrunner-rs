@@ -1,3 +1,8 @@
+use error::Error;
+use ethcontract::{H160, U256};
+use fixed_point::Bfp;
+use std::collections::HashMap;
+
 use crate::{
     baseline_solver::BaselineSolvable,
     sources::balancer_v2::{
@@ -5,10 +10,6 @@ use crate::{
         swap::math::BalU256,
     },
 };
-use error::Error;
-use ethcontract::{H160, U256};
-use fixed_point::Bfp;
-use std::collections::HashMap;
 
 mod error;
 pub mod fixed_point;
@@ -274,8 +275,9 @@ impl BaselineSolvable for StablePool {
 
 #[cfg(test)]
 mod tests {
-    use crate::sources::balancer_v2::pool_fetching::{AmplificationParameter, CommonPoolState};
     use std::collections::HashMap;
+
+    use crate::sources::balancer_v2::pool_fetching::{AmplificationParameter, CommonPoolState};
 
     fn create_weighted_pool_with(
         tokens: Vec<H160>,

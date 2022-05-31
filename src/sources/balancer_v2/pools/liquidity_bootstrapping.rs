@@ -1,7 +1,12 @@
 //! Module implementing liquidity bootstrapping pool specific indexing logic.
 
-pub use super::weighted::{PoolState, TokenState};
-use super::{common, FactoryIndexing, PoolIndexing};
+use anyhow::Result;
+use contracts::{
+    BalancerV2LiquidityBootstrappingPool, BalancerV2LiquidityBootstrappingPoolFactory,
+};
+use ethcontract::BlockId;
+use futures::{future::BoxFuture, FutureExt as _};
+
 use crate::{
     sources::balancer_v2::{
         graph_api::{PoolData, PoolType},
@@ -9,12 +14,9 @@ use crate::{
     },
     Web3CallBatch,
 };
-use anyhow::Result;
-use contracts::{
-    BalancerV2LiquidityBootstrappingPool, BalancerV2LiquidityBootstrappingPoolFactory,
-};
-use ethcontract::BlockId;
-use futures::{future::BoxFuture, FutureExt as _};
+
+pub use super::weighted::{PoolState, TokenState};
+use super::{common, FactoryIndexing, PoolIndexing};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct PoolInfo {
@@ -100,12 +102,14 @@ impl FactoryIndexing for BalancerV2LiquidityBootstrappingPoolFactory {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::sources::balancer_v2::graph_api::Token;
     use ethcontract::{H160, H256};
     use ethcontract_mock::Mock;
     use futures::future;
     use maplit::btreemap;
+
+    use crate::sources::balancer_v2::graph_api::Token;
+
+    use super::*;
 
     #[tokio::test]
     async fn fetch_pool_state() {

@@ -1,45 +1,19 @@
-use crate::arb_thread_pool::spawn;
-use crate::call_julia::route_cfmms;
-use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
-use crate::crypto_math::*;
-use crate::crypto_pair::CryptoPair;
-use crate::swap_route::route_calldata;
-use crate::swap_route::{SwapRoute, TO_ADDRESS};
-use crate::uniswap_providers::ROPSTEN_PROVIDER;
+use std::sync::Arc;
 
-use crate::uniswap_transaction::*;
-use bigdecimal::BigDecimal;
 use ethabi::Token;
-use ethereum_types::{Address, U256, U512};
-use ethers::prelude::Bytes;
 use ethers::prelude::*;
 use future::ready;
-
-use futures::{executor, future, StreamExt};
-use futures_signals::signal::{Mutable, MutableSignal};
-use futures_signals::{
-    map_ref,
-    signal::{Signal, SignalExt},
-};
-use futures_util::Future;
-use num_traits::{FromPrimitive, Pow, ToPrimitive, Zero};
+use futures::{future, StreamExt};
+use futures_signals::{map_ref, signal::SignalExt};
+use num_traits::real::Real;
 use rayon::prelude::*;
 
-use crate::{arb_thread_pool, uniswap_transaction};
-use ethers::prelude::coins_bip39::English;
-use std::collections::HashMap;
-use std::default;
-use std::ops::{Deref, Div, Mul};
-use std::str::FromStr;
-use std::sync::Arc;
+use crate::arb_thread_pool::spawn;
+use crate::crypto_math::*;
+use crate::uniswap_transaction::*;
+use crate::utils::common::ThreePathSequence;
+
 /* Babylonian Sqrt */
-use sim::utils::usize_sqrt;
-
-use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
-use crate::utils::common::{SequenceToken, ThreePathSequence};
-use muldiv::MulDiv;
-use num_traits::real::Real;
-
 impl ArbitragePath {
     /* TODO - For each pair */
     pub fn new(sequence: ThreePathSequence) -> Arc<Self> {

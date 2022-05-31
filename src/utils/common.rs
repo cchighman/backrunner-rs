@@ -1,20 +1,18 @@
-use crate::arb_thread_pool::spawn;
-use crate::crypto_pair::CryptoPair;
-use crate::dex_pool::DexPool;
-use bigdecimal::BigDecimal;
-use ethereum_types::{Address, U256};
-use futures::executor;
-use futures_signals::map_ref;
-use futures_signals::signal::{MutableSignal, SignalExt};
-use num_bigint::BigInt;
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::future::ready;
-use std::mem::swap;
 use std::ops::Mul;
 use std::str::FromStr;
 use std::sync::Arc;
 
+use bigdecimal::BigDecimal;
+use ethereum_types::{Address, U256};
+use futures_signals::map_ref;
+use futures_signals::signal::{MutableSignal, SignalExt};
+use num_bigint::BigInt;
+
+use crate::arb_thread_pool::spawn;
+use crate::crypto_pair::CryptoPair;
+use crate::dex_pool::DexPool;
 use crate::uniswapv2_pairs::uniswap_pairs::UniswapPairsPairsTokens;
 
 pub fn dec_to_int(dec_string: &str, places: i64) -> U256 {

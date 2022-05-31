@@ -11,6 +11,25 @@
 )]
 
 extern crate petgraph;
+
+use std::collections::HashMap;
+use std::fs::File;
+use std::io::BufReader;
+use std::io::{Read, Write};
+use std::sync::Arc;
+
+use ethereum_types::Address;
+use futures_util::{FutureExt, TryFutureExt};
+use grafana_plugin_sdk::prelude::*;
+use itertools::Itertools;
+use rayon::prelude::*;
+
+use arbitrage_path::ArbitragePath;
+use crypto_pair::{CryptoPair, CryptoPairs};
+use utils::uniswapv2_utils::{populate_sushiswap_pairs, populate_uniswapv2_pairs};
+
+use crate::utils::common::cyclic_order;
+
 pub mod arb_signal;
 pub mod arb_thread_pool;
 pub mod arbitrage_path;
@@ -30,28 +49,6 @@ mod uniswap_transaction;
 pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
 pub mod utils;
-
-use crate::arb_thread_pool::spawn;
-use crate::arbitrage_paths::ArbitragePaths;
-use arbitrage_path::ArbitragePath;
-use bigdecimal::BigDecimal;
-use crypto_pair::{CryptoPair, CryptoPairs};
-use ethereum_types::Address;
-use ethers::prelude::U256;
-use futures_util::{FutureExt, TryFutureExt};
-use grafana_plugin_sdk::prelude::*;
-use itertools::Itertools;
-use rayon::prelude::*;
-use std::collections::HashMap;
-use std::fs::File;
-use std::io::BufReader;
-use std::io::{BufWriter, Read, Write};
-use std::sync::Arc;
-use utils::uniswapv2_utils::{populate_sushiswap_pairs, populate_uniswapv2_pairs};
-use utils::uniswapv3_utils::populate_uniswapv3_pools;
-
-use crate::utils::common::{cyclic_order, is_arbitrage_pair};
-use rayon::collections::hash_map;
 
 /*
    Grafana API Key: eyJrIjoiVjY3bzNoWTFnTTNyTUpCVXRoUUJxcXZPTXJGbE1nVmUiLCJuIjoiYmFja3J1bm5lciIsImlkIjoxfQ==

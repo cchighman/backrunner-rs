@@ -1,6 +1,12 @@
 //! Module implementing stable pool specific indexing logic.
 
-use super::{common, FactoryIndexing, PoolIndexing};
+use anyhow::{ensure, Result};
+use contracts::{BalancerV2StablePool, BalancerV2StablePoolFactory};
+use ethcontract::{BlockId, H160, U256};
+use futures::{future::BoxFuture, FutureExt as _};
+use num::BigRational;
+use std::collections::BTreeMap;
+
 use crate::{
     conversions::U256Ext as _,
     sources::balancer_v2::{
@@ -9,12 +15,8 @@ use crate::{
     },
     Web3CallBatch,
 };
-use anyhow::{ensure, Result};
-use contracts::{BalancerV2StablePool, BalancerV2StablePoolFactory};
-use ethcontract::{BlockId, H160, U256};
-use futures::{future::BoxFuture, FutureExt as _};
-use num::BigRational;
-use std::collections::BTreeMap;
+
+use super::{common, FactoryIndexing, PoolIndexing};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct PoolInfo {
@@ -110,12 +112,14 @@ impl FactoryIndexing for BalancerV2StablePoolFactory {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::sources::balancer_v2::graph_api::Token;
     use ethcontract::{H160, H256};
     use ethcontract_mock::Mock;
     use futures::future;
     use maplit::btreemap;
+
+    use crate::sources::balancer_v2::graph_api::Token;
+
+    use super::*;
 
     #[tokio::test]
     async fn fetch_pool_state() {
