@@ -17,7 +17,7 @@ futures = { version = "0.3.21", features = ["thread-pool"]}
 futures-util = "*"
 tracing-subscriber = {version ="0.2.19", features = ["fmt"]}
 tracing-appender = "0.1.2"
-blocknative = {path = "./blocknative-rs", version = "0.1.0" }
+blocknative = {path = "./blocknative", version = "0.1.0" }
 
 ethereum-types = "*"
 
