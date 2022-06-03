@@ -1,3 +1,4 @@
+use bigdecimal::BigDecimal;
 use graphql_client::{reqwest::post_graphql_blocking as post_graphql, GraphQLQuery, Response};
 use reqwest::blocking::Client;
 

@@ -3,11 +3,11 @@ use std::str::FromStr;
 use std::sync::Arc;
 
 use bigdecimal::BigDecimal;
-use ethereum_types::{U256, U512};
+use ethereum_types::U512;
+use ethers::prelude::U256;
 use num_traits::real::Real;
-use num_traits::{Pow, ToPrimitive};
+use num_traits::{FromPrimitive, Pow, ToPrimitive};
 
-use crate::call_julia::route_cfmms;
 use crate::crypto_pair::CryptoPair;
 
 // given an input amount of an asset and pair reserves, returns the maximum output amount of the other asset
@@ -35,7 +35,7 @@ pub fn get_amount_in(amountOut: U512, reserveIn: U512, reserveOut: U512) -> U512
             amountOut, reserveIn, reserveOut
         );
     */
-    let mut denominator = reserveOut.checked_sub(amountOut);
+    let denominator = reserveOut.checked_sub(amountOut);
     if denominator == None {
         return U512::one();
     }
@@ -49,7 +49,7 @@ pub fn get_amount_in(amountOut: U512, reserveIn: U512, reserveOut: U512) -> U512
     );
     */
 
-    return (numerator / denom);
+    return numerator / denom;
 }
 
 pub fn get_amounts_out(amountIn: U512, paths: &Vec<Arc<CryptoPair>>) -> Vec<U512> {
@@ -128,19 +128,19 @@ pub fn test_full_mul() {
     println!("full_mul: {}, {}", res.0, res.1);
 }
 
-pub fn full_div(mut l: U512, mut h: U512, mut k: U512) -> U512 {
+pub fn full_div(mut l: U512, h: U512, mut k: U512) -> U512 {
     let MAX_INT: U512 = U512::from_dec_str(
         "115792089237316195423570985008687907853269984665640564039457584007913129639935",
     )
     .unwrap();
 
-    let mut pow2 = k;
+    let pow2 = k;
     println!("pow2: {}", pow2);
     let one = U512::from(1);
     k /= pow2;
     l /= pow2;
     println!("l: {}", l);
-    l += (one + h + (MAX_INT - pow2).div(pow2));
+    l += one + h + (MAX_INT - pow2).div(pow2);
     println!("---: {}", (MAX_INT - pow2).div(pow2) + one);
     println!("l2: {}", l);
     let two = U512::from(2);
@@ -162,7 +162,7 @@ pub fn test_full_div() {
     let r = full_div(U512::from(4), U512::from(3), U512::from(2));
 }
 
-pub fn mul_div(mut x: U512, mut y: U512, mut d: U512) -> U512 {
+pub fn mul_div(x: U512, y: U512, d: U512) -> U512 {
     println!("before: mul_div: x: {}  y: {} d: {}", x, y, d);
     let (mut l, mut h) = full_mul(x, y, d);
     println!("mul_div: x: {}  y: {} d: {}", x, y, d);
@@ -177,7 +177,7 @@ pub fn mul_div(mut x: U512, mut y: U512, mut d: U512) -> U512 {
     l -= mm;
     println!("h: {}, mm: {}", h, mm);
     if h == U512::from(0) {
-        if (l == U512::from(0) || d == U512::from(0)) {
+        if l == U512::from(0) || d == U512::from(0) {
             return U512::from(0);
         }
         println!("Ouch!!");
@@ -357,8 +357,8 @@ pub fn estimated_profit(
         .to_f64()
         .unwrap();
 
-    let numeratorA = (kSell.sqrt() * buy_a_reserves);
-    let numeratorB = (kBuy.sqrt() * sell_b_reserves);
+    let numeratorA = kSell.sqrt() * buy_a_reserves;
+    let numeratorB = kBuy.sqrt() * sell_b_reserves;
     let denominator = kBuy.sqrt() + kSell.sqrt() * gamma;
     // const numeratorA = (kSell ** .5) * buyTokenReserves;
     //const numeratorB = (gamma ** -1) * ((kBuy ** .5) * sellTokenReserves)
@@ -368,9 +368,9 @@ pub fn estimated_profit(
 
     let betaDenominator = buy_b_reserves - _deltaAlpha;
 
-    let _deltaBeta = ((one / gamma) * ((kBuy / betaDenominator) - buy_a_reserves));
-    let betaPrimeDenominator = (sell_b_reserves + (gamma) * _deltaAlpha);
-    let _deltaBetaPrime = (sell_a_reserves - (kSell / betaPrimeDenominator));
+    let _deltaBeta = (one / gamma) * ((kBuy / betaDenominator) - buy_a_reserves);
+    let betaPrimeDenominator = sell_b_reserves + (gamma) * _deltaAlpha;
+    let _deltaBetaPrime = sell_a_reserves - kSell / betaPrimeDenominator;
 
     let profit = _deltaBetaPrime - _deltaBeta;
 
@@ -409,33 +409,37 @@ pub fn estimated_profit(
 pub fn test_method_b() {}
 
 pub fn optimize_a_prime(
-    a1: f64,
-    b1: f64,
-    a2: f64,
-    b2: f64,
-    a3: f64,
-    b3: f64,
-) -> Option<(f64, f64, f64, f64, f64)> {
-    let Ea = (1.000 * a1 * a2) / (1.000 * a2 + 0.997 * b1);
-    let Eb = (0.997 * b1 * b2) / (1.000 * a2 + 0.997 * b1);
+    a1: BigDecimal,
+    b1: BigDecimal,
+    a2: BigDecimal,
+    b2: BigDecimal,
+    a3: BigDecimal,
+    b3: BigDecimal,
+) -> Option<(BigDecimal, BigDecimal, BigDecimal, BigDecimal, BigDecimal)> {
+    let one = BigDecimal::from_f64(1.000).unwrap();
+    let nine_seven = BigDecimal::from_f64(0.997).unwrap();
+
+    let Ea = (&one * &a1 * &a2) / (&one * &a2 + &nine_seven * &b1);
+    let Eb = (&nine_seven * &b1 * &b2) / (&one * &a2 + &nine_seven * &b1);
 
     /*
-        if Ea > Eb {
-            return None;
-        }
-    */
-    let optimal: f64 = (((Ea * Eb * 0.997 * 1.000) - Ea * 1.000) / 0.997);
-    let delta_a = optimal.sqrt();
-    let delta_b = (b1 * 0.997 * delta_a) / (a1 + 0.997 * delta_a);
-    let delta_c = (b2 * 0.997 * delta_b) / (a2 + 0.997 * delta_b);
-    let delta_a_prime = (b3 * 0.997 * delta_c) / (a3 + 0.997 * delta_c);
-    let profit = delta_a_prime - delta_a;
+    if Ea > Eb {
+        return None;
+    }
+
+     */
+
+    let optimal: BigDecimal = (&Ea * &Eb * &nine_seven * &one) - &Ea * &one / &nine_seven;
+    let delta_a = optimal.sqrt().unwrap();
+    let delta_b = (&b1 * &nine_seven * &delta_a) / (&a1 + &nine_seven * &delta_a);
+    let delta_c = (&b2 * &nine_seven * &delta_b) / (&a2 + &nine_seven * &delta_b);
+    let delta_a_prime = (&b3 * &nine_seven * &delta_c) / (&a3 + &nine_seven * &delta_c);
+    let profit = &delta_a_prime - &delta_a;
     /*
         if profit <= 0.0 {
             return None;
         }
     */
-
     return Some((delta_a, delta_b, delta_c, delta_a_prime, profit));
 }
 
@@ -523,22 +527,6 @@ pub fn test() {
     }
 }
 
-pub fn cfmm_route(A0: U256, A1: U256, B0: U256, B1: U256, C0: U256, C1: U256) {
-    let R0 = &*A0.to_string();
-    let R1 = &*A1.to_string();
-    let R2 = &*B0.to_string();
-    let R3 = &*B1.to_string();
-    let R4 = &*C0.to_string();
-    let R5 = &*C1.to_string();
-
-    let cfmm = vec![
-        String::from(R0.to_owned() + "," + R1 + "," + "0.997" + ",1" + "," + "2"),
-        String::from(R2.to_owned() + "," + R3 + "," + "0.997" + ",2" + "," + "1"),
-        String::from(R4.to_owned() + "," + R5 + "," + "0.997" + ",2" + "," + "1"),
-    ];
-    dbg!("cfmm route: {#:?}", route_cfmms(&cfmm));
-}
-
 pub fn reserves_to_amount(reserve0: u128, decimal0: i32, reserve1: u128, decimal1: i32) -> f64 {
     return f64::powi(10.0, (decimal0 - decimal1).abs()) * reserve1 as f64 / reserve0 as f64;
 }
@@ -600,13 +588,13 @@ fn test1() {
         before_arb_sushi_1.clone(),
     );
     */
- /*
- cfmm_route(
-     before_arb_uni_0.clone(),
-     before_arb_uni_1.clone(),
-     before_arb_sushi_0.clone(),
-     before_arb_sushi_1.clone(),
- );*/
+    /*
+    cfmm_route(
+        before_arb_uni_0.clone(),
+        before_arb_uni_1.clone(),
+        before_arb_sushi_0.clone(),
+        before_arb_sushi_1.clone(),
+    );*/
     println!(
         "get_amount_out: 1.94 WETH for {} ALPHA",
         get_amount_out_2(

@@ -1,11 +1,10 @@
 use std::fmt;
 
-use ethereum_types::Address;
-use futures_signals::signal::{Mutable, MutableSignal};
-use serde::{Deserialize, Serialize};
-
 use crate::dex_pool::DexPool;
 use crate::utils::common::DIRECTION;
+use ethers::prelude::{Address, U256};
+use futures_signals::signal::{Mutable, MutableSignal};
+use serde::{Deserialize, Serialize};
 
 pub struct PairUpdateParams {}
 fn string_to_static_str(s: String) -> &'static str {
@@ -23,13 +22,10 @@ impl CryptoPair {
         invoke recalculate.
     */
     pub fn new(pair: DexPool) -> Self {
-        let reserve0 = string_to_static_str(pair.token0.reserve.to_string().clone());
-        let reserve1 = string_to_static_str(pair.token1.reserve.to_string().clone());
-
         Self {
-            pair,
-            left_reserves: Mutable::new(reserve0.parse::<f64>().unwrap()),
-            right_reserves: Mutable::new(reserve1.parse::<f64>().unwrap()),
+            pair: pair.clone(),
+            left_reserves: Mutable::new(pair.token0.reserve.clone()),
+            right_reserves: Mutable::new(pair.token1.reserve.clone()),
         }
     }
 
@@ -64,11 +60,11 @@ impl CryptoPair {
         }
     }
 
-    pub fn left_reserves(&self) -> f64 {
+    pub fn left_reserves(&self) -> U256 {
         return self.left_reserves.get();
     }
 
-    pub fn right_reserves(&self) -> f64 {
+    pub fn right_reserves(&self) -> U256 {
         return self.right_reserves.get();
     }
 
@@ -104,16 +100,17 @@ impl CryptoPair {
         return self.left_symbol().to_owned() + self.right_symbol();
     }
 
-    pub fn update(&self, new: f64) {
-        self.left_reserves.set(self.left_reserves.get() + new);
-        self.right_reserves.set(self.right_reserves.get() + new);
+    pub fn update(&self, new: &U256) {
+        self.left_reserves.set(&self.left_reserves.get() + new);
+        self.right_reserves
+            .set(&self.right_reserves.get() + new.clone());
     }
 
-    pub fn left_reserves_signal(&self) -> MutableSignal<f64> {
+    pub fn left_reserves_signal(&self) -> MutableSignal<U256> {
         self.left_reserves.signal()
     }
 
-    pub fn get_reserves_signal(&self, direction: DIRECTION) -> MutableSignal<f64> {
+    pub fn get_reserves_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
         if direction == DIRECTION::Left {
             return self.left_reserves_signal();
         } else {
@@ -121,7 +118,7 @@ impl CryptoPair {
         }
     }
 
-    pub fn get_reserve(&self, direction: DIRECTION) -> f64 {
+    pub fn get_reserve(&self, direction: DIRECTION) -> U256 {
         if direction == DIRECTION::Left {
             return self.left_reserves();
         } else {
@@ -129,7 +126,7 @@ impl CryptoPair {
         }
     }
 
-    pub fn get_signal(&self, direction: DIRECTION) -> MutableSignal<f64> {
+    pub fn get_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
         if direction == DIRECTION::Left {
             return self.left_reserves_signal();
         } else {
@@ -137,7 +134,7 @@ impl CryptoPair {
         }
     }
 
-    pub fn right_reserves_signal(&self) -> MutableSignal<f64> {
+    pub fn right_reserves_signal(&self) -> MutableSignal<U256> {
         self.right_reserves.signal()
     }
 }
@@ -145,8 +142,8 @@ impl CryptoPair {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CryptoPair {
     pub(crate) pair: DexPool,
-    pub(crate) left_reserves: Mutable<f64>,
-    pub(crate) right_reserves: Mutable<f64>,
+    pub(crate) left_reserves: Mutable<U256>,
+    pub(crate) right_reserves: Mutable<U256>,
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CryptoPairs {

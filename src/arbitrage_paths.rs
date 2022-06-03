@@ -1,4 +1,3 @@
-extern crate petgraph;
 
 use std::borrow::Borrow;
 use std::collections::HashMap;

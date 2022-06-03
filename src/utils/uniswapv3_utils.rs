@@ -4,7 +4,7 @@ use std::sync::Arc;
 
 use bigdecimal::BigDecimal;
 use dashmap::DashMap;
-use ethereum_types::{Address, U256};
+use ethers::prelude::{Address, U256};
 use num_bigint::BigInt;
 
 use crate::crypto_pair::CryptoPair;
@@ -68,14 +68,14 @@ pub fn uniswapv3_unpack_pairs(
                 name: pair.token0.name.clone(),
                 decimals: pair.token0.decimals.parse::<i32>().unwrap(),
                 symbol: pair.token0.symbol.clone(),
-                reserve: 0.0,
+                reserve: U256::from(0),
             },
             token1: UniswapPairsPairsTokens {
                 id: Address::from_str(&pair.token1.id).unwrap(),
                 name: pair.token1.name.clone(),
                 decimals: pair.token1.decimals.parse::<i32>().unwrap(),
                 symbol: pair.token1.symbol.clone(),
-                reserve: 0.0,
+                reserve: U256::from(0),
             },
             id: Address::from_str(&pair.id).unwrap(),
             sqrt_price: U256::from_dec_str(pair.sqrt_price.clone().to_string().as_str()).unwrap(),

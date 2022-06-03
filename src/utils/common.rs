@@ -4,8 +4,7 @@ use std::ops::Mul;
 use std::str::FromStr;
 use std::sync::Arc;
 
-use bigdecimal::BigDecimal;
-use ethereum_types::{Address, U256};
+use ethers::prelude::{Address, U256};
 use futures_signals::map_ref;
 use futures_signals::signal::{MutableSignal, SignalExt};
 use num_bigint::BigInt;
@@ -15,8 +14,9 @@ use crate::crypto_pair::CryptoPair;
 use crate::dex_pool::DexPool;
 use crate::uniswapv2_pairs::uniswap_pairs::UniswapPairsPairsTokens;
 
+/*
 pub fn dec_to_int(dec_string: &str, places: i64) -> U256 {
-    let rounded = BigDecimal::from_str(dec_string).unwrap().round(places);
+    let rounded = U256::from_str(dec_string).unwrap().round(places);
     //  println!("{}", rounded);
     let base: i128 = 10;
     let num_exp = BigInt::from(base.pow(places as u32));
@@ -26,6 +26,7 @@ pub fn dec_to_int(dec_string: &str, places: i64) -> U256 {
 
     return U256::from_dec_str(result.normalized().to_string().as_str()).unwrap();
 }
+*/
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum DIRECTION {
@@ -36,7 +37,7 @@ pub enum DIRECTION {
 
 #[derive(Debug, Clone)]
 pub struct SequenceToken {
-    token: Arc<CryptoPair>,
+    pub token: Arc<CryptoPair>,
     token_direction: DIRECTION,
     token_context: UniswapPairsPairsTokens,
     id: Address,
@@ -62,11 +63,11 @@ impl SequenceToken {
         &self.id
     }
 
-    pub fn get_reserve(&self) -> f64 {
+    pub fn get_reserve(&self) -> U256 {
         self.token.get_reserve(self.token_direction.clone())
     }
 
-    pub fn get_signal(&self) -> MutableSignal<f64> {
+    pub fn get_signal(&self) -> MutableSignal<U256> {
         self.token.get_signal(self.token_direction.clone())
     }
 
@@ -81,6 +82,10 @@ impl SequenceToken {
     pub fn get_direction(&self) -> &DIRECTION {
         return &self.token_direction;
     }
+
+    pub fn router(&self) -> &Address {
+        &self.token.router()
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -93,7 +98,7 @@ impl ThreePathSequence {
     }
 
     pub async fn init(&self) {
-        let mut t = map_ref! {
+        let t = map_ref! {
             let a1 =self.a1().token.left_reserves_signal(),
             let b1 = self.a1().token.right_reserves_signal(),
             let a2 =self.b1().token.left_reserves_signal(),
@@ -240,7 +245,7 @@ pub fn cyclic_order(
         Option::from(SequenceToken::new(pair_3.clone(), DIRECTION::Right))
     };
 
-    let mut path = ThreePathSequence::new(vec![
+    let path = ThreePathSequence::new(vec![
         token_a1.unwrap(),
         token_b1.unwrap(),
         token_a2.unwrap(),
@@ -250,7 +255,7 @@ pub fn cyclic_order(
     ]);
     return Some(path);
 }
-
+/*
 #[test]
 pub fn test_is_arbitrage_pair_true() {
     let pair1 = CryptoPair::new(DexPool {
@@ -499,3 +504,5 @@ pub fn test_cyclic_order() {
     assert!(ordered.b1().get_symbol() == ordered.a2().get_symbol());
     assert!(ordered.b2().get_symbol() == ordered.a3().get_symbol());
 }
+
+ */

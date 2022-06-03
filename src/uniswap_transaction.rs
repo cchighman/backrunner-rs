@@ -3,18 +3,26 @@ use std::str::FromStr;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use ethereum_types::{Address, U256};
-use ethers::abi::Tokenize;
-use ethers::contract::Abigen;
-use ethers::prelude::*;
+use ethers::core::abi::Tokenize;
+use ethers::prelude::{Address, U256};
+
+use ethers::core::types::transaction::eip2718::TypedTransaction;
 use ethers::providers::{Http, Provider};
 use ethers::signers::{coins_bip39::English, MnemonicBuilder};
+
 use futures::StreamExt;
 use num_traits::FromPrimitive;
 
 use crate::contracts::bindings::ierc20::IERC20;
 use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
 use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
+use crate::utils::common::SequenceToken;
+/*
+pub(crate) static CONTRACT_ADDRESS: Lazy<Address> =
+    Lazy::new(|| Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap());
+
+pub(crate) static FROM_ADDRESS: Lazy<Address> =
+    Lazy::new(|| Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap());
 
 pub fn get_valid_timestamp(future_millis: U256) -> U256 {
     let start = SystemTime::now();
@@ -26,7 +34,42 @@ pub fn get_valid_timestamp(future_millis: U256) -> U256 {
 
     return U256::from(time_millis);
 }
+/*
+pub fn flash_swap_v2(
+    pair_id: Address,
+    in_amt: U256,
+    out_amt: U256,
+    calldata: ethers::core::types::Bytes,
+) -> TypedTransaction {
+    let provider =
+        Provider::<Http>::try_from("https://ropsten.infura.io/v3/7b15aafb575849f4ab4eaccc2725b4a7")
+            .unwrap();
 
+    let phrase = "unveil spoon stable govern diesel park glory visa lucky teach aspect spy";
+    let index = 0u32;
+
+    let wallet = MnemonicBuilder::<English>::default()
+        .phrase(phrase)
+        .index(index)
+        .unwrap()
+        // Use this if your mnemonic is encrypted
+        // .password(password)
+        .build()
+        .unwrap();
+    let wallet = wallet.with_chain_id(3u64);
+
+    dbg!(&wallet);
+
+    let client = Arc::new(SignerMiddleware::new(provider, wallet));
+    let pair_contract = UniswapV2Pair::new(pair_id, Arc::clone(&client));
+
+    let contract_call = pair_contract.swap(in_amt, out_amt, *CONTRACT_ADDRESS, calldata);
+    let mut tx = contract_call.tx;
+    tx.set_chain_id(1);
+    tx.set_from(*FROM_ADDRESS);
+    tx
+}
+*/
 pub fn reserves_to_amount(reserve0: u128, decimal0: i32, reserve1: u128, decimal1: i32) -> f64 {
     return f64::powi(10.0, (decimal0 - decimal1).abs()) * reserve1 as f64 / reserve0 as f64;
 }
@@ -42,7 +85,7 @@ pub fn test() {
 #[cfg(test)]
 mod tests {
     use super::*;
-
+    /*
     async fn swap_eth_for_exact() {
         // Ropsten Uniswap v2
         // Router: 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
@@ -166,4 +209,6 @@ mod tests {
         dbg!("Result:  {#:?}", result1.call().await);
         */
     }
-}
+    }
+ */
+    */

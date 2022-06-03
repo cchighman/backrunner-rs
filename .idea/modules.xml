@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/backrunner-rs.iml" filepath="$PROJECT_DIR$/backrunner-rs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../eth-rs/eth-rs.iml" filepath="$PROJECT_DIR$/../eth-rs/eth-rs.iml" />
     </modules>
   </component>
 </project>

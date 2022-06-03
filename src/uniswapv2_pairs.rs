@@ -1,13 +1,12 @@
-use ethereum_types::U256;
+use ethers::prelude::U256;
 
 pub struct UniswapPairs;
 pub mod uniswap_pairs {
     #![allow(dead_code)]
 
-    use ethereum_types::Address;
-    use serde::{Deserialize, Serialize};
-
     use super::*;
+    use ethers::prelude::Address;
+    use serde::{Deserialize, Serialize};
 
     pub const OPERATION_NAME: &str = "UniswapPairs";
     pub const QUERY : & str = "query UniswapPairs {\r\n  pairs(first: 100, where: {reserveUSD_gt: \"1000000\", volumeUSD_gt: \"50000\"}, orderBy: reserveUSD, orderDirection: desc) {\r\n    id\r\n    token0 {\r\n      id\r\n      symbol\r\n      name\r\n      decimals\r\n\r\n    }\r\n    token1 {\r\n      id\r\n      symbol\r\n      name\r\n      decimals\r\n    }\r\n    reserveUSD\r\n    volumeUSD\r\n    reserve0\r\n    reserve1\r\n    reserveETH\r\n    token0price\r\n    token1price\r\n\r\n  }\r\n}\r\n" ;
@@ -64,7 +63,7 @@ pub mod uniswap_pairs {
         pub symbol: String,
         pub name: String,
         pub decimals: i32,
-        pub reserve: f64,
+        pub reserve: U256,
     }
 }
 /*

@@ -1,25 +1,6 @@
-//use ethers_flashbots::*;
+use ethers::core::types::transaction::eip2718::TypedTransaction;
+
 /*
-pub(crate) static GOERLI_WALLET: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
-    MnemonicBuilder::<English>::default()
-        .phrase("unveil spoon stable govern diesel park glory visa lucky teach aspect spy")
-        .index(0u32)
-        .unwrap()
-        .build()
-        .unwrap()
-        .with_chain_id(5_u64)
-});
-
-pub(crate) static FLASHBOTS_GOERLI_PROVIDER: Lazy<
-    Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>,
-> = Lazy::new(|| {
-    Arc::new(SignerMiddleware::new(FlashbotsMiddleware::new(
-        provider,
-        Url::parse("https://relay-goerli.flashbots.net")?,
-        *GOERLI_WALLET,
-    )))
-});
-
 pub(crate) async fn execute_flashbot_strategy(tx: &TypedTransaction) {
     for x in 0..10 {
         let block_number = FLASHBOTS_GOERLI_PROVIDER.get_block_number().await?;
@@ -54,7 +35,4 @@ pub(crate) async fn execute_flashbot_strategy(tx: &TypedTransaction) {
         Err(e) => println!("An error occured: {}", e),
     }
 }
-
-
-
- */
+*/

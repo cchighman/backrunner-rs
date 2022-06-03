@@ -1,4 +1,4 @@
-use ethereum_types::U256;
+use ethers::prelude::U256;
 
 pub struct UniswapPools;
 

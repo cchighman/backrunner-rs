@@ -17,8 +17,8 @@ use blocknative::{
     models::Blockchain,
     ws::{models::WatchConfig, ws::Ws},
 };
-
-async fn initialize() {
+#[test]
+pub fn blocknative_initialize() {
     println!("Connecting to blocknative..");
     let ws = Ws::connect(
         "wss://api.blocknative.com/v0",
@@ -30,19 +30,16 @@ async fn initialize() {
 
     let mut filters = HashMap::new();
 
-    filters.insert(
-        "contractCall.methodName".to_string(),
-        "transfer".to_string(),
-    );
+    //filters.insert("contractCall.methodName".to_string(), "swap".to_string());
 
     let config = WatchConfig {
-        scope: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2".to_string(),
+        scope: "0xe93527D1F8c586353b13826C501fa5a69bCE2b0E".to_string(),
         filters: vec![filters],
         watch_address: true,
     };
     println!(
         "Subscribing to filter on: {:?}",
-        "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff"
+        "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
     );
 
     let mut stream = ws.listen(config).await.unwrap();

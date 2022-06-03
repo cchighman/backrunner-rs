@@ -7,7 +7,7 @@ use std::{
 
 use bigdecimal::BigDecimal;
 use dashmap::DashMap;
-use ethereum_types::U256;
+use ethers::prelude::U256;
 use lazy_static::lazy_static;
 use math::round::ceil;
 use math::round::floor;

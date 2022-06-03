@@ -772,15 +772,7 @@ mod uniswapv3_mod {
         }
     }
     #[doc = "`ExactInputParams(bytes,address,uint256,uint256,uint256)`"]
-    #[derive(
-        Clone,
-        Debug,
-        Default,
-        Eq,
-        PartialEq,
-        ethers :: contract :: EthAbiType,
-        ethers :: contract :: EthAbiCodec,
-    )]
+    #[derive(Clone, Debug, Default, Eq, PartialEq, ethers :: contract :: EthAbiType)]
     pub struct ExactInputParams {
         pub path: ethers::core::types::Bytes,
         pub recipient: ethers::core::types::Address,
@@ -789,15 +781,7 @@ mod uniswapv3_mod {
         pub amount_out_minimum: ethers::core::types::U256,
     }
     #[doc = "`ExactInputSingleParams(address,address,uint24,address,uint256,uint256,uint256,uint160)`"]
-    #[derive(
-        Clone,
-        Debug,
-        Default,
-        Eq,
-        PartialEq,
-        ethers :: contract :: EthAbiType,
-        ethers :: contract :: EthAbiCodec,
-    )]
+    #[derive(Clone, Debug, Default, Eq, PartialEq, ethers :: contract :: EthAbiType)]
     pub struct ExactInputSingleParams {
         pub token_in: ethers::core::types::Address,
         pub token_out: ethers::core::types::Address,
@@ -809,15 +793,7 @@ mod uniswapv3_mod {
         pub sqrt_price_limit_x96: ethers::core::types::U256,
     }
     #[doc = "`ExactOutputParams(bytes,address,uint256,uint256,uint256)`"]
-    #[derive(
-        Clone,
-        Debug,
-        Default,
-        Eq,
-        PartialEq,
-        ethers :: contract :: EthAbiType,
-        ethers :: contract :: EthAbiCodec,
-    )]
+    #[derive(Clone, Debug, Default, Eq, PartialEq, ethers :: contract :: EthAbiType)]
     pub struct ExactOutputParams {
         pub path: ethers::core::types::Bytes,
         pub recipient: ethers::core::types::Address,
@@ -826,15 +802,7 @@ mod uniswapv3_mod {
         pub amount_in_maximum: ethers::core::types::U256,
     }
     #[doc = "`ExactOutputSingleParams(address,address,uint24,address,uint256,uint256,uint256,uint160)`"]
-    #[derive(
-        Clone,
-        Debug,
-        Default,
-        Eq,
-        PartialEq,
-        ethers :: contract :: EthAbiType,
-        ethers :: contract :: EthAbiCodec,
-    )]
+    #[derive(Clone, Debug, Default, Eq, PartialEq, ethers :: contract :: EthAbiType)]
     pub struct ExactOutputSingleParams {
         pub token_in: ethers::core::types::Address,
         pub token_out: ethers::core::types::Address,
