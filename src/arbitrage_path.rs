@@ -18,7 +18,7 @@ use crate::crypto_math::*;
 
 use crate::uniswap_transaction::*;
 use crate::utils::common::ThreePathSequence;
-
+use bigdecimal::FromPrimitive;
 /* Babylonian Sqrt */
 impl ArbitragePath {
     /* TODO - For each pair */
@@ -101,7 +101,7 @@ impl ArbitragePath {
                 self.sequence.a3().get_symbol(),
                 (BigDecimal::from_str(&*self.sequence.a2().get_reserve().to_string()).unwrap()
                     / BigDecimal::from_str(
-                        &*10_i32
+                        &*10_i128
                             .pow(self.sequence.a2().get_decimal() as u32)
                             .to_string()
                     )
@@ -109,7 +109,7 @@ impl ArbitragePath {
                     / (BigDecimal::from_str(&*self.sequence.b2().get_reserve().to_string())
                         .unwrap()
                         / BigDecimal::from_str(
-                            &*10_i32
+                            &*10_i128
                                 .pow(self.sequence.b2().get_decimal() as u32)
                                 .to_string()
                         )
@@ -126,7 +126,7 @@ impl ArbitragePath {
                 self.sequence.b3().get_symbol(),
                 (BigDecimal::from_str(&*self.sequence.a3().get_reserve().to_string()).unwrap()
                     / BigDecimal::from_str(
-                        &*10_i32
+                        &*10_i128
                             .pow(self.sequence.a3().get_decimal() as u32)
                             .to_string()
                     )
@@ -134,7 +134,7 @@ impl ArbitragePath {
                     / (BigDecimal::from_str(&*self.sequence.b3().get_reserve().to_string())
                         .unwrap()
                         / BigDecimal::from_str(
-                            &*10_i32
+                            &*10_i128
                                 .pow(self.sequence.b3().get_decimal() as u32)
                                 .to_string()
                         )
@@ -148,12 +148,12 @@ impl ArbitragePath {
             );
 
             let (source_amt, dest_amt) = self.dec_to_u256(
-                &delta_a.clone().mul(BigDecimal::from(
-                    10_i32.pow(self.sequence.a1().get_decimal() as u32),
-                )),
-                &delta_b.clone().mul(BigDecimal::from(
-                    10_u32.pow(self.sequence.a1().get_decimal() as u32),
-                )),
+                &delta_a.clone().mul(BigDecimal::from_i128(
+                    10_i128.pow(self.sequence.a1().get_decimal() as u32),
+                ).unwrap()),
+                &delta_b.clone().mul(BigDecimal::from_i128(
+                    10_i128.pow(self.sequence.a1().get_decimal() as u32),
+                ).unwrap()),
             );
 
             let trade1 = SwapRoute::new(
@@ -167,12 +167,12 @@ impl ArbitragePath {
             );
 
             let (source_amt, dest_amt) = self.dec_to_u256(
-                &delta_a.clone().mul(BigDecimal::from(
-                    10_i32.pow(self.sequence.a1().get_decimal() as u32),
-                )),
-                &delta_b.clone().mul(BigDecimal::from(
-                    10_u32.pow(self.sequence.a1().get_decimal() as u32),
-                )),
+                &delta_a.clone().mul(BigDecimal::from_i128(
+                    10_i128.pow(self.sequence.a1().get_decimal() as u32),
+                ).unwrap()),
+                &delta_b.clone().mul(BigDecimal::from_i128(
+                    10_i128.pow(self.sequence.a1().get_decimal() as u32),
+                ).unwrap()),
             );
 
             let trade2 = SwapRoute::new(
@@ -186,12 +186,12 @@ impl ArbitragePath {
             );
 
             let (source_amt, dest_amt) = self.dec_to_u256(
-                &delta_c.clone().mul(BigDecimal::from(
-                    10_i32.pow(self.sequence.a3().get_decimal() as u32),
-                )),
-                &delta_a_prime.clone().mul(BigDecimal::from(
-                    10_u32.pow(self.sequence.b3().get_decimal() as u32),
-                )),
+                &delta_c.clone().mul(BigDecimal::from_i128(
+                    10_i128.pow(self.sequence.a3().get_decimal() as u32),
+                ).unwrap()),
+                &delta_a_prime.clone().mul(BigDecimal::from_i128(
+                    10_i128.pow(self.sequence.b3().get_decimal() as u32),
+                ).unwrap()),
             );
             let trade3 = SwapRoute::new(
                 (
@@ -204,12 +204,12 @@ impl ArbitragePath {
             );
             let trade_vec = vec![trade1, trade2, trade3];
             let (source_amt, dest_amt) = self.dec_to_u256(
-                &delta_a.clone().mul(BigDecimal::from(
-                    10_i32.pow(self.sequence.a1().get_decimal() as u32),
-                )),
-                &delta_b.clone().mul(BigDecimal::from(
-                    10_u32.pow(self.sequence.b1().get_decimal() as u32),
-                )),
+                &delta_a.clone().mul(BigDecimal::from_i128(
+                    10_i128.pow(self.sequence.a1().get_decimal() as u32),
+                ).unwrap()),
+                &delta_b.clone().mul(BigDecimal::from_i128(
+                    10_i128.pow(self.sequence.b1().get_decimal() as u32),
+                ).unwrap()),
             );
             /*
             let flash_tx = flash_swap_v2(
