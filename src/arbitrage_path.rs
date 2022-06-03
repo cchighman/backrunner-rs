@@ -12,7 +12,7 @@ use futures::{future, StreamExt};
 use futures_signals::{map_ref, signal::SignalExt};
 use num_traits::real::Real;
 use rayon::prelude::*;
-
+use bigdecimal::ToPrimitive;
 use crate::arb_thread_pool::spawn;
 use crate::crypto_math::*;
 
@@ -64,26 +64,24 @@ impl ArbitragePath {
             BigDecimal::from_str(&*self.sequence.b3().get_reserve().to_string()).unwrap(),
         );
 
-        let ten = BigDecimal::from(10);
-
         if !result.is_none() {
             let (delta_a, delta_b, delta_c, delta_a_prime, profit) = result.unwrap();
             let method = "optimize_a_prime";
 
             println!(
-                "Method: {} Arb Index: {} Profit: {}
-                Trade {:.2?} {} for {:.2?} {} at price {}
+                "Method: {} Arb Index: {:.3?} Profit: {:.3?}
+                Trade {:.2?} {} for {:.2?} {} at price {:.3?}
                 \t\t{} Reserves:  {} Ratio: {:.2?}  {} Reserves:  {} Ratio: {}
-                Trade {:.2?} {} for {:.2?} {} at price {}
+                Trade {:.2?} {} for {:.2?} {} at price {:.3?}
                 \t\t{} Reserves:  {} Ratio: {:.2?}  {} Reserves:  {} Ratio: {}
-                Trade {:.2?} {} for {:.2?} {} at price {}
+                Trade {:.2?} {} for {:.2?} {} at price {:.3?}
                 \t\t{} Reserves:  {}  Ratio: {:.2?} {} Reserves:  {} Ratio: {}",
                 method,
-                self.arb_index(),
-                profit,
-                delta_a,
+                self.arb_index().to_f64().unwrap(),
+                profit.to_f64().unwrap(),
+                delta_a.to_f64().unwrap(),
                 &self.sequence.a1().get_symbol(),
-                delta_b,
+                delta_b.to_f64().unwrap(),
                 &self.sequence.b1().get_symbol(),
                 (self.sequence.a1().get_reserve() / self.sequence.b1().get_reserve()),
                 self.sequence.a1().get_symbol(),
@@ -92,9 +90,9 @@ impl ArbitragePath {
                 self.sequence.b1().get_symbol(),
                 self.sequence.b1().get_reserve(),
                 self.sequence.b1().get_reserve() / self.sequence.a1().get_reserve(),
-                delta_b,
+                delta_b.to_f64().unwrap(),
                 self.sequence.a2().get_symbol(),
-                delta_c,
+                delta_c.to_f64().unwrap(),
                 self.sequence.a3().get_symbol(),
                 (BigDecimal::from_str(&*self.sequence.a2().get_reserve().to_string()).unwrap()
                     / BigDecimal::from_str(
@@ -102,7 +100,7 @@ impl ArbitragePath {
                             .pow(self.sequence.a2().get_decimal() as u32)
                             .to_string()
                     )
-                    .unwrap())
+                    .unwrap()
                     / (BigDecimal::from_str(&*self.sequence.b2().get_reserve().to_string())
                         .unwrap()
                         / BigDecimal::from_str(
@@ -110,16 +108,16 @@ impl ArbitragePath {
                                 .pow(self.sequence.b2().get_decimal() as u32)
                                 .to_string()
                         )
-                        .unwrap()),
+                        .unwrap())).to_f64().unwrap(),
                 self.sequence.a2().get_symbol(),
                 self.sequence.a2().get_reserve(),
                 self.sequence.a2().get_reserve() / self.sequence.b2().get_reserve(),
                 self.sequence.b2().get_symbol(),
                 self.sequence.b2().get_reserve(),
                 self.sequence.b2().get_reserve() / self.sequence.a2().get_reserve(),
-                delta_c,
+                delta_c.to_f64().unwrap(),
                 self.sequence.a3().get_symbol(),
-                delta_a_prime,
+                delta_a_prime.to_f64().unwrap(),
                 self.sequence.b3().get_symbol(),
                 (BigDecimal::from_str(&*self.sequence.a3().get_reserve().to_string()).unwrap()
                     / BigDecimal::from_str(
@@ -127,7 +125,7 @@ impl ArbitragePath {
                             .pow(self.sequence.a3().get_decimal() as u32)
                             .to_string()
                     )
-                    .unwrap())
+                    .unwrap()
                     / (BigDecimal::from_str(&*self.sequence.b3().get_reserve().to_string())
                         .unwrap()
                         / BigDecimal::from_str(
@@ -135,7 +133,7 @@ impl ArbitragePath {
                                 .pow(self.sequence.b3().get_decimal() as u32)
                                 .to_string()
                         )
-                        .unwrap()),
+                        .unwrap())).to_f64().unwrap(),
                 self.sequence.a3().get_symbol(),
                 self.sequence.a3().get_reserve(),
                 self.sequence.a3().get_reserve() / self.sequence.b3().get_reserve(),
@@ -149,7 +147,7 @@ impl ArbitragePath {
                     10_i128.pow(self.sequence.a1().get_decimal() as u32),
                 ).unwrap()),
                 &delta_b.clone().mul(BigDecimal::from_i128(
-                    10_i128.pow(self.sequence.a1().get_decimal() as u32),
+                    10_i128.pow(self.sequence.b1().get_decimal() as u32),
                 ).unwrap()),
             );
 
@@ -164,11 +162,11 @@ impl ArbitragePath {
             );
 
             let (source_amt, dest_amt) = self.dec_to_u256(
-                &delta_a.clone().mul(BigDecimal::from_i128(
-                    10_i128.pow(self.sequence.a1().get_decimal() as u32),
-                ).unwrap()),
                 &delta_b.clone().mul(BigDecimal::from_i128(
-                    10_i128.pow(self.sequence.a1().get_decimal() as u32),
+                    10_i128.pow(self.sequence.a2().get_decimal() as u32),
+                ).unwrap()),
+                &delta_c.clone().mul(BigDecimal::from_i128(
+                    10_i128.pow(self.sequence.b2().get_decimal() as u32),
                 ).unwrap()),
             );
 
@@ -179,7 +177,7 @@ impl ArbitragePath {
                 ),
                 source_amt,
                 dest_amt,
-                self.sequence.a1().router().clone(),
+                self.sequence.a2().router().clone(),
             );
 
             let (source_amt, dest_amt) = self.dec_to_u256(
@@ -197,7 +195,7 @@ impl ArbitragePath {
                 ),
                 source_amt,
                 dest_amt,
-                self.sequence.a1().router().clone(),
+                self.sequence.a3().router().clone(),
             );
             let trade_vec = vec![trade1, trade2, trade3];
             let (source_amt, dest_amt) = self.dec_to_u256(
@@ -221,8 +219,8 @@ impl ArbitragePath {
 
     pub fn dec_to_u256(&self, delta_a: &BigDecimal, delta_b: &BigDecimal) -> (U256, U256) {
         (
-            U256::from_dec_str(&*delta_a.to_string()).unwrap(),
-            U256::from_dec_str(&*delta_a.to_string()).unwrap(),
+            U256::from_dec_str(&*delta_a.to_string().split_once(".").unwrap().0).unwrap(),
+            U256::from_dec_str(&*delta_b.to_string().split_once(".").unwrap().0).unwrap(),
         )
     }
 
