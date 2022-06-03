@@ -127,12 +127,12 @@ fn main() {
     if args.contains(&"run".to_string()) {
         println!("Running..");
         /* Read Pairs from file */
-        let path = if args.len() > 1 {
+        let path = if args.len() > 2 {
             args[1].clone().to_string()
         } else {
-            "pairs_500.json".clone().to_string()
+            "pairs_new.json".clone().to_string()
         };
-
+        println!("path: {}", path.clone());
         let file = File::open(path).unwrap();
         let mut reader = BufReader::new(file);
         let cached_pairs: CryptoPairs = serde_json::from_reader(reader).unwrap();
