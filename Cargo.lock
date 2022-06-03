@@ -303,6 +303,7 @@ dependencies = [
  "ethabi",
  "ethereum-types",
  "ethers",
+ "ethers-flashbots",
  "futures",
  "futures-signals",
  "futures-util",
@@ -631,6 +632,7 @@ dependencies = [
  "libc",
  "num-integer",
  "num-traits",
+ "serde",
  "time",
  "winapi",
 ]
@@ -1250,6 +1252,25 @@ dependencies = [
  "serde-aux",
  "serde_json",
  "thiserror",
+]
+
+[[package]]
+name = "ethers-flashbots"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2c656a962a4b64cc8b49a74ae859c2b9f1348bf6e75648b098d7cb68bb46b16e"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "ethers",
+ "futures-core",
+ "futures-util",
+ "pin-project",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "url",
 ]
 
 [[package]]

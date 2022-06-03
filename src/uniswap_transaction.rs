@@ -4,20 +4,20 @@ use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use ethers::core::abi::Tokenize;
-use ethers::prelude::{Address, U256};
+use ethers::prelude::{Address, Signer, SignerMiddleware, U256};
 
 use ethers::core::types::transaction::eip2718::TypedTransaction;
 use ethers::providers::{Http, Provider};
 use ethers::signers::{coins_bip39::English, MnemonicBuilder};
 
-use futures::StreamExt;
-use num_traits::FromPrimitive;
-
 use crate::contracts::bindings::ierc20::IERC20;
 use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
 use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
-use crate::utils::common::SequenceToken;
-/*
+use crate::sequence_token::SequenceToken;
+use ethers::contract::Lazy;
+use futures::StreamExt;
+use num_traits::FromPrimitive;
+
 pub(crate) static CONTRACT_ADDRESS: Lazy<Address> =
     Lazy::new(|| Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap());
 
@@ -34,7 +34,7 @@ pub fn get_valid_timestamp(future_millis: U256) -> U256 {
 
     return U256::from(time_millis);
 }
-/*
+
 pub fn flash_swap_v2(
     pair_id: Address,
     in_amt: U256,
@@ -65,15 +65,15 @@ pub fn flash_swap_v2(
 
     let contract_call = pair_contract.swap(in_amt, out_amt, *CONTRACT_ADDRESS, calldata);
     let mut tx = contract_call.tx;
-    tx.set_chain_id(1);
+    //tx = tx.with_chain_id(1);
     tx.set_from(*FROM_ADDRESS);
     tx
 }
-*/
+
 pub fn reserves_to_amount(reserve0: u128, decimal0: i32, reserve1: u128, decimal1: i32) -> f64 {
     return f64::powi(10.0, (decimal0 - decimal1).abs()) * reserve1 as f64 / reserve0 as f64;
 }
-
+/*
 #[test]
 pub fn test() {
     Abigen::new("UniswapV3", "./uniswapv3.json")
@@ -85,7 +85,7 @@ pub fn test() {
 #[cfg(test)]
 mod tests {
     use super::*;
-    /*
+
     async fn swap_eth_for_exact() {
         // Ropsten Uniswap v2
         // Router: 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
@@ -211,4 +211,3 @@ mod tests {
     }
     }
  */
-    */

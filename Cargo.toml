@@ -18,7 +18,7 @@ futures-util = "*"
 tracing-subscriber = {version ="0.2.19", features = ["fmt"]}
 tracing-appender = "0.1.2"
 blocknative = {path = "./blocknative", version = "0.1.0" }
-
+ethers-flashbots = "*"
 ethereum-types = "*"
 
 #petgraph = {path = "../../petgraph", version = "0.6.0" }

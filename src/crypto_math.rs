@@ -6,7 +6,7 @@ use bigdecimal::BigDecimal;
 use ethereum_types::U512;
 use ethers::prelude::U256;
 use num_traits::real::Real;
-use num_traits::{FromPrimitive, Pow, ToPrimitive};
+use num_traits::{FromPrimitive, Pow, ToPrimitive, Zero};
 
 use crate::crypto_pair::CryptoPair;
 
@@ -301,16 +301,6 @@ pub fn get_amount_in_2(amount_out: f64, reserve_in: f64, reserve_out: f64) -> f6
     return (0.997 * amount_out * reserve_in / (reserve_out - amount_out * 0.997)).add(1.0);
 }
 
-pub fn arb_index(A0: &U256, A1: &U256, B0: &U256, B1: &U256) -> BigDecimal {
-    let a0 = BigDecimal::from_str(&*A0.to_string()).unwrap();
-    let a1 = BigDecimal::from_str(&*A1.to_string()).unwrap();
-    let b0 = BigDecimal::from_str(&*B0.to_string()).unwrap();
-    let b1 = BigDecimal::from_str(&*B1.to_string()).unwrap();
-
-    return (a0 / a1) / (b0 / b1);
-    //* (*C0 / *C1) * (*D0 / *D1) * (*E0 / *E1) * (*F0 / *F1)  )
-}
-
 /*
    // q = R0a * R1b
    // r = R1a * R0b
@@ -422,12 +412,9 @@ pub fn optimize_a_prime(
     let Ea = (&one * &a1 * &a2) / (&one * &a2 + &nine_seven * &b1);
     let Eb = (&nine_seven * &b1 * &b2) / (&one * &a2 + &nine_seven * &b1);
 
-    /*
     if Ea > Eb {
         return None;
     }
-
-     */
 
     let optimal: BigDecimal = (&Ea * &Eb * &nine_seven * &one) - &Ea * &one / &nine_seven;
     let delta_a = optimal.sqrt().unwrap();
@@ -435,8 +422,22 @@ pub fn optimize_a_prime(
     let delta_c = (&b2 * &nine_seven * &delta_b) / (&a2 + &nine_seven * &delta_b);
     let delta_a_prime = (&b3 * &nine_seven * &delta_c) / (&a3 + &nine_seven * &delta_c);
     let profit = &delta_a_prime - &delta_a;
+
+    let eq1 = (&a1 + &nine_seven * &delta_a) * (&b1 - &delta_b);
+    let eq2 = (&a2 + &nine_seven * &delta_b) * (&b2 - &delta_c);
+    let eq3 = (&a3 + &nine_seven * &delta_c) * (&b3 - &delta_a_prime);
+
+    let first_eq = if eq1.eq(&a1.mul(&b1)) { true } else { false };
+    let second_eq = if eq2.eq(&a2.mul(&b2)) { true } else { false };
+    let third_eq = if eq3.eq(&a3.mul(&b3)) { true } else { false };
+
+    if first_eq || second_eq || third_eq {
+        println!("Deltas don't equal");
+    }
+
     /*
-        if profit <= 0.0 {
+        if profit <= BigDecimal::zero() {
+
             return None;
         }
     */

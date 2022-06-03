@@ -10,15 +10,15 @@
     unused_mut
 )]
 
+use arb_thread_pool::spawn;
 use async_std::prelude::*;
+use ethers::prelude::Address;
+use futures_util::{FutureExt, TryFutureExt};
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{BufReader, BufWriter};
 use std::io::{Read, Write};
 use std::sync::Arc;
-
-use ethers::prelude::Address;
-use futures_util::{FutureExt, TryFutureExt};
 
 use itertools::Itertools;
 use rayon::prelude::*;
@@ -27,7 +27,7 @@ use arbitrage_path::ArbitragePath;
 use crypto_pair::{CryptoPair, CryptoPairs};
 use utils::uniswapv2_utils::{populate_sushiswap_pairs, populate_uniswapv2_pairs};
 
-use crate::utils::common::{cyclic_order, is_arbitrage_pair};
+use crate::three_path_sequence::{cyclic_order, is_arbitrage_pair};
 
 pub mod arb_signal;
 pub mod arb_thread_pool;
@@ -41,7 +41,9 @@ pub mod dex_pool;
 pub mod flashbot_strategy;
 pub mod graphql_uniswapv2;
 pub mod graphql_uniswapv3;
+pub mod sequence_token;
 pub mod swap_route;
+pub mod three_path_sequence;
 mod uniswap_transaction;
 pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
@@ -55,11 +57,15 @@ pub mod utils;
 */
 
 use std::env;
+use std::future::ready;
 
-fn parse_cmd_args() {}
+use ethers::contract::Lazy;
+
+pub static mut ARB_PATHS: Lazy<Vec<Arc<ArbitragePath>>> = Lazy::new(|| Default::default());
 
 #[allow(dead_code)]
-fn main() {
+#[async-std::main]
+async fn main() {
     let args: Vec<String> = env::args().collect();
 
     tracing_subscriber::fmt::init();
@@ -73,7 +79,7 @@ fn main() {
 
     let mut crypto_pairs: HashMap<Address, Arc<CryptoPair>> = HashMap::new();
     let mut crypto_pairs_unsafe: HashMap<Address, CryptoPair> = HashMap::new();
-    let mut arb_paths: Vec<Arc<ArbitragePath>> = Default::default();
+
     println!("Test - ");
     /* 1.) Populate a map of all possible crypto pairs */
     populate_uniswapv2_pairs(&mut crypto_pairs_unsafe);
@@ -135,7 +141,7 @@ fn main() {
         println!("path: {}", path.clone());
         let file = File::open(path).unwrap();
         let mut reader = BufReader::new(file);
-        let cached_pairs: CryptoPairs = serde_json::from_reader(reader).unwrap();
+        let mut cached_pairs: CryptoPairs = serde_json::from_reader(reader).unwrap();
 
         /* Re-creating path cache from file */
         // First populate CryptoPair objects
@@ -157,14 +163,20 @@ fn main() {
         /*
         Next we want to create arbitrage paths based on the contents of the serialized vector, except we will instead look to the map map above for references.
          */
-        for unordered_pair in cached_pairs.pairs.iter() {
-            let sequence = cyclic_order(unordered_pair.clone(), &crypto_pairs).unwrap();
-            let arb_path = ArbitragePath::new(sequence);
-            arb_path.init(arb_path.clone());
-            arb_paths.push(arb_path);
+        cached_pairs
+            .pairs
+            .par_iter_mut()
+            .for_each(|unordered_pair| unsafe {
+                let sequence = cyclic_order(unordered_pair.clone(), &crypto_pairs).unwrap();
+                let arb_path = ArbitragePath::new(sequence);
+                async {
+                    arb_path.init(arb_path.clone()).await;
+                };
+                ARB_PATHS.push(arb_path);
+            });
+        unsafe {
+            println!("pairs: {}, paths: {}", &crypto_pairs.len(), ARB_PATHS.len());
         }
-
-        println!("pairs: {}, paths: {}", crypto_pairs.len(), arb_paths.len());
     }
     use std::{thread, time};
     loop {
