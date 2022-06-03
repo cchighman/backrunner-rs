@@ -13,7 +13,7 @@
 use async_std::prelude::*;
 use std::collections::HashMap;
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader, BufWriter};
 use std::io::{Read, Write};
 use std::sync::Arc;
 
@@ -27,7 +27,7 @@ use arbitrage_path::ArbitragePath;
 use crypto_pair::{CryptoPair, CryptoPairs};
 use utils::uniswapv2_utils::{populate_sushiswap_pairs, populate_uniswapv2_pairs};
 
-use crate::utils::common::cyclic_order;
+use crate::utils::common::{cyclic_order, is_arbitrage_pair};
 
 pub mod arb_signal;
 pub mod arb_thread_pool;
@@ -56,13 +56,11 @@ pub mod utils;
 
 use std::env;
 
+fn parse_cmd_args() {}
+
 #[allow(dead_code)]
 fn main() {
     let args: Vec<String> = env::args().collect();
-
-    for arg in args.iter() {
-        println!("{}", arg);
-    }
 
     tracing_subscriber::fmt::init();
     /*
@@ -90,7 +88,8 @@ fn main() {
             .generate_arbitrage_paths(&crypto_pairs, &mut arb_paths)
             .await;
     */
-    /*
+    if args.contains(&"generate".to_string()) {
+        println!("Generating...");
         let x = crypto_pairs_unsafe
             .values()
             .collect::<Vec<_>>()
@@ -123,10 +122,18 @@ fn main() {
 
         serde_json::to_writer(&mut writer, &ser_pairs).unwrap();
         writer.flush().unwrap();
-    */
-    /*
+    }
+
+    if args.contains(&"run".to_string()) {
+        println!("Running..");
         /* Read Pairs from file */
-        let file = File::open("pairs_500.json").unwrap();
+        let path = if args.len() > 1 {
+            args[1].clone().to_string()
+        } else {
+            "pairs_500.json".clone().to_string()
+        };
+
+        let file = File::open(path).unwrap();
         let mut reader = BufReader::new(file);
         let cached_pairs: CryptoPairs = serde_json::from_reader(reader).unwrap();
 
@@ -158,8 +165,7 @@ fn main() {
         }
 
         println!("pairs: {}, paths: {}", crypto_pairs.len(), arb_paths.len());
-
-    */
+    }
     use std::{thread, time};
     loop {
         let ten = time::Duration::from_millis(10000);
