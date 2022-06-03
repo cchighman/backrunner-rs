@@ -37,12 +37,15 @@ impl ArbitragePath {
 
     pub fn reserves_to_amount(
         &self,
-        reserve0: u128,
+        reserve0: U256,
         decimal0: i32,
-        reserve1: u128,
+        reserve1: U256,
         decimal1: i32,
-    ) -> f64 {
-        return f64::powi(10.0, (decimal0 - decimal1).abs()) * reserve1 as f64 / reserve0 as f64;
+    ) -> BigDecimal {
+        return BigDecimal::from_f64(
+            f64::powi(10.0, (decimal0 - decimal1).abs()) * reserve1 as f64 / reserve0 as f64,
+        )
+        .unwrap();
     }
 
     pub fn arb_index(&self) -> BigDecimal {

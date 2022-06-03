@@ -1,13 +1,13 @@
+use crate::arbitrage_path::ArbitragePath;
+use ethers::prelude::{Address, U256};
+use futures_signals::map_ref;
+use futures_signals::signal::{MutableSignal, SignalExt};
+use num_bigint::BigInt;
 use std::collections::HashMap;
 use std::future::ready;
 use std::ops::Mul;
 use std::str::FromStr;
 use std::sync::Arc;
-
-use ethers::prelude::{Address, U256};
-use futures_signals::map_ref;
-use futures_signals::signal::{MutableSignal, SignalExt};
-use num_bigint::BigInt;
 
 use crate::arb_thread_pool::spawn;
 use crate::crypto_pair::CryptoPair;
@@ -410,6 +410,8 @@ pub fn test_is_arbitrage_pair_false() {
     assert!(!is_arbitrage_pair(&arb_vec));
 }
 
+
+ */
 #[test]
 pub fn test_cyclic_order() {
     let pair1 = CryptoPair::new(DexPool {
@@ -490,6 +492,7 @@ pub fn test_cyclic_order() {
     crypto_pairs.insert(pair3.pair_id().clone(), Arc::new(pair3.clone()));
 
     let ordered = cyclic_order(crypto_paths, &crypto_pairs).unwrap();
+    let arb_path = ArbitragePath::new(ordered.clone());
 
     println!(
         "a1: {}, b1: {}, a2: {}, b2: {}, a3: {}, b3: {}",
@@ -503,6 +506,6 @@ pub fn test_cyclic_order() {
     assert!(ordered.a1().get_symbol() == ordered.b3().get_symbol());
     assert!(ordered.b1().get_symbol() == ordered.a2().get_symbol());
     assert!(ordered.b2().get_symbol() == ordered.a3().get_symbol());
-}
 
- */
+    arb_path.calculate();
+}
