@@ -1,0 +1,27 @@
+[package]
+name = "blocknative"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "*"
+async-trait = "*"
+chrono = "*"
+futures = { version = "0.3"}
+futures-channel = "*"
+futures-stream = "*"
+futures-util = "*"
+serde = {version = "1.0", features = ["derive"]}
+serde_json = "^1.0"
+thiserror = "*"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+tokio = {version = "*", features = ["macros", "rt-multi-thread", "fs", "time"]}
+async-tungstenite = { version = "*",  features = ["async-native-tls","async-tls", "tokio-rustls-webpki-roots"] }
+async-std = "*"
+url = "*"
+ethers = { version = "0.6", optional = true}
+hex = "*"
+
+[dev-dependencies]
+ethers = { version = "0.6"}
