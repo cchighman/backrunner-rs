@@ -21,6 +21,7 @@ use crate::sequence_token::SequenceToken;
 use crate::three_path_sequence::ThreePathSequence;
 use crate::uniswap_transaction::*;
 use bigdecimal::FromPrimitive;
+use ethers::types::transaction::eip2718::TypedTransaction;
 /* Babylonian Sqrt */
 impl ArbitragePath {
     /* TODO - For each pair */
@@ -218,7 +219,7 @@ impl ArbitragePath {
             )
             .await;
 
-            let flash_tx = flash_swap_v2(
+            let flash_tx: TypedTransaction = flash_swap_v2(
                 sequence.a1().token.pair_id().clone(),
                 source_amt,
                 dest_amt,

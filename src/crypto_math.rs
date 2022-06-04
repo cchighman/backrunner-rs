@@ -434,6 +434,18 @@ pub fn optimize_a_prime(
     let comp_3 = U256::from((&a3.clone().mul(&b3)).to_u128().unwrap()).div(U256::from(100));
 
 
+<<<<<<< HEAD
+    let first_eq = if !eq1.is_integer() && eq1.round(3).eq(&a1.mul(&b1).round(3)) {
+        true
+    } else {
+        false
+    };
+    let second_eq = if eq2.eq(&a2.mul(&b2)) { true } else { false };
+    let third_eq = if eq3.eq(&a3.mul(&b3)) { true } else { false };
+
+    if !first_eq || !second_eq || !third_eq {
+        println!("Deltas don't equal");
+=======
     let ten = U256::from(10);
     let first_eq = (eq1.clone() - comp_1.clone()) < ten.clone();
     let second_eq = (eq2.clone() - comp_2.clone()) < ten.clone();
@@ -443,6 +455,7 @@ pub fn optimize_a_prime(
       //  dbg!("delta not equal",&first_eq, &eq1.to_string().split_once(".").unwrap().0,&a1*&b1, &second_eq, &eq2.to_string().split_once(".").unwrap().0,&a2*&b2, &third_eq, &eq3.to_string().split_once(".").unwrap().0,&a3*&b3, &delta_a, &delta_b, &delta_c, &delta_a_prime);
     }else {
         //dbg!("EQUAL",&first_eq, &a2*&b1, &second_eq, &a2*&b2, &third_eq, &a3*&b3, &delta_a, &delta_b, &delta_c, &delta_a_prime);
+>>>>>>> refs/remotes/origin/main
     }
 
     /*

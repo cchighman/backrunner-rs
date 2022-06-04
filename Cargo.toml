@@ -3,6 +3,9 @@ name = "backrunner-rs"
 version = "0.1.0"
 edition = "2021"
 
+[profile.release]
+lto = true
+
 [dependencies]
 serde = { version = "1.0.136", features = ["derive"] }
 async-std = {version = "1.11.0", features = ["attributes"]}
