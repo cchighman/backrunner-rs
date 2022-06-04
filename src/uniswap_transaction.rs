@@ -11,7 +11,7 @@ use ethers::providers::{Http, Provider};
 use ethers::signers::{coins_bip39::English, MnemonicBuilder};
 
 use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
-use crate::uniswap_providers::{FROM_ADDRESS,CONTRACT_ADDRESS};
+use crate::uniswap_providers::UniswapProviders;
 
 use crate::sequence_token::SequenceToken;
 use ethers::contract::Lazy;
@@ -35,27 +35,15 @@ pub async fn flash_swap_v2(
     out_amt: U256,
     calldata: ethers::core::types::Bytes,
 ) -> TypedTransaction {
-    let provider = Provider::<Http>::try_from(
-        "https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3",
-    ).unwrap();
+    
+    let pair_contract = UniswapV2Pair::new(pair_id, *UniswapProviders::MAINNET_ETH_CLIENT);
 
-    let private_key = "7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236";
-    let wallet = private_key.parse::<LocalWallet>().unwrap();
-    let wallet = wallet.with_chain_id(1u64);
-   
-    let client = Arc::new(SignerMiddleware::new(provider, wallet));
-    let pair_contract = UniswapV2Pair::new(pair_id, Arc::clone(&client));
-
-    let contract_call = pair_contract.swap(in_amt, out_amt, *CONTRACT_ADDRESS, calldata);
+    let contract_call = pair_contract.swap(in_amt, out_amt, UniswapProviders::CONTRACT_ADDRESS, calldata);
     let mut tx = contract_call.tx;
-    //tx = tx.with_chain_id(1);
-    tx.set_from(*FROM_ADDRESS);
+    tx.set_from(UniswapProviders::FROM_ADDRESS);
     tx
 }
 
-pub fn reserves_to_amount(reserve0: u128, decimal0: i32, reserve1: u128, decimal1: i32) -> f64 {
-    return f64::powi(10.0, (decimal0 - decimal1).abs()) * reserve1 as f64 / reserve0 as f64;
-}
 /*
 #[test]
 pub fn test() {

@@ -228,8 +228,8 @@ impl ArbitragePath {
             .await;
             
             println!("Flash Tx: {}", flash_tx.data().unwrap());
-            FlashbotStrategy::do_flashbot_mainnet(flash_tx).await;
-        
+            let result = FlashbotStrategy::do_flashbot_mainnet(flash_tx).await;
+            dbg!(result);
             
         }
     }

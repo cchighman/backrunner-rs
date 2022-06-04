@@ -48,6 +48,7 @@ pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
 pub mod utils;
 pub mod uniswap_providers;
+pub mod UniswapProviders;
 
 /*
    Grafana API Key: eyJrIjoiVjY3bzNoWTFnTTNyTUpCVXRoUUJxcXZPTXJGbE1nVmUiLCJuIjoiYmFja3J1bm5lciIsImlkIjoxfQ==
@@ -61,7 +62,8 @@ pub mod uniswap_providers;
      Discord Client Secret: lREE9D8B7qrKsyfqJQqkegNrPhTCGsa2
      Discord Invite Link: https://discord.com/api/oauth2/authorize?client_id=982459497320689684&permissions=8&redirect_uri=http%3A%2F%2Fwww.google.com&response_type=code&scope=identify%20email%20rpc.notifications.read%20rpc%20gdm.join%20guilds.members.read%20guilds.join%20connections%20guilds%20rpc.activities.write%20rpc.voice.write%20rpc.voice.read%20bot%20webhook.incoming%20messages.read%20applications.builds.upload%20applications.builds.read%20dm_channels.read%20voice%20relationships.read%20activities.write%20activities.read%20applications.entitlements%20applications.store.update%20applications.commands
      Discord Webhook URL: https://discord.com/api/webhooks/982463881354035241/6XmX7RP90l1LW50WrLSsgnJPAQNM0Woqa2pG7Kk693ujqGQYdMr9jHoClgU6MmJXrpI0
-*/
+RUSTFLAGS="-C target-cpu=native" cargo build --release
+     */
 
 use std::env;
 use std::future::ready;

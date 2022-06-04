@@ -1,4 +1,4 @@
-
+pub mod UniswapProviders {
     use std::fmt;
     use ethers::abi::Token;
     use std::str::FromStr;
@@ -52,6 +52,28 @@ impl fmt::Display for Dex {
         write!(f, "{:?}", self)
     }
 }
+
+/* 
+#[derive(Clone)]
+pub struct UniswapProviders {
+    pub providers: u8
+}
+
+impl UniswapProviders {
+    pub fn new() -> Self {
+        Self {
+            providers: 5,
+        }
+    }
+}
+*/
+//  Mainnet
+// https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3
+// wss://mainnet.infura.io/ws/v3/20ca45667c5d4fa6b259b9a36babe5c3
+
+// Goerli
+// https://goerli.infura.io/v3/0ab0b9c9d5bf44818399aea45b5ade51
+// wss://goerli.infura.io/ws/v3/0ab0b9c9d5bf44818399aea45b5ade51
 
 
 /*
@@ -136,7 +158,7 @@ static MAINNET_ROUTER_V2_ADDY: Lazy<Address> =
 
     
 pub static MAINNET_PROVIDER: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>> =
-Lazy::new(|| {
+Lazy::new(|| {  
     Arc::new(SignerMiddleware::new(
         Provider::<Http>::try_from(
             "https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3",
@@ -146,6 +168,23 @@ Lazy::new(|| {
     ))
 });
 
+pub static MAINNET_FLASHBOTS_CLIENT: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>> =
+    Lazy::new(|| {  
+    SignerMiddleware::new(
+        FlashbotsMiddleware::new(
+            MAINNET_PROVIDER,
+            Url::parse("https://relay.flashbots.net")?,
+            MAINNET_BUNDLE_SIGNER,
+        ),
+        MAINNET_BOT_SIGNER,
+    )});
 
+    
+pub static MAINNET_ETH_CLIENT: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>> =
+Lazy::new(|| {Arc::new(SignerMiddleware::new(MAINNET_PROVIDER, MAINNET_BOT_SIGNER))});
+
+/* 
 pub static ROUTER_CONTRACT: Lazy<u8
 > = Lazy::new(|| 7);
+    }*/
+}
