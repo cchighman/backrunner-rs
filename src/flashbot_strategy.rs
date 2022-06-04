@@ -1,7 +1,9 @@
+use std::sync::Arc;
 use std::time::SystemTime;
 use std::time::UNIX_EPOCH;
 
 use anyhow::Result;
+use ethers::core::k256::ecdsa::SigningKey;
 use ethers::core::types::transaction::eip2718::TypedTransaction;
 use ethers::prelude::*;
 use ethers::prelude::{Signer, SignerMiddleware, U256};
@@ -29,6 +31,31 @@ impl FlashbotStrategy {
         return U256::from(time_millis);
     }
 
+    async fn get_bundle_for_test<M: 'static + Middleware, S: 'static + Signer>(
+        client: &SignerMiddleware<M, S>,
+    ) -> Result<BundleRequest> {
+        let mut nounce = client.get_transaction_count(*UNISWAP_PROVIDERS.MAINNET_BOT_SIGNER.address(), None).await?;
+
+        let mut tx: TypedTransaction = TransactionRequest::pay("vitalik.eth", 100).into();
+        let bundle = BundleRequest::new();
+        // creation bundle with multiple transaction to handle the gas spent in a bundle > 42000
+        let bundle = {
+            tx.set_nonce(nounce);
+            client.fill_transaction(&mut tx, None).await?;
+            nounce = nounce + 1;
+            let signature = client.signer().sign_transaction(&tx).await?;
+            let inner = bundle.push_transaction(tx.rlp_signed(client.signer().chain_id(), &signature));
+            inner
+        };
+        let bundle = {
+            tx.set_nonce(nounce);
+            client.fill_transaction(&mut tx, None).await?;
+            let signature = client.signer().sign_transaction(&tx).await?;
+            let inner = bundle.push_transaction(tx.rlp_signed(client.signer().chain_id(), &signature));
+            inner
+        };
+        Ok(bundle)
+    }
 
 //  Mainnet
 // https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3
@@ -59,6 +86,15 @@ impl FlashbotStrategy {
             ),
             wallet,
         );
+
+      let x: SignerMiddleware<FlashbotsMiddleware<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>, Wallet<SigningKey>>, Wallet<SigningKey>> =   SignerMiddleware::new(
+            FlashbotsMiddleware::new(
+                *crate::uniswap_providers::UniswapProviders::MAINNET_PROVIDER,
+                Url::parse("https://relay.flashbots.net").unwrap(),
+                *crate::uniswap_providers::UniswapProviders::MAINNET_BUNDLE_SIGNER,
+            ),
+            *crate::uniswap_providers::UniswapProviders::MAINNET_BOT_SIGNER
+        )
 
         let block_number = client.inner().inner().get_block_number().await?;
         let signature = client.signer().sign_transaction(&tx).await?;
