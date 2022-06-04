@@ -367,7 +367,7 @@ mod tests {
             BigRational::from(Bfp::from_wei(U256::MAX)),
             BigRational::new(
                 BigInt::from_str("115792089237316195423570985008687907853269984665640564039457584007913129639935").unwrap(),
-                BigInt::from(1_000_000_000_000_000_000u64)
+                BigInt::from(1_000_000_000_000_000_000u64),
             )
         );
         assert_eq!(
@@ -395,7 +395,7 @@ mod tests {
         assert_eq!(
             Bfp::try_from(&BigRational::new(
                 u256_to_big_int(&U256::MAX),
-                BigInt::from(1_000_000_000_000_000_000u64)
+                BigInt::from(1_000_000_000_000_000_000u64),
             ))
             .unwrap(),
             Bfp::from_wei(U256::MAX),
@@ -411,7 +411,7 @@ mod tests {
     fn big_rational_to_bfp_overflow() {
         assert!(Bfp::try_from(&BigRational::new(
             u256_to_big_int(&U256::MAX) + 1,
-            BigInt::from(1_000_000_000_000_000_000u64)
+            BigInt::from(1_000_000_000_000_000_000u64),
         ))
         .is_err());
     }

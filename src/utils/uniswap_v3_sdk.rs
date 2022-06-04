@@ -282,13 +282,13 @@ impl PartialEq for Price {
 
 impl Eq for Price {}
 
-impl std::cmp::PartialOrd for Price {
+impl PartialOrd for Price {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
 
-impl std::cmp::Ord for Price {
+impl Ord for Price {
     fn cmp(&self, other: &Self) -> Ordering {
         self.to_rational().cmp(&other.to_rational())
     }
@@ -367,6 +367,7 @@ pub fn max_liquidity_for_amount0(
     let denominator = (sqrt_ratio_bx96 - sqrt_ratio_ax96) * q96;
     return numerator / denominator;
 }
+
 /// @notice Computes the amount of liquidity received for a given amount of token1 and price range
 /// @dev Calculates amount1 / (sqrt(upper) - sqrt(lower)).
 /// @param sqrt_ratio_ax96 A sqrt price representing the first tick boundary

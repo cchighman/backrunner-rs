@@ -1,102 +1,104 @@
 {
-	// Use IntelliSense to learn about possible attributes.
-	// Hover to view descriptions of existing attributes.
-	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-	"version": "0.2.0",
-	"configurations": [
-
-	{		"type": "lldb",
-			"request": "attach",
-			"program": "${workspaceRoot}/target/debug/backrunner-rs",
-			"name": "Attach",
-			"cargo": {
-				"args": [
-					"build",
-					"--bin=backrunner-rs",
-					"--package=backrunner-rs"
-				],
-				"filter": {
-					"name": "backrunner-rs",
-					"kind": "bin"
-				},
-            "cwd": "${workspaceRoot}/target/debug/",
-            "sourceLanguages": ["rust"]
-		}
-	},
-
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Rust Debug Launch",
-            "program": "${workspaceRoot}/target/debug/backrunner-rs",
-            "cargo": {
-				"args": [
-					"run",
-					"--bin=backrunner-rs",
-					"--package=backrunner-rs"
-					"RUST_BACKTRACE=1"
-				
-				],
-				"filter": {
-					"name": "backrunner-rs",
-					"kind": "bin"
-				},
-			
-            "cwd": "/workspaces/backrunner-rs/target/debug/backrunner-rs",
-            "sourceLanguages": ["rust"]
-			}
-        },
-		{
-			"type": "lldb",
-			"request": "launch",
-			"name": "Debug unit tests in library 'backrunner-rs'",
-			"cargo": {
-				"args": [
-					"test",
-					"--no-run",
-					"--lib",
-					"--package=backrunner-rs"
-				],
-				"filter": {
-					"name": "backrunner-rs",
-					"kind": "lib"
-				}
-			},
-			"args": [],
-			"cwd": "${workspaceFolder}"
-		},
-		{
-			"type": "lldb",
-			"request": "launch",
-			"name": "Debug executable 'backrunner-rs'",
-			"cargo": {
-				"args": [
-					"build",
-					"--bin=backrunner-rs",
-					"--package=backrunner-rs"
-				],
-				"filter": {
-					"name": "backrunner-rs",
-					"kind": "bin"
-				}
-			},
-			"args": [],
-			"cwd": "${workspaceFolder}"
-		},
-			
-	{
-    "type": "lldb",
-    "request": "launch",
-    "name": "Debug Cargo LLDB",
-    "sourceLanguages": ["rust"],
-    "cargo": {
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "attach",
+      "program": "${workspaceRoot}/target/debug/backrunner-rs",
+      "name": "Attach",
+      "cargo": {
         "args": [
-            "+stable-i686-pc-windows-gnu",
-            "build"
+          "build",
+          "--bin=backrunner-rs",
+          "--package=backrunner-rs"
+        ],
+        "filter": {
+          "name": "backrunner-rs",
+          "kind": "bin"
+        },
+        "cwd": "${workspaceRoot}/target/debug/",
+        "sourceLanguages": [
+          "rust"
         ]
+      }
     },
-    "program": "${cargo:program}",
-    "args": []
-}
-	]
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Rust Debug Launch",
+      "program": "${workspaceRoot}/target/debug/backrunner-rs",
+      "cargo": {
+        "args": [
+          "run",
+          "--bin=backrunner-rs",
+          "--package=backrunner-rs"
+          "RUST_BACKTRACE=1"
+        ],
+        "filter": {
+          "name": "backrunner-rs",
+          "kind": "bin"
+        },
+        "cwd": "/workspaces/backrunner-rs/target/debug/backrunner-rs",
+        "sourceLanguages": [
+          "rust"
+        ]
+      }
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug unit tests in library 'backrunner-rs'",
+      "cargo": {
+        "args": [
+          "test",
+          "--no-run",
+          "--lib",
+          "--package=backrunner-rs"
+        ],
+        "filter": {
+          "name": "backrunner-rs",
+          "kind": "lib"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug executable 'backrunner-rs'",
+      "cargo": {
+        "args": [
+          "build",
+          "--bin=backrunner-rs",
+          "--package=backrunner-rs"
+        ],
+        "filter": {
+          "name": "backrunner-rs",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug Cargo LLDB",
+      "sourceLanguages": [
+        "rust"
+      ],
+      "cargo": {
+        "args": [
+          "+stable-i686-pc-windows-gnu",
+          "build"
+        ]
+      },
+      "program": "${cargo:program}",
+      "args": []
+    }
+  ]
 }

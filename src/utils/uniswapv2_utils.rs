@@ -36,7 +36,7 @@ pub async fn uniswapv2_unpack_pairs(
             liquidity: Default::default(),
             tick: Default::default(),
             dex: dex.clone(),
-            router: router,
+            router,
             fee_tier: Default::default(),
         };
 

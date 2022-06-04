@@ -234,6 +234,7 @@ mod tests {
         Vec<Bfp>,
         Vec<(PoolCreated, u64)>,
     );
+
     fn pool_init_data(start: usize, end: usize) -> PoolInitData {
         let pool_ids: Vec<H256> = (start..=end)
             .map(|i| H256::from_low_u64_be(i as u64))

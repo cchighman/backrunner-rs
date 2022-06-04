@@ -94,7 +94,7 @@ impl SwapRoute {
     /
     Provided some amount for some pair, return abi-encoded data for swap
      */
-    pub async fn calldata(&self) -> ethers::core::types::Bytes {
+    pub async fn calldata(&self) -> Bytes {
         /*
         match (
             self.pair.0.get_symbol().as_str(),

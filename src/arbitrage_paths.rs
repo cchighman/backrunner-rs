@@ -317,6 +317,7 @@ impl ArbitragePaths {
          */
     }
 }
+
 pub struct ArbitragePaths {}
 
 pub struct Intolterator {}

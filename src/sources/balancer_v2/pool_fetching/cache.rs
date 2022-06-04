@@ -25,6 +25,7 @@ pub trait BalancerPoolCacheMetrics: Send + Sync {
 }
 
 pub struct NoopBalancerPoolCacheMetrics;
+
 impl BalancerPoolCacheMetrics for NoopBalancerPoolCacheMetrics {
     fn pools_fetched(&self, _: usize, _: usize) {}
 }

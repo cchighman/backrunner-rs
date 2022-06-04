@@ -417,7 +417,7 @@ mod tests {
     #[test]
     fn computes_final_reserves() {
         assert_eq!(
-            check_final_reserves(1.into(), 2.into(), 1_000_000.into(), 2_000_000.into(),).unwrap(),
+            check_final_reserves(1.into(), 2.into(), 1_000_000.into(), 2_000_000.into()).unwrap(),
             (1_000_001.into(), 1_999_998.into()),
         );
     }

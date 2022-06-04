@@ -198,6 +198,7 @@ impl PartialEq for SwapCurve {
 }
 
 impl Sealed for SwapCurve {}
+
 impl Pack for SwapCurve {
     /// Size of encoding of all curve parameters, which include fees and any other
     /// constants used to calculate swaps, deposits, and withdrawals.

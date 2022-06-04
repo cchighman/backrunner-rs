@@ -4,6 +4,7 @@ use reqwest::blocking::Client;
 // The paths are relative to the directory where your `Cargo.toml` is located.
 // Both json and the GraphQL schema language are supported as sources for the schema
 pub type BigInt = String;
+
 #[derive(GraphQLQuery)]
 #[graphql(
     query_path = "src/queries/uniswapv3_pools.graphql",

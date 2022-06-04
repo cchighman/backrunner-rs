@@ -21,16 +21,19 @@ mod arbitrageswap_mod {
 
     pub static ARBITRAGESWAP_ABI: ethers::contract::Lazy<ethers::core::abi::Abi> =
         ethers::contract::Lazy::new(|| {
-            serde_json :: from_str ("[{\"type\":\"constructor\",\"inputs\":[{\"internalType\":\"address payable\",\"name\":\"_weth\",\"type\":\"address\"}]},{\"type\":\"function\",\"name\":\"swap\",\"inputs\":[{\"internalType\":\"contract IUniswapV2Pair\",\"name\":\"pool_a\",\"type\":\"address\"},{\"internalType\":\"contract IUniswapV2Pair\",\"name\":\"pool_b\",\"type\":\"address\"},{\"internalType\":\"contract IERC20\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"intermediate_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"profit\",\"type\":\"uint256\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"payable\"},{\"type\":\"receive\"}]") . expect ("invalid abi")
+            serde_json::from_str("[{\"type\":\"constructor\",\"inputs\":[{\"internalType\":\"address payable\",\"name\":\"_weth\",\"type\":\"address\"}]},{\"type\":\"function\",\"name\":\"swap\",\"inputs\":[{\"internalType\":\"contract IUniswapV2Pair\",\"name\":\"pool_a\",\"type\":\"address\"},{\"internalType\":\"contract IUniswapV2Pair\",\"name\":\"pool_b\",\"type\":\"address\"},{\"internalType\":\"contract IERC20\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"intermediate_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"profit\",\"type\":\"uint256\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"payable\"},{\"type\":\"receive\"}]").expect("invalid abi")
         });
+
     #[derive(Clone)]
     pub struct ArbitrageSwap<M>(ethers::contract::Contract<M>);
+
     impl<M> std::ops::Deref for ArbitrageSwap<M> {
         type Target = ethers::contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
     }
+
     impl<M: ethers::providers::Middleware> std::fmt::Debug for ArbitrageSwap<M> {
         fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
             f.debug_tuple(stringify!(ArbitrageSwap))
@@ -38,6 +41,7 @@ mod arbitrageswap_mod {
                 .finish()
         }
     }
+
     impl<'a, M: ethers::providers::Middleware> ArbitrageSwap<M> {
         #[doc = r" Creates a new contract instance with the specified `ethers`"]
         #[doc = r" client at the given `Address`. The contract derefs to a `ethers::Contract`"]
@@ -67,6 +71,7 @@ mod arbitrageswap_mod {
                 .expect("method not found (this should never happen)")
         }
     }
+
     #[doc = "Container type for all input parameters for the `swap`function with signature `swap(address,address,address,uint256,uint256)` and selector `[227, 67, 254, 18]`"]
     #[derive(
         Clone,
@@ -74,8 +79,8 @@ mod arbitrageswap_mod {
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthCall,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthCall,
+        ethers::contract::EthDisplay,
     )]
     #[ethcall(name = "swap", abi = "swap(address,address,address,uint256,uint256)")]
     pub struct SwapCall {

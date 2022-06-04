@@ -146,6 +146,7 @@ impl Ws {
         Ok(())
     }
 }
+
 pub type NotificationStream = mpsc::UnboundedReceiver<Response>;
 
 impl Ws {

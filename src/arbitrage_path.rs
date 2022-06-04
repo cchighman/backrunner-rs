@@ -24,7 +24,7 @@ use crate::uniswap_transaction::*;
 impl ArbitragePath {
     /* TODO - For each pair */
     pub fn new(sequence: ThreePathSequence) -> Arc<Self> {
-        Arc::new(Self { sequence: sequence })
+        Arc::new(Self { sequence })
     }
 
     pub fn path(&self) -> String {
@@ -281,6 +281,7 @@ impl ArbitragePath {
 pub struct ArbitragePath {
     sequence: ThreePathSequence,
 }
+
 #[test]
 pub fn test_abi_encoding() {
     let tokens = vec![Token::String("test".to_string())];

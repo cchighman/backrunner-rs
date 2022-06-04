@@ -1,3 +1,4 @@
+# noinspection GraphQLUnresolvedReference
 query UniswapPairs {
     pairs(first:600, where: {volumeUSD_gt: "10000", reserve0_gt: "0", reserve1_gt: "0"}, orderBy: reserveUSD, orderDirection: desc) {
         id

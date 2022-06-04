@@ -1,48 +1,31 @@
-use crate::contracts::bindings::ierc20::IERC20;
-use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
-use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
-
-use crate::sequence_token::SequenceToken;
-use anyhow::Result;
+use std::time::SystemTime;
 use std::time::UNIX_EPOCH;
 
-use ethers::contract::Lazy;
-use crate::swap_route::SwapRoute;
-use ethers::core::abi::Tokenize;
+use anyhow::Result;
 use ethers::core::types::transaction::eip2718::TypedTransaction;
-use ethers::prelude::k256::ecdsa::SigningKey;
 use ethers::prelude::*;
-use ethers::prelude::{Address, Signer, SignerMiddleware, Wallet, U256};
-use ethers::prelude::{BlockId, BlockNumber};
-use ethers::signers::{coins_bip39::English, MnemonicBuilder};
-use ethers_flashbots::BundleRequest;
+use ethers::prelude::{Signer, SignerMiddleware, U256};
+use ethers_flashbots::{BundleRequest, FlashbotsMiddleware};
 use ethers_flashbots::PendingBundleError;
-use lazy_static::__Deref;
-use crate::uniswap_providers::TIMESTAMP_SEED;
-use rand::thread_rng;
-
-use std::str::FromStr;
-use std::sync::Arc;
 use url::Url;
-use std::time::SystemTime;
 
-
+use crate::uniswap_providers::UniswapProviders::TIMESTAMP_SEED;
 
 #[derive(Clone)]
 pub struct FlashbotStrategy {
-    pub tx: TypedTransaction
+    pub tx: TypedTransaction,
 }
 
-    impl FlashbotStrategy {
+impl FlashbotStrategy {
     pub fn new(tx: TypedTransaction) -> Self {
         Self {
-           tx
+            tx
         }
     }
     pub fn get_valid_timestamp() -> U256 {
         let start = SystemTime::now();
         let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
-        let time_millis = since_epoch.as_millis().checked_add(TIMESTAMP_SEED).unwrap();
+        let time_millis = since_epoch.as_millis().checked_add(*TIMESTAMP_SEED).unwrap();
         return U256::from(time_millis);
     }
 
@@ -55,124 +38,124 @@ pub struct FlashbotStrategy {
 // https://goerli.infura.io/v3/0ab0b9c9d5bf44818399aea45b5ade51
 // wss://goerli.infura.io/ws/v3/0ab0b9c9d5bf44818399aea45b5ade51
 
-pub async fn do_flashbot_goerli(tx: &mut TypedTransaction) -> Result<()> {
-    // Connect to the network - using URL used by metamask
-    let provider =
-        Provider::<Http>::try_from("https://goerli.infura.io/v3/0ab0b9c9d5bf44818399aea45b5ade51")?;
+    pub async fn do_flashbot_goerli(tx: &mut TypedTransaction) -> Result<()> {
+        // Connect to the network - using URL used by metamask
+        let provider =
+            Provider::<Http>::try_from("https://goerli.infura.io/v3/0ab0b9c9d5bf44818399aea45b5ade51")?;
 
-    let private_key = env::var("7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236")?;
-    let bundle_signer = private_key.parse::<LocalWallet>()?;
-    let wallet = private_key.parse::<LocalWallet>()?;
+        let private_key = env::var("7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236")?;
+        let bundle_signer = private_key.parse::<LocalWallet>()?;
+        let wallet = private_key.parse::<LocalWallet>()?;
 
-    // Set chainId for goerli testnet
-    let wallet = wallet.with_chain_id(1u64);
-    let bundle_signer = bundle_signer.with_chain_id(1u64);
+        // Set chainId for goerli testnet
+        let wallet = wallet.with_chain_id(1u64);
+        let bundle_signer = bundle_signer.with_chain_id(1u64);
 
-    let client = SignerMiddleware::new(
-        FlashbotsMiddleware::new(
-            provider,
-            Url::parse("https://relay-goerli.flashbots.net")?,
-            bundle_signer,
-        ),
-        wallet,
-    );
+        let client = SignerMiddleware::new(
+            FlashbotsMiddleware::new(
+                provider,
+                Url::parse("https://relay-goerli.flashbots.net")?,
+                bundle_signer,
+            ),
+            wallet,
+        );
 
-    let block_number = client.inner().inner().get_block_number().await?;
-    let signature = client.signer().sign_transaction(&tx).await?;
-    let bundle = BundleRequest::new()
-        .push_transaction(tx.rlp_signed(client.signer().chain_id(), &signature))
-        .set_block(block_number + 1);
+        let block_number = client.inner().inner().get_block_number().await?;
+        let signature = client.signer().sign_transaction(&tx).await?;
+        let bundle = BundleRequest::new()
+            .push_transaction(tx.rlp_signed(client.signer().chain_id(), &signature))
+            .set_block(block_number + 1);
 
-    // Simulate it
-    let simulated_bundle = client.inner().simulate_bundle(&bundle).await?;
-    println!("Simulated bundle: {:?}", simulated_bundle);
+        // Simulate it
+        let simulated_bundle = client.inner().simulate_bundle(&bundle).await?;
+        println!("Simulated bundle: {:?}", simulated_bundle);
 
-    // Send it
-    let pending_bundle = client.inner().send_bundle(&bundle).await?;
+        // Send it
+        let pending_bundle = client.inner().send_bundle(&bundle).await?;
 
-    // You can also optionally wait to see if the bundle was included
-    match pending_bundle.await {
-        Ok(bundle_hash) => println!(
-            "Bundle with hash {:?} was included in target block",
-            bundle_hash
-        ),
-        Err(PendingBundleError::BundleNotIncluded) => {
-            println!("Bundle was not included in target block.")
+        // You can also optionally wait to see if the bundle was included
+        match pending_bundle.await {
+            Ok(bundle_hash) => println!(
+                "Bundle with hash {:?} was included in target block",
+                bundle_hash
+            ),
+            Err(PendingBundleError::BundleNotIncluded) => {
+                println!("Bundle was not included in target block.")
+            }
+            Err(e) => println!("An error occured."),
         }
-        Err(e) => println!("An error occured."),
+
+        Ok(())
     }
 
-    Ok(())
-}
+    pub async fn do_flashbot_mainnet(mut tx: TypedTransaction) -> Result<()> {
+        println!("do_flashbot_mainnet");
+        // Connect to the network - using URL used by metamask
+        let provider = Provider::<Http>::try_from(
+            "https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3",
+        ).unwrap();
 
-pub async fn do_flashbot_mainnet(mut tx: TypedTransaction) -> Result<()> {
-    println!("do_flashbot_mainnet");
-    // Connect to the network - using URL used by metamask
-    let provider = Provider::<Http>::try_from(
-        "https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3",
-    ).unwrap();
+        let private_key = "7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236";
 
-    let private_key = "7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236";
- 
-    let bundle_signer = private_key.parse::<LocalWallet>().unwrap();
-    let wallet = private_key.parse::<LocalWallet>().unwrap();
+        let bundle_signer = private_key.parse::<LocalWallet>().unwrap();
+        let wallet = private_key.parse::<LocalWallet>().unwrap();
 
-    let wallet = wallet.with_chain_id(1u64);
- 
-    let bundle_signer = bundle_signer.with_chain_id(1u64);
+        let wallet = wallet.with_chain_id(1u64);
 
-    let client = SignerMiddleware::new(
-        FlashbotsMiddleware::new(
-            provider,
-            Url::parse("https://relay.flashbots.net")?,
-            bundle_signer,
-        ),
-        wallet,
-    );
- 
-    let block_number = client.inner().inner().get_block_number().await.unwrap();
-    println!("Block Number: {}", block_number);
+        let bundle_signer = bundle_signer.with_chain_id(1u64);
 
-    let signature = client.signer().sign_transaction(&tx).await.unwrap();
-    
-    let mut nonce = client.get_transaction_count(client.address(), None).await?;
+        let client = SignerMiddleware::new(
+            FlashbotsMiddleware::new(
+                provider,
+                Url::parse("https://relay.flashbots.net")?,
+                bundle_signer,
+            ),
+            wallet,
+        );
 
-    let bundle = BundleRequest::new();
-    // creation bundle with multiple transaction to handle the gas spent in a bundle > 42000
-    tx.set_nonce(nonce);
-    client.fill_transaction(&mut tx, None).await.unwrap();
-    nonce = nonce + 1;
-    let bundle = 
-        bundle.push_transaction(tx.rlp_signed(client.signer().chain_id(), &signature))
-        .set_block(block_number + 1);
+        let block_number = client.inner().inner().get_block_number().await.unwrap();
+        println!("Block Number: {}", block_number);
 
-    let bundle = bundle
-    .set_simulation_block(block_number)
-    .set_simulation_timestamp(FlashbotStrategy::get_valid_timestamp().as_u64())
-    .set_block(block_number + 1);
-    // Simulate it
-    let simulated_bundle = client.inner().simulate_bundle(&bundle).await.unwrap();
+        let signature = client.signer().sign_transaction(&tx).await.unwrap();
 
-    println!("Simulated bundle: {:?}", simulated_bundle);
+        let mut nonce = client.get_transaction_count(client.address(), None).await?;
 
-    // Send it
-    let pending_bundle = client.inner().send_bundle(&bundle).await.unwrap();
+        let bundle = BundleRequest::new();
+        // creation bundle with multiple transaction to handle the gas spent in a bundle > 42000
+        tx.set_nonce(nonce);
+        client.fill_transaction(&mut tx, None).await.unwrap();
+        nonce = nonce + 1;
+        let bundle =
+            bundle.push_transaction(tx.rlp_signed(client.signer().chain_id(), &signature))
+                .set_block(block_number + 1);
 
-    // You can also optionally wait to see if the bundle was included
-    match pending_bundle.await {
-        Ok(bundle_hash) => println!(
-            "Bundle with hash {:?} was included in target block",
-            bundle_hash
-        ),
-        Err(PendingBundleError::BundleNotIncluded) => {
-            println!("Bundle was not included in target block.")
+        let bundle = bundle
+            .set_simulation_block(block_number)
+            .set_simulation_timestamp(FlashbotStrategy::get_valid_timestamp().as_u64())
+            .set_block(block_number + 1);
+        // Simulate it
+        let simulated_bundle = client.inner().simulate_bundle(&bundle).await.unwrap();
+
+        println!("Simulated bundle: {:?}", simulated_bundle);
+
+        // Send it
+        let pending_bundle = client.inner().send_bundle(&bundle).await.unwrap();
+
+        // You can also optionally wait to see if the bundle was included
+        match pending_bundle.await {
+            Ok(bundle_hash) => println!(
+                "Bundle with hash {:?} was included in target block",
+                bundle_hash
+            ),
+            Err(PendingBundleError::BundleNotIncluded) => {
+                println!("Bundle was not included in target block.")
+            }
+            Err(e) => println!("An error occured."),
         }
-        Err(e) => println!("An error occured."),
-    }
 
-    Ok(())
-}
+        Ok(())
     }
+}
 /*
 let bundle = get_bundle_for_test(&client).await?;
 let current_block_number = client.inner().inner().get_block_number().await?;

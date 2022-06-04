@@ -21,16 +21,19 @@ mod weth9_mod {
 
     pub static WETH9_ABI: ethers::contract::Lazy<ethers::core::abi::Abi> =
         ethers::contract::Lazy::new(|| {
-            serde_json :: from_str ("[{\"type\":\"function\",\"name\":\"allowance\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"approve\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"guy\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"balanceOf\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"decimals\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"deposit\",\"inputs\":[],\"outputs\":[],\"constant\":false,\"stateMutability\":\"payable\"},{\"type\":\"function\",\"name\":\"name\",\"inputs\":[],\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"symbol\",\"inputs\":[],\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalSupply\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"transfer\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"transferFrom\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"src\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"withdraw\",\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"Approval\",\"inputs\":[{\"name\":\"src\",\"type\":\"address\",\"indexed\":true},{\"name\":\"guy\",\"type\":\"address\",\"indexed\":true},{\"name\":\"wad\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Deposit\",\"inputs\":[{\"name\":\"dst\",\"type\":\"address\",\"indexed\":true},{\"name\":\"wad\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Transfer\",\"inputs\":[{\"name\":\"src\",\"type\":\"address\",\"indexed\":true},{\"name\":\"dst\",\"type\":\"address\",\"indexed\":true},{\"name\":\"wad\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Withdrawal\",\"inputs\":[{\"name\":\"src\",\"type\":\"address\",\"indexed\":true},{\"name\":\"wad\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"receive\"}]") . expect ("invalid abi")
+            serde_json::from_str("[{\"type\":\"function\",\"name\":\"allowance\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"approve\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"guy\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"balanceOf\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"decimals\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"deposit\",\"inputs\":[],\"outputs\":[],\"constant\":false,\"stateMutability\":\"payable\"},{\"type\":\"function\",\"name\":\"name\",\"inputs\":[],\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"symbol\",\"inputs\":[],\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalSupply\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"transfer\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"transferFrom\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"src\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dst\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"withdraw\",\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"wad\",\"type\":\"uint256\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"Approval\",\"inputs\":[{\"name\":\"src\",\"type\":\"address\",\"indexed\":true},{\"name\":\"guy\",\"type\":\"address\",\"indexed\":true},{\"name\":\"wad\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Deposit\",\"inputs\":[{\"name\":\"dst\",\"type\":\"address\",\"indexed\":true},{\"name\":\"wad\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Transfer\",\"inputs\":[{\"name\":\"src\",\"type\":\"address\",\"indexed\":true},{\"name\":\"dst\",\"type\":\"address\",\"indexed\":true},{\"name\":\"wad\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Withdrawal\",\"inputs\":[{\"name\":\"src\",\"type\":\"address\",\"indexed\":true},{\"name\":\"wad\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"receive\"}]").expect("invalid abi")
         });
+
     #[derive(Clone)]
     pub struct WETH9<M>(ethers::contract::Contract<M>);
+
     impl<M> std::ops::Deref for WETH9<M> {
         type Target = ethers::contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
     }
+
     impl<M: ethers::providers::Middleware> std::fmt::Debug for WETH9<M> {
         fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
             f.debug_tuple(stringify!(WETH9))
@@ -38,6 +41,7 @@ mod weth9_mod {
                 .finish()
         }
     }
+
     impl<'a, M: ethers::providers::Middleware> WETH9<M> {
         #[doc = r" Creates a new contract instance with the specified `ethers`"]
         #[doc = r" client at the given `Address`. The contract derefs to a `ethers::Contract`"]
@@ -162,14 +166,15 @@ mod weth9_mod {
             self.0.event_with_filter(Default::default())
         }
     }
+
     #[derive(
         Clone,
         Debug,
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthEvent,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthEvent,
+        ethers::contract::EthDisplay,
     )]
     #[ethevent(name = "Approval", abi = "Approval(address,address,uint256)")]
     pub struct ApprovalFilter {
@@ -179,14 +184,15 @@ mod weth9_mod {
         pub guy: ethers::core::types::Address,
         pub wad: ethers::core::types::U256,
     }
+
     #[derive(
         Clone,
         Debug,
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthEvent,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthEvent,
+        ethers::contract::EthDisplay,
     )]
     #[ethevent(name = "Deposit", abi = "Deposit(address,uint256)")]
     pub struct DepositFilter {
@@ -194,14 +200,15 @@ mod weth9_mod {
         pub dst: ethers::core::types::Address,
         pub wad: ethers::core::types::U256,
     }
+
     #[derive(
         Clone,
         Debug,
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthEvent,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthEvent,
+        ethers::contract::EthDisplay,
     )]
     #[ethevent(name = "Transfer", abi = "Transfer(address,address,uint256)")]
     pub struct TransferFilter {
@@ -211,14 +218,15 @@ mod weth9_mod {
         pub dst: ethers::core::types::Address,
         pub wad: ethers::core::types::U256,
     }
+
     #[derive(
         Clone,
         Debug,
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthEvent,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthEvent,
+        ethers::contract::EthDisplay,
     )]
     #[ethevent(name = "Withdrawal", abi = "Withdrawal(address,uint256)")]
     pub struct WithdrawalFilter {
@@ -226,13 +234,15 @@ mod weth9_mod {
         pub src: ethers::core::types::Address,
         pub wad: ethers::core::types::U256,
     }
-    #[derive(Debug, Clone, PartialEq, Eq, ethers :: contract :: EthAbiType)]
+
+    #[derive(Debug, Clone, PartialEq, Eq, ethers::contract::EthAbiType)]
     pub enum WETH9Events {
         ApprovalFilter(ApprovalFilter),
         DepositFilter(DepositFilter),
         TransferFilter(TransferFilter),
         WithdrawalFilter(WithdrawalFilter),
     }
+
     impl ethers::contract::EthLogDecode for WETH9Events {
         fn decode_log(log: &ethers::core::abi::RawLog) -> Result<Self, ethers::core::abi::Error>
         where
@@ -253,6 +263,7 @@ mod weth9_mod {
             Err(ethers::core::abi::Error::InvalidData)
         }
     }
+
     impl ::std::fmt::Display for WETH9Events {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match self {
@@ -263,6 +274,7 @@ mod weth9_mod {
             }
         }
     }
+
     #[doc = "Container type for all input parameters for the `allowance`function with signature `allowance(address,address)` and selector `[221, 98, 237, 62]`"]
     #[derive(
         Clone,
@@ -270,14 +282,15 @@ mod weth9_mod {
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthCall,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthCall,
+        ethers::contract::EthDisplay,
     )]
     #[ethcall(name = "allowance", abi = "allowance(address,address)")]
     pub struct AllowanceCall(
         pub ethers::core::types::Address,
         pub ethers::core::types::Address,
     );
+
     #[doc = "Container type for all input parameters for the `approve`function with signature `approve(address,uint256)` and selector `[9, 94, 167, 179]`"]
     #[derive(
         Clone,
@@ -285,14 +298,15 @@ mod weth9_mod {
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthCall,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthCall,
+        ethers::contract::EthDisplay,
     )]
     #[ethcall(name = "approve", abi = "approve(address,uint256)")]
     pub struct ApproveCall {
         pub guy: ethers::core::types::Address,
         pub wad: ethers::core::types::U256,
     }
+
     #[doc = "Container type for all input parameters for the `balanceOf`function with signature `balanceOf(address)` and selector `[112, 160, 130, 49]`"]
     #[derive(
         Clone,
@@ -300,11 +314,12 @@ mod weth9_mod {
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthCall,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthCall,
+        ethers::contract::EthDisplay,
     )]
     #[ethcall(name = "balanceOf", abi = "balanceOf(address)")]
     pub struct BalanceOfCall(pub ethers::core::types::Address);
+
     #[doc = "Container type for all input parameters for the `decimals`function with signature `decimals()` and selector `[49, 60, 229, 103]`"]
     #[derive(
         Clone,
@@ -312,11 +327,12 @@ mod weth9_mod {
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthCall,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthCall,
+        ethers::contract::EthDisplay,
     )]
     #[ethcall(name = "decimals", abi = "decimals()")]
     pub struct DecimalsCall;
+
     #[doc = "Container type for all input parameters for the `deposit`function with signature `deposit()` and selector `[208, 227, 13, 176]`"]
     #[derive(
         Clone,
@@ -324,11 +340,12 @@ mod weth9_mod {
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthCall,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthCall,
+        ethers::contract::EthDisplay,
     )]
     #[ethcall(name = "deposit", abi = "deposit()")]
     pub struct DepositCall;
+
     #[doc = "Container type for all input parameters for the `name`function with signature `name()` and selector `[6, 253, 222, 3]`"]
     #[derive(
         Clone,
@@ -336,11 +353,12 @@ mod weth9_mod {
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthCall,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthCall,
+        ethers::contract::EthDisplay,
     )]
     #[ethcall(name = "name", abi = "name()")]
     pub struct NameCall;
+
     #[doc = "Container type for all input parameters for the `symbol`function with signature `symbol()` and selector `[149, 216, 155, 65]`"]
     #[derive(
         Clone,
@@ -348,11 +366,12 @@ mod weth9_mod {
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthCall,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthCall,
+        ethers::contract::EthDisplay,
     )]
     #[ethcall(name = "symbol", abi = "symbol()")]
     pub struct SymbolCall;
+
     #[doc = "Container type for all input parameters for the `totalSupply`function with signature `totalSupply()` and selector `[24, 22, 13, 221]`"]
     #[derive(
         Clone,
@@ -360,11 +379,12 @@ mod weth9_mod {
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthCall,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthCall,
+        ethers::contract::EthDisplay,
     )]
     #[ethcall(name = "totalSupply", abi = "totalSupply()")]
     pub struct TotalSupplyCall;
+
     #[doc = "Container type for all input parameters for the `transfer`function with signature `transfer(address,uint256)` and selector `[169, 5, 156, 187]`"]
     #[derive(
         Clone,
@@ -372,14 +392,15 @@ mod weth9_mod {
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthCall,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthCall,
+        ethers::contract::EthDisplay,
     )]
     #[ethcall(name = "transfer", abi = "transfer(address,uint256)")]
     pub struct TransferCall {
         pub dst: ethers::core::types::Address,
         pub wad: ethers::core::types::U256,
     }
+
     #[doc = "Container type for all input parameters for the `transferFrom`function with signature `transferFrom(address,address,uint256)` and selector `[35, 184, 114, 221]`"]
     #[derive(
         Clone,
@@ -387,8 +408,8 @@ mod weth9_mod {
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthCall,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthCall,
+        ethers::contract::EthDisplay,
     )]
     #[ethcall(name = "transferFrom", abi = "transferFrom(address,address,uint256)")]
     pub struct TransferFromCall {
@@ -396,6 +417,7 @@ mod weth9_mod {
         pub dst: ethers::core::types::Address,
         pub wad: ethers::core::types::U256,
     }
+
     #[doc = "Container type for all input parameters for the `withdraw`function with signature `withdraw(uint256)` and selector `[46, 26, 125, 77]`"]
     #[derive(
         Clone,
@@ -403,14 +425,15 @@ mod weth9_mod {
         Default,
         Eq,
         PartialEq,
-        ethers :: contract :: EthCall,
-        ethers :: contract :: EthDisplay,
+        ethers::contract::EthCall,
+        ethers::contract::EthDisplay,
     )]
     #[ethcall(name = "withdraw", abi = "withdraw(uint256)")]
     pub struct WithdrawCall {
         pub wad: ethers::core::types::U256,
     }
-    #[derive(Debug, Clone, PartialEq, Eq, ethers :: contract :: EthAbiType)]
+
+    #[derive(Debug, Clone, PartialEq, Eq, ethers::contract::EthAbiType)]
     pub enum WETH9Calls {
         Allowance(AllowanceCall),
         Approve(ApproveCall),
@@ -424,6 +447,7 @@ mod weth9_mod {
         TransferFrom(TransferFromCall),
         Withdraw(WithdrawCall),
     }
+
     impl ethers::core::abi::AbiDecode for WETH9Calls {
         fn decode(data: impl AsRef<[u8]>) -> Result<Self, ethers::core::abi::AbiError> {
             if let Ok(decoded) =
@@ -481,6 +505,7 @@ mod weth9_mod {
             Err(ethers::core::abi::Error::InvalidData.into())
         }
     }
+
     impl ethers::core::abi::AbiEncode for WETH9Calls {
         fn encode(self) -> Vec<u8> {
             match self {
@@ -498,6 +523,7 @@ mod weth9_mod {
             }
         }
     }
+
     impl ::std::fmt::Display for WETH9Calls {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match self {
@@ -515,56 +541,67 @@ mod weth9_mod {
             }
         }
     }
+
     impl ::std::convert::From<AllowanceCall> for WETH9Calls {
         fn from(var: AllowanceCall) -> Self {
             WETH9Calls::Allowance(var)
         }
     }
+
     impl ::std::convert::From<ApproveCall> for WETH9Calls {
         fn from(var: ApproveCall) -> Self {
             WETH9Calls::Approve(var)
         }
     }
+
     impl ::std::convert::From<BalanceOfCall> for WETH9Calls {
         fn from(var: BalanceOfCall) -> Self {
             WETH9Calls::BalanceOf(var)
         }
     }
+
     impl ::std::convert::From<DecimalsCall> for WETH9Calls {
         fn from(var: DecimalsCall) -> Self {
             WETH9Calls::Decimals(var)
         }
     }
+
     impl ::std::convert::From<DepositCall> for WETH9Calls {
         fn from(var: DepositCall) -> Self {
             WETH9Calls::Deposit(var)
         }
     }
+
     impl ::std::convert::From<NameCall> for WETH9Calls {
         fn from(var: NameCall) -> Self {
             WETH9Calls::Name(var)
         }
     }
+
     impl ::std::convert::From<SymbolCall> for WETH9Calls {
         fn from(var: SymbolCall) -> Self {
             WETH9Calls::Symbol(var)
         }
     }
+
     impl ::std::convert::From<TotalSupplyCall> for WETH9Calls {
         fn from(var: TotalSupplyCall) -> Self {
             WETH9Calls::TotalSupply(var)
         }
     }
+
     impl ::std::convert::From<TransferCall> for WETH9Calls {
         fn from(var: TransferCall) -> Self {
             WETH9Calls::Transfer(var)
         }
     }
+
     impl ::std::convert::From<TransferFromCall> for WETH9Calls {
         fn from(var: TransferFromCall) -> Self {
             WETH9Calls::TransferFrom(var)
         }
     }
+
     impl ::std::convert::From<WithdrawCall> for WETH9Calls {
         fn from(var: WithdrawCall) -> Self {
             WETH9Calls::Withdraw(var)
