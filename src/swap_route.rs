@@ -27,7 +27,7 @@ use std::ops::Deref;
 use std::{collections::HashMap, fs::File, io, thread, time};
 use stream_cancel::Tripwire;
 use url::Url;
-use crate::uniswap_providers::{MAINNET_PROVIDER,TO_ADDRESS,MAX_AMOUNT,ROUTER_CONTRACT, TIMESTAMP_SEED};
+use crate::uniswap_providers::UniswapProviders;
 use std::env;
 
 #[derive(Clone)]
@@ -134,8 +134,8 @@ impl SwapRoute {
     }
 pub fn get_valid_timestamp(&self) -> U256 {
         let start = SystemTime::now();
-        let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
-        let time_millis = since_epoch.as_millis().checked_add(TIMESTAMP_SEED).unwrap();
+        let since_epoch = start.duration_since(UniswapProviders::UNIX_EPOCH).unwrap();
+        let time_millis = since_epoch.as_millis().checked_add(UniswapProviders::TIMESTAMP_SEED).unwrap();
         return U256::from(time_millis);
     }
 

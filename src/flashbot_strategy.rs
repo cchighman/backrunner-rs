@@ -5,28 +5,33 @@ use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
 use crate::sequence_token::SequenceToken;
 use anyhow::Result;
 use std::env;
-use std::time::UNIX_EPOCH;
-
+use ethers::prelude::Http;
+use ethers::prelude::Provider;
 use ethers::contract::Lazy;
 use crate::swap_route::SwapRoute;
 use ethers::core::abi::Tokenize;
 use ethers::core::types::transaction::eip2718::TypedTransaction;
 use ethers::prelude::k256::ecdsa::SigningKey;
 use ethers::prelude::*;
-use ethers::prelude::{Address, Signer, SignerMiddleware, Wallet, U256};
+use ethers::prelude::{Address, Signer, SignerMiddleware, Wallet, U256, LocalWallet};
 use ethers::signers::{coins_bip39::English, MnemonicBuilder};
 use ethers_flashbots::BundleRequest;
 use ethers_flashbots::*;
 use lazy_static::__Deref;
-use crate::uniswap_providers::TIMESTAMP_SEED;
+use crate::uniswap_providers::{TIMESTAMP_SEED,UniswapProviders};
 use rand::thread_rng;
-
+use ethers_flashbots::FlashbotsMiddleware;
 use std::str::FromStr;
 use std::sync::Arc;
-use url::Url;
 use std::time::SystemTime;
+use std::time::UNIX_EPOCH;
+use ethers::types::{BlockNumber, BlockId};
+use url::Url;
+use crate::flashbot_strategy::TypedTransaction;
+use std::time::SystemTime;
+use ethers_flashbots::BundleRequest;
 
-
+pub mod flashbot_strategy {
 
 #[derive(Clone)]
 pub struct FlashbotStrategy {
@@ -39,29 +44,35 @@ pub struct FlashbotStrategy {
            tx
         }
     }
+
+
     pub fn get_valid_timestamp() -> U256 {
         let start = SystemTime::now();
         let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
-        let time_millis = since_epoch.as_millis().checked_add(TIMESTAMP_SEED).unwrap();
+        let time_millis = since_epoch.as_millis().checked_add(UniswapProviders::TIMESTAMP_SEED).unwrap();
         return U256::from(time_millis);
     }
 
 
 
-//  Mainnet
-// https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3
-// wss://mainnet.infura.io/ws/v3/20ca45667c5d4fa6b259b9a36babe5c3
 
-// Goerli
-// https://goerli.infura.io/v3/0ab0b9c9d5bf44818399aea45b5ade51
-// wss://goerli.infura.io/ws/v3/0ab0b9c9d5bf44818399aea45b5ade51
-
-pub async fn do_flashbot_goerli(tx: &mut TypedTransaction) -> Result<()> {
+ /// Return a new flashbots bundle request for this block
+ async fn new_bundle_request() -> anyhow::Result<BundleRequest> {
+    let block = crateUniswapProviders::MAINNET_FLASHBOTS_CLIENT.get_block_number().await?;
+    let mut bundle = BundleRequest::new();
+    bundle = bundle.set_simulation_block(block);
+    bundle = bundle.set_block(block + 1);
+    let now = SystemTime::now();
+    bundle = bundle.set_simulation_timestamp(now.duration_since(UNIX_EPOCH)?.as_secs());
+    Ok(bundle)
+}
+/*pub async fn do_flashbot_goerli(tx: &mut TypedTransaction) -> anyhow::Result<()> {
+    
     // Connect to the network - using URL used by metamask
     let provider =
         Provider::<Http>::try_from("https://goerli.infura.io/v3/0ab0b9c9d5bf44818399aea45b5ade51")?;
 
-    let private_key = env::var("7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236")?;
+    let private_key = "7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236";
     let bundle_signer = private_key.parse::<LocalWallet>()?;
     let wallet = private_key.parse::<LocalWallet>()?;
 
@@ -105,8 +116,9 @@ pub async fn do_flashbot_goerli(tx: &mut TypedTransaction) -> Result<()> {
 
     Ok(())
 }
+ */
 
-pub async fn do_flashbot_mainnet(mut tx: TypedTransaction) -> Result<()> {
+pub async fn do_flashbot_mainnet(mut tx: TypedTransaction) -> anyhow::Result<()> {
     println!("do_flashbot_mainnet");
     // Connect to the network - using URL used by metamask
     let provider = Provider::<Http>::try_from(
@@ -115,8 +127,8 @@ pub async fn do_flashbot_mainnet(mut tx: TypedTransaction) -> Result<()> {
 
     let private_key = "7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236";
  
-    let bundle_signer = private_key.parse::<LocalWallet>().unwrap();
-    let wallet = private_key.parse::<LocalWallet>().unwrap();
+    let bundle_signer = private_key.parse::<LocalWallet>()?;
+    let wallet = private_key.parse::<LocalWallet>()?;
 
     let wallet = wallet.with_chain_id(1u64);
  
@@ -131,33 +143,21 @@ pub async fn do_flashbot_mainnet(mut tx: TypedTransaction) -> Result<()> {
         wallet,
     );
  
-    let block_number = client.inner().inner().get_block_number().await.unwrap();
-    println!("Block Number: {}", block_number);
-
-    let signature = client.signer().sign_transaction(&tx).await.unwrap();
-    
-    let mut nonce = client.get_transaction_count(client.address(), None).await?;
-
-    let bundle = BundleRequest::new();
-    // creation bundle with multiple transaction to handle the gas spent in a bundle > 42000
+    let block_number = client.inner().inner().get_block_number().await?;
+    let nonce = client.get_transaction_count(wallet.address(),  Some(BlockId::from(BlockNumber::Latest))).await?;
     tx.set_nonce(nonce);
-    client.fill_transaction(&mut tx, None).await.unwrap();
-    nonce = nonce + 1;
-    let bundle = 
-        bundle.push_transaction(tx.rlp_signed(client.signer().chain_id(), &signature))
-        .set_block(block_number + 1);
-
-    let bundle = bundle
-    .set_simulation_block(block_number)
-    .set_simulation_timestamp(FlashbotStrategy::get_valid_timestamp().as_u64())
-    .set_block(block_number + 1);
-    // Simulate it
-    let simulated_bundle = client.inner().simulate_bundle(&bundle).await.unwrap();
-
+    tx.set_gas_price(U256::from(300000000000u64));
+    tx.set_gas(U256::from(50000));
+    
+    let signature = client.signer().sign_transaction(&tx).await?;
+    let bundle = FlashbotsStrategy::new_bundle_request()
+        .push_transaction(tx.rlp_signed(client.signer().chain_id(), &signature));
+       
+    let simulated_bundle = client.inner().simulate_bundle(&bundle).await?;
     println!("Simulated bundle: {:?}", simulated_bundle);
 
     // Send it
-    let pending_bundle = client.inner().send_bundle(&bundle).await.unwrap();
+    let pending_bundle = client.inner().send_bundle(&bundle).await?;
 
     // You can also optionally wait to see if the bundle was included
     match pending_bundle.await {
@@ -175,12 +175,6 @@ pub async fn do_flashbot_mainnet(mut tx: TypedTransaction) -> Result<()> {
 }
     }
 /*
-let bundle = get_bundle_for_test(&client).await?;
-let current_block_number = client.inner().inner().get_block_number().await?;
-let bundle = bundle
-    .set_simulation_block(current_block_number)
-    .set_simulation_timestamp(1731851886)
-    .set_block(current_block_number + 1);
 
 let raw_txs: Vec<Bytes> = bundle
     .transactions()
@@ -342,4 +336,4 @@ pub fn test() {
 }
  */
     */
-    
+}
