@@ -153,7 +153,7 @@ pub async fn do_flashbot_mainnet(mut tx: TypedTransaction) -> Result<()> {
     // Simulate it
     let simulated_bundle = client.inner().simulate_bundle(&bundle).await.unwrap();
 
-    println!("Simulated bundle: {:?}", simulated_bundle);
+    println!("Simulated bundle: {:?}",ca simulated_bundle);
 
     // Send it
     let pending_bundle = client.inner().send_bundle(&bundle).await.unwrap();
