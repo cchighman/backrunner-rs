@@ -322,7 +322,7 @@ pub fn test_is_arbitrage_pair_false() {
 }
 
 
-*/
+/* 
 #[test]
 pub fn test_cyclic_order() {
     let pair1 = CryptoPair::new(DexPool {
@@ -420,3 +420,4 @@ pub fn test_cyclic_order() {
 
     arb_path.calculate();
 }
+*/
