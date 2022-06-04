@@ -2,7 +2,7 @@ use std::ops::Div;
 use std::str::FromStr;
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
-
+use ethers::prelude::*;
 use ethers::core::abi::Tokenize;
 use ethers::prelude::{Address, Signer, SignerMiddleware, U256};
 
@@ -10,19 +10,13 @@ use ethers::core::types::transaction::eip2718::TypedTransaction;
 use ethers::providers::{Http, Provider};
 use ethers::signers::{coins_bip39::English, MnemonicBuilder};
 
-use crate::contracts::bindings::ierc20::IERC20;
 use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
-use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
+use crate::uniswap_providers::{FROM_ADDRESS,CONTRACT_ADDRESS};
+
 use crate::sequence_token::SequenceToken;
 use ethers::contract::Lazy;
 use futures::StreamExt;
 use num_traits::FromPrimitive;
-
-pub(crate) static CONTRACT_ADDRESS: Lazy<Address> =
-    Lazy::new(|| Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap());
-
-pub(crate) static FROM_ADDRESS: Lazy<Address> =
-    Lazy::new(|| Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap());
 
 pub fn get_valid_timestamp(future_millis: U256) -> U256 {
     let start = SystemTime::now();
@@ -41,25 +35,14 @@ pub async fn flash_swap_v2(
     out_amt: U256,
     calldata: ethers::core::types::Bytes,
 ) -> TypedTransaction {
-    let provider =
-        Provider::<Http>::try_from("https://ropsten.infura.io/v3/7b15aafb575849f4ab4eaccc2725b4a7")
-            .unwrap();
+    let provider = Provider::<Http>::try_from(
+        "https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3",
+    ).unwrap();
 
-    let phrase = "unveil spoon stable govern diesel park glory visa lucky teach aspect spy";
-    let index = 0u32;
-
-    let wallet = MnemonicBuilder::<English>::default()
-        .phrase(phrase)
-        .index(index)
-        .unwrap()
-        // Use this if your mnemonic is encrypted
-        // .password(password)
-        .build()
-        .unwrap();
-    let wallet = wallet.with_chain_id(3u64);
-
-    dbg!(&wallet);
-
+    let private_key = "7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236";
+    let wallet = private_key.parse::<LocalWallet>().unwrap();
+    let wallet = wallet.with_chain_id(1u64);
+   
     let client = Arc::new(SignerMiddleware::new(provider, wallet));
     let pair_contract = UniswapV2Pair::new(pair_id, Arc::clone(&client));
 

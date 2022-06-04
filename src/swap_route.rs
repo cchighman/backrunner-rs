@@ -27,13 +27,9 @@ use std::ops::Deref;
 use std::{collections::HashMap, fs::File, io, thread, time};
 use stream_cancel::Tripwire;
 use url::Url;
-use crate::uniswap_providers::MAINNET_PROVIDER;
-use crate::uniswap_providers::TO_ADDRESS;
-use crate::uniswap_providers::MAX_AMOUNT;
-use crate::uniswap_providers::ROUTER_CONTRACT;
-use crate::uniswap_providers::TIMESTAMP_SEED;
-
+use crate::uniswap_providers::{MAINNET_PROVIDER,TO_ADDRESS,MAX_AMOUNT,ROUTER_CONTRACT, TIMESTAMP_SEED};
 use std::env;
+
 #[derive(Clone)]
 pub struct SwapRoute {
     pub pair: (Address, Address),
@@ -53,7 +49,7 @@ impl SwapRoute {
             router,
         }
     }
-
+/* 
     pub async fn swap_eth_for_exact_tokens(&self) -> Bytes {
         (*ROUTER_CONTRACT)
             .swap_eth_for_exact_tokens(
@@ -117,11 +113,11 @@ impl SwapRoute {
             .unwrap()
     }
 
-    /*
+    /
     Provided some amount for some pair, return abi-encoded data for swap
      */
     pub async fn calldata(&self) -> ethers::core::types::Bytes {
-        /*
+        /* 
         match (
             self.pair.0.get_symbol().as_str(),
             self.pair.1.get_symbol().as_str(),
@@ -133,15 +129,16 @@ impl SwapRoute {
             (_, _) => self.swap_tokens_for_exact_tokens(),
         }
         */
-        self.swap_tokens_for_exact_tokens().await
+        //self.swap_tokens_for_exact_tokens().await
+        return Bytes::default();
     }
-    fn get_valid_timestamp(&self) -> U256 {
+pub fn get_valid_timestamp(&self) -> U256 {
         let start = SystemTime::now();
         let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
         let time_millis = since_epoch.as_millis().checked_add(TIMESTAMP_SEED).unwrap();
         return U256::from(time_millis);
     }
-}
+
 
 pub async fn route_calldata(swap_routes: Vec<SwapRoute>) -> Bytes {
     /* For each pair, get abi-encoded swap call */
@@ -167,3 +164,6 @@ pub async fn route_calldata(swap_routes: Vec<SwapRoute>) -> Bytes {
     ];
     Bytes::from(abi::encode(&tokens))
 }
+}
+
+

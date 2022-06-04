@@ -14,7 +14,7 @@
     use ethers::signers::Wallet;
     use ethers::contract::Lazy;
     
-    use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
+    //use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
     use anyhow;
     use ethers::abi::AbiDecode;
     use ethers::core::utils::keccak256;
@@ -122,6 +122,13 @@ pub static MAX_AMOUNT: Lazy<U256> =
 pub static TO_ADDRESS: Lazy<Address> =
     Lazy::new(|| Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap());
 
+pub static CONTRACT_ADDRESS: Lazy<Address> =
+    Lazy::new(|| Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap());
+
+pub static FROM_ADDRESS: Lazy<Address> =
+    Lazy::new(|| Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap());
+
+
 // Ropsten Uniswap v2
 // Router: 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
 static MAINNET_ROUTER_V2_ADDY: Lazy<Address> =
@@ -139,7 +146,6 @@ Lazy::new(|| {
     ))
 });
 
-pub static ROUTER_CONTRACT: Lazy<
-    UniswapV2Router02<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>,
-> = Lazy::new(|| UniswapV2Router02::new(*MAINNET_ROUTER_V2_ADDY, Arc::clone(&*MAINNET_PROVIDER)));
 
+pub static ROUTER_CONTRACT: Lazy<u8
+> = Lazy::new(|| 7);
