@@ -11,7 +11,7 @@ use ethers::providers::{Http, Provider};
 use ethers::signers::Signer;
 use ethers::signers::Wallet;
 
-use once_cell::sync::Lazy;
+use lazy_static::lazy::Lazy;
 
 use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
 use anyhow;

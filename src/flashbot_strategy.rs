@@ -21,6 +21,23 @@ use std::str::FromStr;
 use std::sync::Arc;
 use url::Url;
 
+/*
+pub static GOERLI_WALLET: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
+    MnemonicBuilder::<English>::default()
+        .phrase("unveil spoon stable govern diesel park glory visa lucky teach aspect spy")
+        .index(0u32)
+        .unwrap()
+        .build()
+        .unwrap()
+        .with_chain_id(5_u64)
+});
+
+// Ropsten Uniswap v2
+// Router: 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
+static ROPSTEN_ROUTER_V2_ADDY: Lazy<Address> =
+    Lazy::new(|| Address::from_str("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D").unwrap());
+
+
 pub(crate) static ROPSTEN_WALLET: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
     MnemonicBuilder::<English>::default()
         .phrase("unveil spoon stable govern diesel park glory visa lucky teach aspect spy")
@@ -41,7 +58,8 @@ pub static ROPSTEN_PROVIDER: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<Si
             (*ROPSTEN_WALLET.deref()).clone(),
         ))
     });
-
+*/
+/*
 pub static TIMESTAMP_SEED: u128 = 30000_u128;
 pub static MAX_AMOUNT: Lazy<U256> =
     Lazy::new(|| U256::from_str("9999999999999999999999999999999999").unwrap());
@@ -49,24 +67,11 @@ pub static MAX_AMOUNT: Lazy<U256> =
 pub static TO_ADDRESS: Lazy<Address> =
     Lazy::new(|| Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap());
 
-// Ropsten Uniswap v2
-// Router: 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
-static ROPSTEN_ROUTER_V2_ADDY: Lazy<Address> =
-    Lazy::new(|| Address::from_str("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D").unwrap());
-
+*/
 pub static ROUTER_CONTRACT: Lazy<
     UniswapV2Router02<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>,
 > = Lazy::new(|| UniswapV2Router02::new(*ROPSTEN_ROUTER_V2_ADDY, Arc::clone(&*ROPSTEN_PROVIDER)));
 
-pub static GOERLI_WALLET: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
-    MnemonicBuilder::<English>::default()
-        .phrase("unveil spoon stable govern diesel park glory visa lucky teach aspect spy")
-        .index(0u32)
-        .unwrap()
-        .build()
-        .unwrap()
-        .with_chain_id(5_u64)
-});
 /*
 pub static FLASHBOTS_GOERLI_PROVIDER: Lazy<
     Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>,
@@ -80,6 +85,10 @@ pub static FLASHBOTS_GOERLI_PROVIDER: Lazy<
         LocalWallet::new(&mut thread_rng()),
     ))
 });
+
+
+*/
+
 //  Mainnet
 // https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3
 // wss://mainnet.infura.io/ws/v3/20ca45667c5d4fa6b259b9a36babe5c3
@@ -87,7 +96,6 @@ pub static FLASHBOTS_GOERLI_PROVIDER: Lazy<
 // Goerli
 // https://goerli.infura.io/v3/0ab0b9c9d5bf44818399aea45b5ade51
 // wss://goerli.infura.io/ws/v3/0ab0b9c9d5bf44818399aea45b5ade51
-*/
 
 pub(crate) async fn do_flashbot_goerli(tx: &TypedTransaction) -> Result<()> {
     // Connect to the network - using URL used by metamask
