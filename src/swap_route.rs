@@ -1,22 +1,13 @@
 use std::time::SystemTime;
 
-<<<<<<< HEAD
 use crate::uniswap_providers::UNISWAP_PROVIDERS;
 use anyhow;
 use anyhow::Result;
-=======
-use anyhow;
->>>>>>> parent of 6c40e7b... Optimize
 use ethers::abi::Token;
 use ethers::prelude::*;
 use ethers::prelude::{Address, U256};
 use ethers::providers::Middleware;
-<<<<<<< HEAD
 use std::time::UNIX_EPOCH;
-=======
-
-use crate::uniswap_providers::UniswapProviders;
->>>>>>> parent of 6c40e7b... Optimize
 
 #[derive(Clone)]
 pub struct SwapRoute {
@@ -104,11 +95,7 @@ impl SwapRoute {
     /
     Provided some amount for some pair, return abi-encoded data for swap
      */
-<<<<<<< HEAD
     pub async fn calldata(&self) -> Bytes {
-=======
-    pub async fn calldata(&self) -> ethers::core::types::Bytes {
->>>>>>> parent of 6c40e7b... Optimize
         /*
         match (
             self.pair.0.get_symbol().as_str(),
@@ -126,17 +113,10 @@ impl SwapRoute {
     }
     pub fn get_valid_timestamp(&self) -> U256 {
         let start = SystemTime::now();
-<<<<<<< HEAD
         let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
         let time_millis = since_epoch
             .as_millis()
-            .checked_add(*UNISWAP_PROVIDERS.TIMESTAMP_SEED)
-=======
-        let since_epoch = start.duration_since(UniswapProviders::UNIX_EPOCH).unwrap();
-        let time_millis = since_epoch
-            .as_millis()
-            .checked_add(UniswapProviders::TIMESTAMP_SEED)
->>>>>>> parent of 6c40e7b... Optimize
+            .checked_add(UNISWAP_PROVIDERS.TIMESTAMP_SEED)
             .unwrap();
         return U256::from(time_millis);
     }

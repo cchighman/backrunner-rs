@@ -30,7 +30,6 @@ use utils::uniswapv2_utils::{populate_sushiswap_pairs, populate_uniswapv2_pairs}
 
 use crate::three_path_sequence::{cyclic_order, is_arbitrage_pair};
 
-pub mod UniswapProviders;
 pub mod arb_signal;
 pub mod arb_thread_pool;
 pub mod arbitrage_path;
