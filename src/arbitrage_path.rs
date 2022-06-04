@@ -36,23 +36,8 @@ impl ArbitragePath {
 
         return path_str;
     }
-    /*
-       pub fn reserves_to_amount(
-           &self,
-           reserve0: U256,
-           decimal0: i32,
-           reserve1: U256,
-           decimal1: i32,
-       ) -> BigDecimal {
-           return BigDecimal::from_f64(
-               f64::powi(10.0, (decimal0 - decimal1).abs()) * reserve1 as f64 / reserve0 as f64,
-           )
-           .unwrap();
-       }
 
-    */
-
-    pub fn arb_index(&self) -> BigDecimal {
+    pub async fn arb_index(&self) -> BigDecimal {
         (BigDecimal::from_str(&*self.sequence.a1().get_reserve().to_string()).unwrap()
             / BigDecimal::from_str(&*self.sequence.b1().get_reserve().to_string()).unwrap())
             * (BigDecimal::from_str(&*self.sequence.a2().get_reserve().to_string()).unwrap()
@@ -169,7 +154,8 @@ impl ArbitragePath {
                 &delta_b.clone().mul(
                     BigDecimal::from_i128(10_i128.pow(sequence.b1().get_decimal() as u32)).unwrap(),
                 ),
-            );
+            )
+            .await;
 
             let trade1 = SwapRoute::new(
                 (
@@ -178,7 +164,7 @@ impl ArbitragePath {
                 ),
                 source_amt.clone(),
                 dest_amt,
-                sequence.a1().router().clone(),
+                sequence.a1().token.pair.router.clone(),
             );
 
             let (source_amt, dest_amt) = ArbitragePath::dec_to_u256(
@@ -188,7 +174,8 @@ impl ArbitragePath {
                 &delta_c.clone().mul(
                     BigDecimal::from_i128(10_i128.pow(sequence.b2().get_decimal() as u32)).unwrap(),
                 ),
-            );
+            )
+            .await;
 
             let trade2 = SwapRoute::new(
                 (
@@ -197,7 +184,7 @@ impl ArbitragePath {
                 ),
                 source_amt,
                 dest_amt,
-                sequence.a2().router().clone(),
+                sequence.a2().token.pair.router.clone(),
             );
 
             let (source_amt, dest_amt) = ArbitragePath::dec_to_u256(
@@ -207,7 +194,9 @@ impl ArbitragePath {
                 &delta_a_prime.clone().mul(
                     BigDecimal::from_i128(10_i128.pow(sequence.b3().get_decimal() as u32)).unwrap(),
                 ),
-            );
+            )
+            .await;
+
             let trade3 = SwapRoute::new(
                 (
                     sequence.a3().get_id().clone(),
@@ -215,8 +204,9 @@ impl ArbitragePath {
                 ),
                 source_amt,
                 dest_amt,
-                sequence.a3().router().clone(),
+                sequence.a3().token.pair.router.clone(),
             );
+
             let trade_vec = vec![trade1, trade2, trade3];
             let (source_amt, dest_amt) = ArbitragePath::dec_to_u256(
                 &delta_a.clone().mul(
@@ -225,26 +215,23 @@ impl ArbitragePath {
                 &delta_b.clone().mul(
                     BigDecimal::from_i128(10_i128.pow(sequence.b1().get_decimal() as u32)).unwrap(),
                 ),
-            );
+            )
+            .await;
 
             let flash_tx = flash_swap_v2(
                 sequence.a1().token.pair_id().clone(),
                 source_amt,
                 dest_amt,
-                route_calldata(trade_vec),
-            );
+                route_calldata(trade_vec).await,
+            )
+            .await;
+            dbg!(flash_tx.clone());
 
-            do_flashbot_mainnet(&flash_tx);
-
-            dbg!(
-                &(*sequence.a1().token).clone(),
-                &*sequence.a2().token.clone(),
-                &*sequence.a3().token.clone()
-            );
+            do_flashbot_mainnet(&flash_tx).await;
         }
     }
 
-    pub fn dec_to_u256(delta_a: &BigDecimal, delta_b: &BigDecimal) -> (U256, U256) {
+    pub async fn dec_to_u256(delta_a: &BigDecimal, delta_b: &BigDecimal) -> (U256, U256) {
         (
             U256::from_dec_str(&*delta_a.to_string().split_once(".").unwrap().0).unwrap(),
             U256::from_dec_str(&*delta_b.to_string().split_once(".").unwrap().0).unwrap(),

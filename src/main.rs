@@ -12,16 +12,16 @@
 
 use arb_thread_pool::spawn;
 use async_std::prelude::*;
+use async_std::prelude::*;
 use ethers::prelude::Address;
 use futures_util::{FutureExt, TryFutureExt};
+use itertools::Itertools;
+use rayon::prelude::*;
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{BufReader, BufWriter};
 use std::io::{Read, Write};
 use std::sync::Arc;
-
-use itertools::Itertools;
-use rayon::prelude::*;
 
 use arbitrage_path::ArbitragePath;
 use crypto_pair::{CryptoPair, CryptoPairs};
@@ -54,17 +54,20 @@ pub mod utils;
     Ex:
     curl -H "Authorization: Bearer eyJrIjoiVjY3bzNoWTFnTTNyTUpCVXRoUUJxcXZPTXJGbE1nVmUiLCJuIjoiYmFja3J1bm5lciIsImlkIjoxfQ=="
                  https://soundscapes.grafana.net/api/dashboards/home
+
+     Discord Public Key: 0c31e811154cd8b3396151aad0c4ecb650d158f2758e782bf2a0bf5724a4e0d4
+     Discord App Id: 982459497320689684
+     Discord Client Id: 982459497320689684
+     Discord Client Secret: lREE9D8B7qrKsyfqJQqkegNrPhTCGsa2
+     Discord Invite Link: https://discord.com/api/oauth2/authorize?client_id=982459497320689684&permissions=8&redirect_uri=http%3A%2F%2Fwww.google.com&response_type=code&scope=identify%20email%20rpc.notifications.read%20rpc%20gdm.join%20guilds.members.read%20guilds.join%20connections%20guilds%20rpc.activities.write%20rpc.voice.write%20rpc.voice.read%20bot%20webhook.incoming%20messages.read%20applications.builds.upload%20applications.builds.read%20dm_channels.read%20voice%20relationships.read%20activities.write%20activities.read%20applications.entitlements%20applications.store.update%20applications.commands
+     Discord Webhook URL: https://discord.com/api/webhooks/982463881354035241/6XmX7RP90l1LW50WrLSsgnJPAQNM0Woqa2pG7Kk693ujqGQYdMr9jHoClgU6MmJXrpI0
 */
 
 use std::env;
 use std::future::ready;
 
-use ethers::contract::Lazy;
-
-pub static mut ARB_PATHS: Lazy<Vec<Arc<ArbitragePath>>> = Lazy::new(|| Default::default());
-
 #[allow(dead_code)]
-#[async-std::main]
+#[async_std::main]
 async fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -79,21 +82,14 @@ async fn main() {
 
     let mut crypto_pairs: HashMap<Address, Arc<CryptoPair>> = HashMap::new();
     let mut crypto_pairs_unsafe: HashMap<Address, CryptoPair> = HashMap::new();
+    let mut arb_paths: Vec<Arc<ArbitragePath>> = Default::default();
 
     println!("Test - ");
     /* 1.) Populate a map of all possible crypto pairs */
-    populate_uniswapv2_pairs(&mut crypto_pairs_unsafe);
+    populate_uniswapv2_pairs(&mut crypto_pairs_unsafe).await;
     // populate_uniswapv3_pools(&mut crypto_pairs);
-    populate_sushiswap_pairs(&mut crypto_pairs_unsafe);
+    populate_sushiswap_pairs(&mut crypto_pairs_unsafe).await;
 
-    /* 2) Load some source to populate and init arb paths */
-    /* 3.) Begin listening to pending / completed tx */
-    /*
-    let paths = ArbitragePaths::new();
-        paths
-            .generate_arbitrage_paths(&crypto_pairs, &mut arb_paths)
-            .await;
-    */
     if args.contains(&"generate".to_string()) {
         println!("Generating...");
         let x = crypto_pairs_unsafe
@@ -108,7 +104,7 @@ async fn main() {
         let mut new_vec: Vec<Vec<CryptoPair>> = Vec::default();
         let mut ser_pairs = CryptoPairs { pairs: new_vec };
 
-        for crypto_paths in t.clone() {
+        t.iter().for_each(|crypto_paths| {
             let mut y = Vec::default();
 
             y.push(crypto_paths[0].clone());
@@ -121,7 +117,7 @@ async fn main() {
                 y_2.push(crypto_paths[2].clone());
                 ser_pairs.pairs.push(y_2);
             }
-        }
+        });
         println!("ser_pairs: {}", ser_pairs.pairs.len());
         let file = File::create("pairs.json").unwrap();
         let mut writer = BufWriter::new(file);
@@ -163,20 +159,16 @@ async fn main() {
         /*
         Next we want to create arbitrage paths based on the contents of the serialized vector, except we will instead look to the map map above for references.
          */
-        cached_pairs
-            .pairs
-            .par_iter_mut()
-            .for_each(|unordered_pair| unsafe {
-                let sequence = cyclic_order(unordered_pair.clone(), &crypto_pairs).unwrap();
-                let arb_path = ArbitragePath::new(sequence);
-                async {
-                    arb_path.init(arb_path.clone()).await;
-                };
-                ARB_PATHS.push(arb_path);
-            });
-        unsafe {
-            println!("pairs: {}, paths: {}", &crypto_pairs.len(), ARB_PATHS.len());
+        for unordered_pair in cached_pairs.pairs {
+            let sequence = cyclic_order(unordered_pair.clone(), &crypto_pairs)
+                .await
+                .unwrap();
+            let arb_path = ArbitragePath::new(sequence);
+            arb_path.init(arb_path.clone()).await;
+            arb_paths.push(arb_path);
         }
+
+        println!("pairs: {}, paths: {}", &crypto_pairs.len(), arb_paths.len());
     }
     use std::{thread, time};
     loop {

@@ -27,7 +27,7 @@ use std::ops::Deref;
 use std::{collections::HashMap, fs::File, io, thread, time};
 use stream_cancel::Tripwire;
 use url::Url;
-
+/*
 pub static GOERLI_WALLET: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
     MnemonicBuilder::<English>::default()
         .phrase("unveil spoon stable govern diesel park glory visa lucky teach aspect spy")
@@ -37,7 +37,7 @@ pub static GOERLI_WALLET: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
         .unwrap()
         .with_chain_id(5_u64)
 });
-/*
+
 pub static FLASHBOTS_GOERLI_PROVIDER: Lazy<
     Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>,
 > = Lazy::new(|| {
@@ -50,7 +50,7 @@ pub static FLASHBOTS_GOERLI_PROVIDER: Lazy<
         LocalWallet::new(&mut thread_rng()),
     ))
 });
-*/
+
 pub(crate) static ROPSTEN_WALLET: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
     MnemonicBuilder::<English>::default()
         .phrase("unveil spoon stable govern diesel park glory visa lucky teach aspect spy")
@@ -88,6 +88,9 @@ pub static ROUTER_CONTRACT: Lazy<
     UniswapV2Router02<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>,
 > = Lazy::new(|| UniswapV2Router02::new(*ROPSTEN_ROUTER_V2_ADDY, Arc::clone(&*ROPSTEN_PROVIDER)));
 
+
+*/
+
 #[derive(Clone)]
 pub struct SwapRoute {
     pub pair: (Address, Address),
@@ -99,7 +102,7 @@ pub struct SwapRoute {
 impl SwapRoute {
     /* TODO - For each pair */
 
-    pub fn new(tokens: (Address, Address), source: U256, dest: U256, router: H160) -> Self {
+    pub fn new(tokens: (Address, Address), source: U256, dest: U256, router: Address) -> Self {
         Self {
             pair: tokens.clone(),
             source_amount: source,
@@ -108,8 +111,8 @@ impl SwapRoute {
         }
     }
 
-    pub fn swap_eth_for_exact_tokens(&self) -> ethers::core::types::Bytes {
-        return (*ROUTER_CONTRACT)
+    pub async fn swap_eth_for_exact_tokens(&self) -> Bytes {
+        (*ROUTER_CONTRACT)
             .swap_eth_for_exact_tokens(
                 self.dest_amount,
                 vec![
@@ -120,11 +123,11 @@ impl SwapRoute {
                 self.get_valid_timestamp(),
             )
             .calldata()
-            .unwrap();
+            .unwrap()
     }
 
-    pub fn swap_tokens_for_exact_eth(&self) -> ethers::core::types::Bytes {
-        return (*ROUTER_CONTRACT)
+    pub async fn swap_tokens_for_exact_eth(&self) -> Bytes {
+        (*ROUTER_CONTRACT)
             .swap_tokens_for_exact_eth(
                 self.dest_amount,
                 *MAX_AMOUNT,
@@ -136,11 +139,11 @@ impl SwapRoute {
                 self.get_valid_timestamp(),
             )
             .calldata()
-            .unwrap();
+            .unwrap()
     }
 
-    pub fn swap_tokens_for_exact_tokens(&self) -> ethers::core::types::Bytes {
-        return (*ROUTER_CONTRACT)
+    pub async fn swap_tokens_for_exact_tokens(&self) -> Bytes {
+        (*ROUTER_CONTRACT)
             .swap_tokens_for_exact_tokens(
                 self.dest_amount,
                 *MAX_AMOUNT,
@@ -152,11 +155,11 @@ impl SwapRoute {
                 self.get_valid_timestamp(),
             )
             .calldata()
-            .unwrap();
+            .unwrap()
     }
 
-    pub fn swap_exact_tokens_for_tokens(&self) -> ethers::core::types::Bytes {
-        return (*ROUTER_CONTRACT)
+    pub async fn swap_exact_tokens_for_tokens(&self) -> Bytes {
+        (*ROUTER_CONTRACT)
             .swap_exact_tokens_for_tokens(
                 self.source_amount,
                 self.dest_amount,
@@ -168,13 +171,13 @@ impl SwapRoute {
                 self.get_valid_timestamp(),
             )
             .calldata()
-            .unwrap();
+            .unwrap()
     }
 
     /*
     Provided some amount for some pair, return abi-encoded data for swap
      */
-    pub fn calldata(&self) -> ethers::core::types::Bytes {
+    pub async fn calldata(&self) -> ethers::core::types::Bytes {
         /*
         match (
             self.pair.0.get_symbol().as_str(),
@@ -187,7 +190,7 @@ impl SwapRoute {
             (_, _) => self.swap_tokens_for_exact_tokens(),
         }
         */
-        self.swap_tokens_for_exact_tokens()
+        self.swap_tokens_for_exact_tokens().await
     }
     fn get_valid_timestamp(&self) -> U256 {
         let start = SystemTime::now();
@@ -197,7 +200,7 @@ impl SwapRoute {
     }
 }
 
-pub fn route_calldata(swap_routes: Vec<SwapRoute>) -> ethers::core::types::Bytes {
+pub async fn route_calldata(swap_routes: Vec<SwapRoute>) -> Bytes {
     /* For each pair, get abi-encoded swap call */
     let miner_tip = Token::Uint(U256::from(0));
 
@@ -207,13 +210,9 @@ pub fn route_calldata(swap_routes: Vec<SwapRoute>) -> ethers::core::types::Bytes
 
     /* Build data */
     for trade in swap_routes {
-        trade_routers.push(Token::Address(
-            Address::from_str(&*trade.router.to_string()).unwrap(),
-        ));
-        sell_tokens.push(Token::Address(
-            Address::from_str(&*trade.pair.1.to_string()).unwrap(),
-        ));
-        swap_data.push(Token::Bytes(trade.calldata().clone().to_vec()));
+        trade_routers.push(Token::Address(trade.router));
+        sell_tokens.push(Token::Address(trade.pair.1));
+        swap_data.push(Token::Bytes(trade.calldata().await.clone().to_vec()));
     }
 
     /* abi encode data */
@@ -223,5 +222,5 @@ pub fn route_calldata(swap_routes: Vec<SwapRoute>) -> ethers::core::types::Bytes
         Token::Array(sell_tokens),
         Token::Array(swap_data),
     ];
-    return ethers::core::types::Bytes::from(ethers::core::abi::encode(&tokens));
+    Bytes::from(abi::encode(&tokens))
 }

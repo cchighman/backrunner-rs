@@ -35,7 +35,7 @@ pub fn get_valid_timestamp(future_millis: U256) -> U256 {
     return U256::from(time_millis);
 }
 
-pub fn flash_swap_v2(
+pub async fn flash_swap_v2(
     pair_id: Address,
     in_amt: U256,
     out_amt: U256,

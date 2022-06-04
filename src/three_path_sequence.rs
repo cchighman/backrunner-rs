@@ -46,7 +46,7 @@ impl ThreePathSequence {
     }
 }
 
-pub fn cyclic_order(
+pub async fn cyclic_order(
     crypto_path: Vec<CryptoPair>,
     crypto_pairs: &HashMap<Address, Arc<CryptoPair>>,
 ) -> Option<ThreePathSequence> {

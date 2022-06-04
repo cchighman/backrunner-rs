@@ -63,7 +63,7 @@ impl SequenceToken {
         return &self.token_direction;
     }
 
-    pub fn router(&self) -> &Address {
-        &self.token.router()
+    pub fn router(&self) -> Address {
+        self.token.pair.router
     }
 }

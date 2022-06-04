@@ -7,12 +7,13 @@ use crate::graphql_uniswapv2;
 use crate::uniswapv2_pairs::uniswap_pairs::UniswapPairsPairsTokens;
 use ethers::prelude::{Address, U256};
 
-pub fn uniswapv2_unpack_pairs(
+pub async fn uniswapv2_unpack_pairs(
     pairs: graphql_client::Response<graphql_uniswapv2::uniswap_pairs::ResponseData>,
     pair_map: &mut HashMap<Address, CryptoPair>,
     dex: String,
     router: Address,
 ) {
+    dbg!(&router);
     for pair in pairs.data.unwrap().pairs {
         let uni_pair = DexPool {
             token0: UniswapPairsPairsTokens {
@@ -34,7 +35,7 @@ pub fn uniswapv2_unpack_pairs(
             liquidity: Default::default(),
             tick: Default::default(),
             dex: dex.clone(),
-            router,
+            router: router,
             fee_tier: Default::default(),
         };
 
@@ -48,9 +49,10 @@ pub fn uniswapv2_unpack_pairs(
     }
 }
 
-pub fn populate_uniswapv2_pairs(pair_map: &mut HashMap<Address, CryptoPair>) {
+pub async fn populate_uniswapv2_pairs(pair_map: &mut HashMap<Address, CryptoPair>) {
     let pairs =
         graphql_uniswapv2::get_pairs("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2")
+            .await
             .unwrap();
     //dbg!("uniswap - {#:?}", &pairs);
     uniswapv2_unpack_pairs(
@@ -58,12 +60,14 @@ pub fn populate_uniswapv2_pairs(pair_map: &mut HashMap<Address, CryptoPair>) {
         pair_map,
         " - univ2".to_string(),
         Address::from_str("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D").unwrap(),
-    );
+    )
+    .await;
 }
 
-pub fn populate_sushiswap_pairs(pair_map: &mut HashMap<Address, CryptoPair>) {
+pub async fn populate_sushiswap_pairs(pair_map: &mut HashMap<Address, CryptoPair>) {
     let pairs =
         graphql_uniswapv2::get_pairs("https://api.thegraph.com/subgraphs/name/sushiswap/exchange")
+            .await
             .unwrap();
     //dbg!("sushi - {#:?}", pairs);
     uniswapv2_unpack_pairs(
@@ -71,5 +75,6 @@ pub fn populate_sushiswap_pairs(pair_map: &mut HashMap<Address, CryptoPair>) {
         pair_map,
         " - sushi".to_string(),
         Address::from_str("0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F").unwrap(),
-    );
+    )
+    .await;
 }

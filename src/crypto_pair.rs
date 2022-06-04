@@ -76,8 +76,8 @@ impl CryptoPair {
         return &self.pair.dex;
     }
 
-    pub fn router(&self) -> &Address {
-        return &self.pair.router;
+    pub fn router(&self) -> Address {
+        return self.pair.router;
     }
 
     pub fn left_id(&self) -> &Address {

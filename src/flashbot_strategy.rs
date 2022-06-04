@@ -149,7 +149,6 @@ pub(crate) async fn do_flashbot_mainnet(tx: &TypedTransaction) -> Result<()> {
     let bundle_signer = private_key.parse::<LocalWallet>()?;
     let wallet = private_key.parse::<LocalWallet>()?;
 
-    // Set chainId for goerli testnet
     let wallet = wallet.with_chain_id(1u64);
     let bundle_signer = bundle_signer.with_chain_id(1u64);
 
@@ -161,7 +160,7 @@ pub(crate) async fn do_flashbot_mainnet(tx: &TypedTransaction) -> Result<()> {
         ),
         wallet,
     );
-
+    dbg!(client.clone());
     let block_number = client.inner().inner().get_block_number().await?;
     let signature = client.signer().sign_transaction(&tx).await?;
     let bundle = BundleRequest::new()
