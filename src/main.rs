@@ -126,7 +126,7 @@ async fn main() {
         writer.flush().unwrap();
     }
 
-    if args.contains(&"run".to_string()) {
+    if args.contains(&"run".to_string()) || args.len() == 1 {
         println!("Running..");
         /* Read Pairs from file */
         let path = if args.len() > 2 && !args.contains(&"RUST_BACKTRACE=1".to_string()) {
