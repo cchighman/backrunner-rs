@@ -63,6 +63,7 @@ pub struct FlashbotStrategy {
     bundle = bundle.set_simulation_block(block);
     bundle = bundle.set_block(block + 1);
     let now = SystemTime::now();
+    
     bundle = bundle.set_simulation_timestamp(now.duration_since(UNIX_EPOCH)?.as_secs());
     Ok(bundle)
 }
