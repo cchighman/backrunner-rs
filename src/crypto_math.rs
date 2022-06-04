@@ -196,7 +196,6 @@ pub fn test_mul_div() {
     let res = mul_div(a, b, c);
     println!("mul_div: {}", res);
 }
-
 pub fn compute_profit_maximizing_trade_2(
     truePrice1: &BigDecimal,
     truePrice2: &BigDecimal,
@@ -613,7 +612,7 @@ fn test1() {
         get_amount_out_2(
             34107.0,
             before_arb_sushi_0.to_string().parse::<f64>().unwrap(),
-            before_arb_sushi_1.to_string().parse::<f64>().unwrap(),
+            before_arb_sushi_1.to_string().parse::<f64>().unwrap()
         )
         .to_string()
     );
@@ -623,7 +622,7 @@ fn test1() {
         get_amount_in_2(
             1.94,
             before_arb_sushi_0.to_string().parse::<f64>().unwrap(),
-            before_arb_sushi_1.to_string().parse::<f64>().unwrap(),
+            before_arb_sushi_1.to_string().parse::<f64>().unwrap()
         )
         .to_string()
     );

@@ -18,7 +18,6 @@ pub struct CakeRouter {
     token_contract: Contract<Arc<Provider<Http>>>,
     signer: SignerMiddleware<Arc<Provider<Http>>, LocalWallet>,
 }
-
 // TODO check how can we reuse the common struct data members and associated ::new method
 impl CakeRouter {
     #[instrument(skip(provider, signer))]

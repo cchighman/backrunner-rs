@@ -41,7 +41,6 @@ fn constant_x_20(i: u32) -> I256 {
     }
     .into()
 }
-
 fn constant_x_18(i: u32) -> I256 {
     match i {
         0 => 128_000_000_000_000_000_000_i128,
@@ -50,7 +49,6 @@ fn constant_x_18(i: u32) -> I256 {
     }
     .into()
 }
-
 fn constant_a_20(i: u32) -> I256 {
     match i {
         2 => 7_896_296_018_268_069_516_100_000_000_000_000_i128,
@@ -67,7 +65,6 @@ fn constant_a_20(i: u32) -> I256 {
     }
     .into()
 }
-
 fn constant_a_18(i: u32) -> I256 {
     match i {
         0 => {
@@ -463,14 +460,13 @@ mod tests {
             assert_eq!(
                 pow(
                     U256::from_dec_str(i[0]).unwrap(),
-                    U256::from_dec_str(i[1]).unwrap(),
+                    U256::from_dec_str(i[1]).unwrap()
                 )
                 .unwrap_err(),
                 o.into()
             );
         }
     }
-
     #[test]
     fn pow_success() {
         let input = [
@@ -512,7 +508,7 @@ mod tests {
             assert_eq!(
                 pow(
                     U256::from_dec_str(i[0]).unwrap(),
-                    U256::from_dec_str(i[1]).unwrap(),
+                    U256::from_dec_str(i[1]).unwrap()
                 )
                 .unwrap(),
                 U256::from_dec_str(o).unwrap()
@@ -549,14 +545,14 @@ mod tests {
         assert_eq!(
             pow(
                 U256::from_dec_str("0").unwrap(),
-                U256::from_dec_str("0").unwrap(),
+                U256::from_dec_str("0").unwrap()
             ),
             Ok(*UFIXED256X18_ONE)
         );
         assert_eq!(
             pow(
                 U256::from_dec_str("0").unwrap(),
-                U256::from_dec_str("1").unwrap(),
+                U256::from_dec_str("1").unwrap()
             ),
             Ok(U256::zero())
         );

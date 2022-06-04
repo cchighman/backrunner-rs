@@ -23,15 +23,15 @@
         coins = collect(1:10)
 
         for i in 1:100
-            Ai = sample(coins, 2, replace = false)
+            Ai = sample(coins, 2, replace=false)
             pools[i] = ProductTwoCoin(
-                1000 * rand(2),
+                1000*rand(2),
                 1.0,
                 Ai
             )
         end
 
-        Δin = vcat([0.0], 100 * rand(9))
+        Δin = vcat([0.0], 100*rand(9))
         router = Router(
             BasketLiquidation(1, Δin),
             pools,
@@ -40,7 +40,7 @@
 
         route!(router)
 
-        check_primal_feasibility(router; arb = false)
+        check_primal_feasibility(router; arb=false)
         check_dual_feasibility(router)
         check_opt_conditions_no_fee!(router)
     end

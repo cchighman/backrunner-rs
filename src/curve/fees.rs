@@ -134,7 +134,6 @@ impl IsInitialized for Fees {
 }
 
 impl Sealed for Fees {}
-
 impl Pack for Fees {
     const LEN: usize = 64;
     fn pack_into_slice(&self, output: &mut [u8]) {

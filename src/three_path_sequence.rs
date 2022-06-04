@@ -11,7 +11,6 @@ use crate::utils::common::DIRECTION;
 pub struct ThreePathSequence {
     pub(crate) sequence: Vec<SequenceToken>,
 }
-
 impl ThreePathSequence {
     pub fn new(path: Vec<SequenceToken>) -> Self {
         Self { sequence: path }

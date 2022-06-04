@@ -317,9 +317,7 @@ impl IsInitialized for StableCurve {
         true
     }
 }
-
 impl Sealed for StableCurve {}
-
 impl Pack for StableCurve {
     const LEN: usize = 8;
     fn pack_into_slice(&self, output: &mut [u8]) {

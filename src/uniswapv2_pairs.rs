@@ -1,7 +1,6 @@
 use ethers::prelude::U256;
 
 pub struct UniswapPairs;
-
 pub mod uniswap_pairs {
     #![allow(dead_code)]
 
@@ -11,7 +10,7 @@ pub mod uniswap_pairs {
     use super::*;
 
     pub const OPERATION_NAME: &str = "UniswapPairs";
-    pub const QUERY: &str = "query UniswapPairs {\r\n  pairs(first: 100, where: {reserveUSD_gt: \"1000000\", volumeUSD_gt: \"50000\"}, orderBy: reserveUSD, orderDirection: desc) {\r\n    id\r\n    token0 {\r\n      id\r\n      symbol\r\n      name\r\n      decimals\r\n\r\n    }\r\n    token1 {\r\n      id\r\n      symbol\r\n      name\r\n      decimals\r\n    }\r\n    reserveUSD\r\n    volumeUSD\r\n    reserve0\r\n    reserve1\r\n    reserveETH\r\n    token0price\r\n    token1price\r\n\r\n  }\r\n}\r\n";
+    pub const QUERY : & str = "query UniswapPairs {\r\n  pairs(first: 100, where: {reserveUSD_gt: \"1000000\", volumeUSD_gt: \"50000\"}, orderBy: reserveUSD, orderDirection: desc) {\r\n    id\r\n    token0 {\r\n      id\r\n      symbol\r\n      name\r\n      decimals\r\n\r\n    }\r\n    token1 {\r\n      id\r\n      symbol\r\n      name\r\n      decimals\r\n    }\r\n    reserveUSD\r\n    volumeUSD\r\n    reserve0\r\n    reserve1\r\n    reserveETH\r\n    token0price\r\n    token1price\r\n\r\n  }\r\n}\r\n" ;
 
     #[allow(dead_code)]
     type Boolean = bool;
@@ -44,7 +43,6 @@ pub mod uniswap_pairs {
         pub reserve1: U256,
         pub dex: String,
     }
-
     #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct UniswapPairsPairsToken0 {
         pub id: Address,
@@ -52,7 +50,6 @@ pub mod uniswap_pairs {
         pub name: String,
         pub decimals: i32,
     }
-
     #[derive(Deserialize, Serialize, Debug, Clone)]
     pub struct UniswapPairsPairsToken1 {
         pub id: Address,

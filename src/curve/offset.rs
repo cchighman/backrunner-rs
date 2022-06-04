@@ -161,9 +161,7 @@ impl IsInitialized for OffsetCurve {
         true
     }
 }
-
 impl Sealed for OffsetCurve {}
-
 impl Pack for OffsetCurve {
     const LEN: usize = 8;
     fn pack_into_slice(&self, output: &mut [u8]) {

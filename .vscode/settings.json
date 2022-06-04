@@ -1,5 +1,5 @@
 {
-  "lldb.showDisassembly": "always",
-  "lldb.dereferencePointers": true,
-  "lldb.consoleMode": "evaluate"
+    "lldb.showDisassembly": "always",
+    "lldb.dereferencePointers": true,
+    "lldb.consoleMode": "evaluate"
 }

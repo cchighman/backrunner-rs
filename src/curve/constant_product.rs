@@ -257,9 +257,7 @@ impl IsInitialized for ConstantProductCurve {
         true
     }
 }
-
 impl Sealed for ConstantProductCurve {}
-
 impl Pack for ConstantProductCurve {
     const LEN: usize = 0;
     fn pack_into_slice(&self, output: &mut [u8]) {

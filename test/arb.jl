@@ -1,4 +1,4 @@
-cosangle(u, v) = dot(u, v) / (norm(u) * norm(v))
+cosangle(u, v) = dot(u, v)/(norm(u)*norm(v))
 
 TOL = 1e-4
 
@@ -8,7 +8,7 @@ function check_primal_feasibility(r::Router; arb=true)
     for (Δ, Λ, c) in zip(r.Δs, r.Λs, r.cfmms)
         @test all(Δ .>= -TOL)
         @test all(Λ .>= -TOL)
-        @test CFMMRouter.ϕ(c, R = c.R + c.γ*Δ - Λ) >= CFMMRouter.ϕ(c) - sqrt(eps())
+        @test CFMMRouter.ϕ(c, R=c.R + c.γ*Δ - Λ) >= CFMMRouter.ϕ(c) - sqrt(eps())
 
         all_flows[c.Ai] .+= Λ - Δ
     end
@@ -62,9 +62,9 @@ end
         coins = collect(1:10)
 
         for i in 1:100
-            Ai = sample(coins, 2, replace = false)
+            Ai = sample(coins, 2, replace=false)
             pools[i] = ProductTwoCoin(
-                1000 * rand(2),
+                1000*rand(2),
                 1.0,
                 Ai
             )

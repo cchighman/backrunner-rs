@@ -21,17 +21,14 @@ mod context_mod {
 
     pub static CONTEXT_ABI: ethers::contract::Lazy<ethers::core::abi::Abi> =
         ethers::contract::Lazy::new(|| serde_json::from_str("[]").expect("invalid abi"));
-
     #[derive(Clone)]
     pub struct Context<M>(ethers::contract::Contract<M>);
-
     impl<M> std::ops::Deref for Context<M> {
         type Target = ethers::contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
     }
-
     impl<M: ethers::providers::Middleware> std::fmt::Debug for Context<M> {
         fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
             f.debug_tuple(stringify!(Context))
@@ -39,7 +36,6 @@ mod context_mod {
                 .finish()
         }
     }
-
     impl<'a, M: ethers::providers::Middleware> Context<M> {
         #[doc = r" Creates a new contract instance with the specified `ethers`"]
         #[doc = r" client at the given `Address`. The contract derefs to a `ethers::Contract`"]

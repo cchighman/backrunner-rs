@@ -16,7 +16,6 @@ pub trait PoolCacheMetrics: Send + Sync {
 }
 
 pub struct NoopPoolCacheMetrics;
-
 impl PoolCacheMetrics for NoopPoolCacheMetrics {
     fn pools_fetched(&self, _: usize, _: usize) {}
 }

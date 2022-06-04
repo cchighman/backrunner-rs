@@ -21,19 +21,16 @@ mod ttoken_mod {
 
     pub static TTOKEN_ABI: ethers::contract::Lazy<ethers::core::abi::Abi> =
         ethers::contract::Lazy::new(|| {
-            serde_json::from_str("[{\"type\":\"constructor\",\"inputs\":[]},{\"type\":\"function\",\"name\":\"allowance\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"approve\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"balanceOf\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"decimals\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"decreaseAllowance\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"subtractedValue\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"increaseAllowance\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"addedValue\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"name\",\"inputs\":[],\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"symbol\",\"inputs\":[],\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalSupply\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"transfer\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"transferFrom\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"Approval\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"indexed\":true},{\"name\":\"spender\",\"type\":\"address\",\"indexed\":true},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Transfer\",\"inputs\":[{\"name\":\"from\",\"type\":\"address\",\"indexed\":true},{\"name\":\"to\",\"type\":\"address\",\"indexed\":true},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false}]").expect("invalid abi")
+            serde_json :: from_str ("[{\"type\":\"constructor\",\"inputs\":[]},{\"type\":\"function\",\"name\":\"allowance\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"approve\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"balanceOf\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"decimals\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"decreaseAllowance\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"subtractedValue\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"increaseAllowance\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"addedValue\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"name\",\"inputs\":[],\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"symbol\",\"inputs\":[],\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalSupply\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"transfer\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"transferFrom\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"Approval\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"indexed\":true},{\"name\":\"spender\",\"type\":\"address\",\"indexed\":true},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Transfer\",\"inputs\":[{\"name\":\"from\",\"type\":\"address\",\"indexed\":true},{\"name\":\"to\",\"type\":\"address\",\"indexed\":true},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false}]") . expect ("invalid abi")
         });
-
     #[derive(Clone)]
     pub struct TToken<M>(ethers::contract::Contract<M>);
-
     impl<M> std::ops::Deref for TToken<M> {
         type Target = ethers::contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
     }
-
     impl<M: ethers::providers::Middleware> std::fmt::Debug for TToken<M> {
         fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
             f.debug_tuple(stringify!(TToken))
@@ -41,7 +38,6 @@ mod ttoken_mod {
                 .finish()
         }
     }
-
     impl<'a, M: ethers::providers::Middleware> TToken<M> {
         #[doc = r" Creates a new contract instance with the specified `ethers`"]
         #[doc = r" client at the given `Address`. The contract derefs to a `ethers::Contract`"]
@@ -163,15 +159,14 @@ mod ttoken_mod {
             self.0.event_with_filter(Default::default())
         }
     }
-
     #[derive(
         Clone,
         Debug,
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthEvent,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthEvent,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethevent(name = "Approval", abi = "Approval(address,address,uint256)")]
     pub struct ApprovalFilter {
@@ -181,15 +176,14 @@ mod ttoken_mod {
         pub spender: ethers::core::types::Address,
         pub value: ethers::core::types::U256,
     }
-
     #[derive(
         Clone,
         Debug,
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthEvent,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthEvent,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethevent(name = "Transfer", abi = "Transfer(address,address,uint256)")]
     pub struct TransferFilter {
@@ -199,13 +193,11 @@ mod ttoken_mod {
         pub to: ethers::core::types::Address,
         pub value: ethers::core::types::U256,
     }
-
-    #[derive(Debug, Clone, PartialEq, Eq, ethers::contract::EthAbiType)]
+    #[derive(Debug, Clone, PartialEq, Eq, ethers :: contract :: EthAbiType)]
     pub enum TTokenEvents {
         ApprovalFilter(ApprovalFilter),
         TransferFilter(TransferFilter),
     }
-
     impl ethers::contract::EthLogDecode for TTokenEvents {
         fn decode_log(log: &ethers::core::abi::RawLog) -> Result<Self, ethers::core::abi::Error>
         where
@@ -220,7 +212,6 @@ mod ttoken_mod {
             Err(ethers::core::abi::Error::InvalidData)
         }
     }
-
     impl ::std::fmt::Display for TTokenEvents {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match self {
@@ -229,7 +220,6 @@ mod ttoken_mod {
             }
         }
     }
-
     #[doc = "Container type for all input parameters for the `allowance`function with signature `allowance(address,address)` and selector `[221, 98, 237, 62]`"]
     #[derive(
         Clone,
@@ -237,15 +227,14 @@ mod ttoken_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "allowance", abi = "allowance(address,address)")]
     pub struct AllowanceCall {
         pub owner: ethers::core::types::Address,
         pub spender: ethers::core::types::Address,
     }
-
     #[doc = "Container type for all input parameters for the `approve`function with signature `approve(address,uint256)` and selector `[9, 94, 167, 179]`"]
     #[derive(
         Clone,
@@ -253,15 +242,14 @@ mod ttoken_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "approve", abi = "approve(address,uint256)")]
     pub struct ApproveCall {
         pub spender: ethers::core::types::Address,
         pub amount: ethers::core::types::U256,
     }
-
     #[doc = "Container type for all input parameters for the `balanceOf`function with signature `balanceOf(address)` and selector `[112, 160, 130, 49]`"]
     #[derive(
         Clone,
@@ -269,14 +257,13 @@ mod ttoken_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "balanceOf", abi = "balanceOf(address)")]
     pub struct BalanceOfCall {
         pub account: ethers::core::types::Address,
     }
-
     #[doc = "Container type for all input parameters for the `decimals`function with signature `decimals()` and selector `[49, 60, 229, 103]`"]
     #[derive(
         Clone,
@@ -284,12 +271,11 @@ mod ttoken_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "decimals", abi = "decimals()")]
     pub struct DecimalsCall;
-
     #[doc = "Container type for all input parameters for the `decreaseAllowance`function with signature `decreaseAllowance(address,uint256)` and selector `[164, 87, 194, 215]`"]
     #[derive(
         Clone,
@@ -297,15 +283,14 @@ mod ttoken_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "decreaseAllowance", abi = "decreaseAllowance(address,uint256)")]
     pub struct DecreaseAllowanceCall {
         pub spender: ethers::core::types::Address,
         pub subtracted_value: ethers::core::types::U256,
     }
-
     #[doc = "Container type for all input parameters for the `increaseAllowance`function with signature `increaseAllowance(address,uint256)` and selector `[57, 80, 147, 81]`"]
     #[derive(
         Clone,
@@ -313,15 +298,14 @@ mod ttoken_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "increaseAllowance", abi = "increaseAllowance(address,uint256)")]
     pub struct IncreaseAllowanceCall {
         pub spender: ethers::core::types::Address,
         pub added_value: ethers::core::types::U256,
     }
-
     #[doc = "Container type for all input parameters for the `name`function with signature `name()` and selector `[6, 253, 222, 3]`"]
     #[derive(
         Clone,
@@ -329,12 +313,11 @@ mod ttoken_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "name", abi = "name()")]
     pub struct NameCall;
-
     #[doc = "Container type for all input parameters for the `symbol`function with signature `symbol()` and selector `[149, 216, 155, 65]`"]
     #[derive(
         Clone,
@@ -342,12 +325,11 @@ mod ttoken_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "symbol", abi = "symbol()")]
     pub struct SymbolCall;
-
     #[doc = "Container type for all input parameters for the `totalSupply`function with signature `totalSupply()` and selector `[24, 22, 13, 221]`"]
     #[derive(
         Clone,
@@ -355,12 +337,11 @@ mod ttoken_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "totalSupply", abi = "totalSupply()")]
     pub struct TotalSupplyCall;
-
     #[doc = "Container type for all input parameters for the `transfer`function with signature `transfer(address,uint256)` and selector `[169, 5, 156, 187]`"]
     #[derive(
         Clone,
@@ -368,15 +349,14 @@ mod ttoken_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "transfer", abi = "transfer(address,uint256)")]
     pub struct TransferCall {
         pub recipient: ethers::core::types::Address,
         pub amount: ethers::core::types::U256,
     }
-
     #[doc = "Container type for all input parameters for the `transferFrom`function with signature `transferFrom(address,address,uint256)` and selector `[35, 184, 114, 221]`"]
     #[derive(
         Clone,
@@ -384,8 +364,8 @@ mod ttoken_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "transferFrom", abi = "transferFrom(address,address,uint256)")]
     pub struct TransferFromCall {
@@ -393,8 +373,7 @@ mod ttoken_mod {
         pub recipient: ethers::core::types::Address,
         pub amount: ethers::core::types::U256,
     }
-
-    #[derive(Debug, Clone, PartialEq, Eq, ethers::contract::EthAbiType)]
+    #[derive(Debug, Clone, PartialEq, Eq, ethers :: contract :: EthAbiType)]
     pub enum TTokenCalls {
         Allowance(AllowanceCall),
         Approve(ApproveCall),
@@ -408,7 +387,6 @@ mod ttoken_mod {
         Transfer(TransferCall),
         TransferFrom(TransferFromCall),
     }
-
     impl ethers::core::abi::AbiDecode for TTokenCalls {
         fn decode(data: impl AsRef<[u8]>) -> Result<Self, ethers::core::abi::AbiError> {
             if let Ok(decoded) =
@@ -466,7 +444,6 @@ mod ttoken_mod {
             Err(ethers::core::abi::Error::InvalidData.into())
         }
     }
-
     impl ethers::core::abi::AbiEncode for TTokenCalls {
         fn encode(self) -> Vec<u8> {
             match self {
@@ -484,7 +461,6 @@ mod ttoken_mod {
             }
         }
     }
-
     impl ::std::fmt::Display for TTokenCalls {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match self {
@@ -502,67 +478,56 @@ mod ttoken_mod {
             }
         }
     }
-
     impl ::std::convert::From<AllowanceCall> for TTokenCalls {
         fn from(var: AllowanceCall) -> Self {
             TTokenCalls::Allowance(var)
         }
     }
-
     impl ::std::convert::From<ApproveCall> for TTokenCalls {
         fn from(var: ApproveCall) -> Self {
             TTokenCalls::Approve(var)
         }
     }
-
     impl ::std::convert::From<BalanceOfCall> for TTokenCalls {
         fn from(var: BalanceOfCall) -> Self {
             TTokenCalls::BalanceOf(var)
         }
     }
-
     impl ::std::convert::From<DecimalsCall> for TTokenCalls {
         fn from(var: DecimalsCall) -> Self {
             TTokenCalls::Decimals(var)
         }
     }
-
     impl ::std::convert::From<DecreaseAllowanceCall> for TTokenCalls {
         fn from(var: DecreaseAllowanceCall) -> Self {
             TTokenCalls::DecreaseAllowance(var)
         }
     }
-
     impl ::std::convert::From<IncreaseAllowanceCall> for TTokenCalls {
         fn from(var: IncreaseAllowanceCall) -> Self {
             TTokenCalls::IncreaseAllowance(var)
         }
     }
-
     impl ::std::convert::From<NameCall> for TTokenCalls {
         fn from(var: NameCall) -> Self {
             TTokenCalls::Name(var)
         }
     }
-
     impl ::std::convert::From<SymbolCall> for TTokenCalls {
         fn from(var: SymbolCall) -> Self {
             TTokenCalls::Symbol(var)
         }
     }
-
     impl ::std::convert::From<TotalSupplyCall> for TTokenCalls {
         fn from(var: TotalSupplyCall) -> Self {
             TTokenCalls::TotalSupply(var)
         }
     }
-
     impl ::std::convert::From<TransferCall> for TTokenCalls {
         fn from(var: TransferCall) -> Self {
             TTokenCalls::Transfer(var)
         }
     }
-
     impl ::std::convert::From<TransferFromCall> for TTokenCalls {
         fn from(var: TransferFromCall) -> Self {
             TTokenCalls::TransferFrom(var)

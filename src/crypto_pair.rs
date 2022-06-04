@@ -8,11 +8,9 @@ use crate::dex_pool::DexPool;
 use crate::utils::common::DIRECTION;
 
 pub struct PairUpdateParams {}
-
 fn string_to_static_str(s: String) -> &'static str {
     Box::leak(s.into_boxed_str())
 }
-
 impl fmt::Display for CryptoPair {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{:?}", self)
@@ -44,11 +42,11 @@ impl CryptoPair {
         return self.pair.token0.decimals;
     }
     pub fn get_symbol(&self, direction: DIRECTION) -> &String {
-        return if direction == DIRECTION::Left {
-            &self.pair.token0.symbol
+        if direction == DIRECTION::Left {
+            return &self.pair.token0.symbol;
         } else {
-            &self.pair.token1.symbol
-        };
+            return &self.pair.token1.symbol;
+        }
     }
 
     pub fn right_decimal(&self) -> i32 {
@@ -56,11 +54,11 @@ impl CryptoPair {
     }
 
     pub fn get_decimal(&self, direction: DIRECTION) -> i32 {
-        return if direction == DIRECTION::Left {
-            self.pair.token0.decimals
+        if direction == DIRECTION::Left {
+            return self.pair.token0.decimals;
         } else {
-            self.pair.token1.decimals
-        };
+            return self.pair.token1.decimals;
+        }
     }
 
     pub fn left_reserves(&self) -> U256 {
@@ -92,11 +90,11 @@ impl CryptoPair {
     }
 
     pub fn get_id(&self, direction: DIRECTION) -> &Address {
-        return if direction == DIRECTION::Left {
-            self.left_id()
+        if direction == DIRECTION::Left {
+            return self.left_id();
         } else {
-            self.right_id()
-        };
+            return self.right_id();
+        }
     }
 
     pub fn pair_symbol(&self) -> String {
@@ -114,27 +112,27 @@ impl CryptoPair {
     }
 
     pub fn get_reserves_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
-        return if direction == DIRECTION::Left {
-            self.left_reserves_signal()
+        if direction == DIRECTION::Left {
+            return self.left_reserves_signal();
         } else {
-            self.right_reserves_signal()
-        };
+            return self.right_reserves_signal();
+        }
     }
 
     pub fn get_reserve(&self, direction: DIRECTION) -> U256 {
-        return if direction == DIRECTION::Left {
-            self.left_reserves()
+        if direction == DIRECTION::Left {
+            return self.left_reserves();
         } else {
-            self.right_reserves()
-        };
+            return self.right_reserves();
+        }
     }
 
     pub fn get_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
-        return if direction == DIRECTION::Left {
-            self.left_reserves_signal()
+        if direction == DIRECTION::Left {
+            return self.left_reserves_signal();
         } else {
-            self.right_reserves_signal()
-        };
+            return self.right_reserves_signal();
+        }
     }
 
     pub fn right_reserves_signal(&self) -> MutableSignal<U256> {
@@ -148,7 +146,6 @@ pub struct CryptoPair {
     pub(crate) left_reserves: Mutable<U256>,
     pub(crate) right_reserves: Mutable<U256>,
 }
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CryptoPairs {
     pub pairs: Vec<Vec<CryptoPair>>,

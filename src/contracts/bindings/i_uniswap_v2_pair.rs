@@ -21,19 +21,16 @@ mod iuniswapv2pair_mod {
 
     pub static IUNISWAPV2PAIR_ABI: ethers::contract::Lazy<ethers::core::abi::Abi> =
         ethers::contract::Lazy::new(|| {
-            serde_json::from_str("[{\"type\":\"function\",\"name\":\"DOMAIN_SEPARATOR\",\"inputs\":[],\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"MINIMUM_LIQUIDITY\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"pure\"},{\"type\":\"function\",\"name\":\"PERMIT_TYPEHASH\",\"inputs\":[],\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"constant\":false,\"stateMutability\":\"pure\"},{\"type\":\"function\",\"name\":\"allowance\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"approve\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"balanceOf\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"burn\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amount0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount1\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"decimals\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"constant\":false,\"stateMutability\":\"pure\"},{\"type\":\"function\",\"name\":\"factory\",\"inputs\":[],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getReserves\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint112\",\"name\":\"reserve0\",\"type\":\"uint112\"},{\"internalType\":\"uint112\",\"name\":\"reserve1\",\"type\":\"uint112\"},{\"internalType\":\"uint32\",\"name\":\"blockTimestampLast\",\"type\":\"uint32\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"initialize\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"kLast\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"mint\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"liquidity\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"name\",\"inputs\":[],\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"constant\":false,\"stateMutability\":\"pure\"},{\"type\":\"function\",\"name\":\"nonces\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"permit\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"price0CumulativeLast\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"price1CumulativeLast\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"skim\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"swap\",\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount0Out\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount1Out\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"symbol\",\"inputs\":[],\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"constant\":false,\"stateMutability\":\"pure\"},{\"type\":\"function\",\"name\":\"sync\",\"inputs\":[],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"token0\",\"inputs\":[],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"token1\",\"inputs\":[],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalSupply\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"transfer\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"transferFrom\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"Approval\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"indexed\":true},{\"name\":\"spender\",\"type\":\"address\",\"indexed\":true},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Burn\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":true},{\"name\":\"amount0\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"amount1\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"to\",\"type\":\"address\",\"indexed\":true}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Mint\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":true},{\"name\":\"amount0\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"amount1\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Swap\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":true},{\"name\":\"amount0In\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"amount1In\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"amount0Out\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"amount1Out\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"to\",\"type\":\"address\",\"indexed\":true}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Sync\",\"inputs\":[{\"name\":\"reserve0\",\"type\":\"uint112\",\"indexed\":false},{\"name\":\"reserve1\",\"type\":\"uint112\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Transfer\",\"inputs\":[{\"name\":\"from\",\"type\":\"address\",\"indexed\":true},{\"name\":\"to\",\"type\":\"address\",\"indexed\":true},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false}]").expect("invalid abi")
+            serde_json :: from_str ("[{\"type\":\"function\",\"name\":\"DOMAIN_SEPARATOR\",\"inputs\":[],\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"MINIMUM_LIQUIDITY\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"pure\"},{\"type\":\"function\",\"name\":\"PERMIT_TYPEHASH\",\"inputs\":[],\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"constant\":false,\"stateMutability\":\"pure\"},{\"type\":\"function\",\"name\":\"allowance\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"approve\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"balanceOf\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"burn\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amount0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount1\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"decimals\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"constant\":false,\"stateMutability\":\"pure\"},{\"type\":\"function\",\"name\":\"factory\",\"inputs\":[],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getReserves\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint112\",\"name\":\"reserve0\",\"type\":\"uint112\"},{\"internalType\":\"uint112\",\"name\":\"reserve1\",\"type\":\"uint112\"},{\"internalType\":\"uint32\",\"name\":\"blockTimestampLast\",\"type\":\"uint32\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"initialize\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"kLast\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"mint\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"liquidity\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"name\",\"inputs\":[],\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"constant\":false,\"stateMutability\":\"pure\"},{\"type\":\"function\",\"name\":\"nonces\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"permit\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"price0CumulativeLast\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"price1CumulativeLast\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"skim\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"swap\",\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount0Out\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount1Out\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"symbol\",\"inputs\":[],\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"constant\":false,\"stateMutability\":\"pure\"},{\"type\":\"function\",\"name\":\"sync\",\"inputs\":[],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"token0\",\"inputs\":[],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"token1\",\"inputs\":[],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"totalSupply\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":false,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"transfer\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"transferFrom\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"Approval\",\"inputs\":[{\"name\":\"owner\",\"type\":\"address\",\"indexed\":true},{\"name\":\"spender\",\"type\":\"address\",\"indexed\":true},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Burn\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":true},{\"name\":\"amount0\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"amount1\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"to\",\"type\":\"address\",\"indexed\":true}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Mint\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":true},{\"name\":\"amount0\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"amount1\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Swap\",\"inputs\":[{\"name\":\"sender\",\"type\":\"address\",\"indexed\":true},{\"name\":\"amount0In\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"amount1In\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"amount0Out\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"amount1Out\",\"type\":\"uint256\",\"indexed\":false},{\"name\":\"to\",\"type\":\"address\",\"indexed\":true}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Sync\",\"inputs\":[{\"name\":\"reserve0\",\"type\":\"uint112\",\"indexed\":false},{\"name\":\"reserve1\",\"type\":\"uint112\",\"indexed\":false}],\"anonymous\":false},{\"type\":\"event\",\"name\":\"Transfer\",\"inputs\":[{\"name\":\"from\",\"type\":\"address\",\"indexed\":true},{\"name\":\"to\",\"type\":\"address\",\"indexed\":true},{\"name\":\"value\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false}]") . expect ("invalid abi")
         });
-
     #[derive(Clone)]
     pub struct IUniswapV2Pair<M>(ethers::contract::Contract<M>);
-
     impl<M> std::ops::Deref for IUniswapV2Pair<M> {
         type Target = ethers::contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
     }
-
     impl<M: ethers::providers::Middleware> std::fmt::Debug for IUniswapV2Pair<M> {
         fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
             f.debug_tuple(stringify!(IUniswapV2Pair))
@@ -41,7 +38,6 @@ mod iuniswapv2pair_mod {
                 .finish()
         }
     }
-
     impl<'a, M: ethers::providers::Middleware> IUniswapV2Pair<M> {
         #[doc = r" Creates a new contract instance with the specified `ethers`"]
         #[doc = r" client at the given `Address`. The contract derefs to a `ethers::Contract`"]
@@ -320,15 +316,14 @@ mod iuniswapv2pair_mod {
             self.0.event_with_filter(Default::default())
         }
     }
-
     #[derive(
         Clone,
         Debug,
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthEvent,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthEvent,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethevent(name = "Approval", abi = "Approval(address,address,uint256)")]
     pub struct ApprovalFilter {
@@ -338,15 +333,14 @@ mod iuniswapv2pair_mod {
         pub spender: ethers::core::types::Address,
         pub value: ethers::core::types::U256,
     }
-
     #[derive(
         Clone,
         Debug,
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthEvent,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthEvent,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethevent(name = "Burn", abi = "Burn(address,uint256,uint256,address)")]
     pub struct BurnFilter {
@@ -357,15 +351,14 @@ mod iuniswapv2pair_mod {
         #[ethevent(indexed)]
         pub to: ethers::core::types::Address,
     }
-
     #[derive(
         Clone,
         Debug,
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthEvent,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthEvent,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethevent(name = "Mint", abi = "Mint(address,uint256,uint256)")]
     pub struct MintFilter {
@@ -374,15 +367,14 @@ mod iuniswapv2pair_mod {
         pub amount_0: ethers::core::types::U256,
         pub amount_1: ethers::core::types::U256,
     }
-
     #[derive(
         Clone,
         Debug,
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthEvent,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthEvent,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethevent(
         name = "Swap",
@@ -398,30 +390,28 @@ mod iuniswapv2pair_mod {
         #[ethevent(indexed)]
         pub to: ethers::core::types::Address,
     }
-
     #[derive(
         Clone,
         Debug,
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthEvent,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthEvent,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethevent(name = "Sync", abi = "Sync(uint112,uint112)")]
     pub struct SyncFilter {
         pub reserve_0: u128,
         pub reserve_1: u128,
     }
-
     #[derive(
         Clone,
         Debug,
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthEvent,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthEvent,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethevent(name = "Transfer", abi = "Transfer(address,address,uint256)")]
     pub struct TransferFilter {
@@ -431,8 +421,7 @@ mod iuniswapv2pair_mod {
         pub to: ethers::core::types::Address,
         pub value: ethers::core::types::U256,
     }
-
-    #[derive(Debug, Clone, PartialEq, Eq, ethers::contract::EthAbiType)]
+    #[derive(Debug, Clone, PartialEq, Eq, ethers :: contract :: EthAbiType)]
     pub enum IUniswapV2PairEvents {
         ApprovalFilter(ApprovalFilter),
         BurnFilter(BurnFilter),
@@ -441,7 +430,6 @@ mod iuniswapv2pair_mod {
         SyncFilter(SyncFilter),
         TransferFilter(TransferFilter),
     }
-
     impl ethers::contract::EthLogDecode for IUniswapV2PairEvents {
         fn decode_log(log: &ethers::core::abi::RawLog) -> Result<Self, ethers::core::abi::Error>
         where
@@ -468,7 +456,6 @@ mod iuniswapv2pair_mod {
             Err(ethers::core::abi::Error::InvalidData)
         }
     }
-
     impl ::std::fmt::Display for IUniswapV2PairEvents {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match self {
@@ -481,7 +468,6 @@ mod iuniswapv2pair_mod {
             }
         }
     }
-
     #[doc = "Container type for all input parameters for the `DOMAIN_SEPARATOR`function with signature `DOMAIN_SEPARATOR()` and selector `[54, 68, 229, 21]`"]
     #[derive(
         Clone,
@@ -489,12 +475,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "DOMAIN_SEPARATOR", abi = "DOMAIN_SEPARATOR()")]
     pub struct DomainSeparatorCall;
-
     #[doc = "Container type for all input parameters for the `MINIMUM_LIQUIDITY`function with signature `MINIMUM_LIQUIDITY()` and selector `[186, 154, 122, 86]`"]
     #[derive(
         Clone,
@@ -502,12 +487,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "MINIMUM_LIQUIDITY", abi = "MINIMUM_LIQUIDITY()")]
     pub struct MinimumLiquidityCall;
-
     #[doc = "Container type for all input parameters for the `PERMIT_TYPEHASH`function with signature `PERMIT_TYPEHASH()` and selector `[48, 173, 248, 31]`"]
     #[derive(
         Clone,
@@ -515,12 +499,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "PERMIT_TYPEHASH", abi = "PERMIT_TYPEHASH()")]
     pub struct PermitTypehashCall;
-
     #[doc = "Container type for all input parameters for the `allowance`function with signature `allowance(address,address)` and selector `[221, 98, 237, 62]`"]
     #[derive(
         Clone,
@@ -528,15 +511,14 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "allowance", abi = "allowance(address,address)")]
     pub struct AllowanceCall {
         pub owner: ethers::core::types::Address,
         pub spender: ethers::core::types::Address,
     }
-
     #[doc = "Container type for all input parameters for the `approve`function with signature `approve(address,uint256)` and selector `[9, 94, 167, 179]`"]
     #[derive(
         Clone,
@@ -544,15 +526,14 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "approve", abi = "approve(address,uint256)")]
     pub struct ApproveCall {
         pub spender: ethers::core::types::Address,
         pub value: ethers::core::types::U256,
     }
-
     #[doc = "Container type for all input parameters for the `balanceOf`function with signature `balanceOf(address)` and selector `[112, 160, 130, 49]`"]
     #[derive(
         Clone,
@@ -560,14 +541,13 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "balanceOf", abi = "balanceOf(address)")]
     pub struct BalanceOfCall {
         pub owner: ethers::core::types::Address,
     }
-
     #[doc = "Container type for all input parameters for the `burn`function with signature `burn(address)` and selector `[137, 175, 203, 68]`"]
     #[derive(
         Clone,
@@ -575,14 +555,13 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "burn", abi = "burn(address)")]
     pub struct BurnCall {
         pub to: ethers::core::types::Address,
     }
-
     #[doc = "Container type for all input parameters for the `decimals`function with signature `decimals()` and selector `[49, 60, 229, 103]`"]
     #[derive(
         Clone,
@@ -590,12 +569,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "decimals", abi = "decimals()")]
     pub struct DecimalsCall;
-
     #[doc = "Container type for all input parameters for the `factory`function with signature `factory()` and selector `[196, 90, 1, 85]`"]
     #[derive(
         Clone,
@@ -603,12 +581,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "factory", abi = "factory()")]
     pub struct FactoryCall;
-
     #[doc = "Container type for all input parameters for the `getReserves`function with signature `getReserves()` and selector `[9, 2, 241, 172]`"]
     #[derive(
         Clone,
@@ -616,12 +593,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "getReserves", abi = "getReserves()")]
     pub struct GetReservesCall;
-
     #[doc = "Container type for all input parameters for the `initialize`function with signature `initialize(address,address)` and selector `[72, 92, 201, 85]`"]
     #[derive(
         Clone,
@@ -629,15 +605,14 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "initialize", abi = "initialize(address,address)")]
     pub struct InitializeCall(
         pub ethers::core::types::Address,
         pub ethers::core::types::Address,
     );
-
     #[doc = "Container type for all input parameters for the `kLast`function with signature `kLast()` and selector `[116, 100, 252, 61]`"]
     #[derive(
         Clone,
@@ -645,12 +620,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "kLast", abi = "kLast()")]
     pub struct KlastCall;
-
     #[doc = "Container type for all input parameters for the `mint`function with signature `mint(address)` and selector `[106, 98, 120, 66]`"]
     #[derive(
         Clone,
@@ -658,14 +632,13 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "mint", abi = "mint(address)")]
     pub struct MintCall {
         pub to: ethers::core::types::Address,
     }
-
     #[doc = "Container type for all input parameters for the `name`function with signature `name()` and selector `[6, 253, 222, 3]`"]
     #[derive(
         Clone,
@@ -673,12 +646,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "name", abi = "name()")]
     pub struct NameCall;
-
     #[doc = "Container type for all input parameters for the `nonces`function with signature `nonces(address)` and selector `[126, 206, 190, 0]`"]
     #[derive(
         Clone,
@@ -686,14 +658,13 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "nonces", abi = "nonces(address)")]
     pub struct NoncesCall {
         pub owner: ethers::core::types::Address,
     }
-
     #[doc = "Container type for all input parameters for the `permit`function with signature `permit(address,address,uint256,uint256,uint8,bytes32,bytes32)` and selector `[213, 5, 172, 207]`"]
     #[derive(
         Clone,
@@ -701,8 +672,8 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(
         name = "permit",
@@ -717,7 +688,6 @@ mod iuniswapv2pair_mod {
         pub r: [u8; 32],
         pub s: [u8; 32],
     }
-
     #[doc = "Container type for all input parameters for the `price0CumulativeLast`function with signature `price0CumulativeLast()` and selector `[89, 9, 192, 213]`"]
     #[derive(
         Clone,
@@ -725,12 +695,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "price0CumulativeLast", abi = "price0CumulativeLast()")]
     pub struct Price0CumulativeLastCall;
-
     #[doc = "Container type for all input parameters for the `price1CumulativeLast`function with signature `price1CumulativeLast()` and selector `[90, 61, 84, 147]`"]
     #[derive(
         Clone,
@@ -738,12 +707,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "price1CumulativeLast", abi = "price1CumulativeLast()")]
     pub struct Price1CumulativeLastCall;
-
     #[doc = "Container type for all input parameters for the `skim`function with signature `skim(address)` and selector `[188, 37, 207, 119]`"]
     #[derive(
         Clone,
@@ -751,14 +719,13 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "skim", abi = "skim(address)")]
     pub struct SkimCall {
         pub to: ethers::core::types::Address,
     }
-
     #[doc = "Container type for all input parameters for the `swap`function with signature `swap(uint256,uint256,address,bytes)` and selector `[2, 44, 13, 159]`"]
     #[derive(
         Clone,
@@ -766,8 +733,8 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "swap", abi = "swap(uint256,uint256,address,bytes)")]
     pub struct SwapCall {
@@ -776,7 +743,6 @@ mod iuniswapv2pair_mod {
         pub to: ethers::core::types::Address,
         pub data: ethers::core::types::Bytes,
     }
-
     #[doc = "Container type for all input parameters for the `symbol`function with signature `symbol()` and selector `[149, 216, 155, 65]`"]
     #[derive(
         Clone,
@@ -784,12 +750,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "symbol", abi = "symbol()")]
     pub struct SymbolCall;
-
     #[doc = "Container type for all input parameters for the `sync`function with signature `sync()` and selector `[255, 246, 202, 233]`"]
     #[derive(
         Clone,
@@ -797,12 +762,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "sync", abi = "sync()")]
     pub struct SyncCall;
-
     #[doc = "Container type for all input parameters for the `token0`function with signature `token0()` and selector `[13, 254, 22, 129]`"]
     #[derive(
         Clone,
@@ -810,12 +774,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "token0", abi = "token0()")]
     pub struct Token0Call;
-
     #[doc = "Container type for all input parameters for the `token1`function with signature `token1()` and selector `[210, 18, 32, 167]`"]
     #[derive(
         Clone,
@@ -823,12 +786,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "token1", abi = "token1()")]
     pub struct Token1Call;
-
     #[doc = "Container type for all input parameters for the `totalSupply`function with signature `totalSupply()` and selector `[24, 22, 13, 221]`"]
     #[derive(
         Clone,
@@ -836,12 +798,11 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "totalSupply", abi = "totalSupply()")]
     pub struct TotalSupplyCall;
-
     #[doc = "Container type for all input parameters for the `transfer`function with signature `transfer(address,uint256)` and selector `[169, 5, 156, 187]`"]
     #[derive(
         Clone,
@@ -849,15 +810,14 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "transfer", abi = "transfer(address,uint256)")]
     pub struct TransferCall {
         pub to: ethers::core::types::Address,
         pub value: ethers::core::types::U256,
     }
-
     #[doc = "Container type for all input parameters for the `transferFrom`function with signature `transferFrom(address,address,uint256)` and selector `[35, 184, 114, 221]`"]
     #[derive(
         Clone,
@@ -865,8 +825,8 @@ mod iuniswapv2pair_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "transferFrom", abi = "transferFrom(address,address,uint256)")]
     pub struct TransferFromCall {
@@ -874,8 +834,7 @@ mod iuniswapv2pair_mod {
         pub to: ethers::core::types::Address,
         pub value: ethers::core::types::U256,
     }
-
-    #[derive(Debug, Clone, PartialEq, Eq, ethers::contract::EthAbiType)]
+    #[derive(Debug, Clone, PartialEq, Eq, ethers :: contract :: EthAbiType)]
     pub enum IUniswapV2PairCalls {
         DomainSeparator(DomainSeparatorCall),
         MinimumLiquidity(MinimumLiquidityCall),
@@ -905,7 +864,6 @@ mod iuniswapv2pair_mod {
         Transfer(TransferCall),
         TransferFrom(TransferFromCall),
     }
-
     impl ethers::core::abi::AbiDecode for IUniswapV2PairCalls {
         fn decode(data: impl AsRef<[u8]>) -> Result<Self, ethers::core::abi::AbiError> {
             if let Ok(decoded) =
@@ -1028,7 +986,6 @@ mod iuniswapv2pair_mod {
             Err(ethers::core::abi::Error::InvalidData.into())
         }
     }
-
     impl ethers::core::abi::AbiEncode for IUniswapV2PairCalls {
         fn encode(self) -> Vec<u8> {
             match self {
@@ -1062,7 +1019,6 @@ mod iuniswapv2pair_mod {
             }
         }
     }
-
     impl ::std::fmt::Display for IUniswapV2PairCalls {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match self {
@@ -1096,163 +1052,136 @@ mod iuniswapv2pair_mod {
             }
         }
     }
-
     impl ::std::convert::From<DomainSeparatorCall> for IUniswapV2PairCalls {
         fn from(var: DomainSeparatorCall) -> Self {
             IUniswapV2PairCalls::DomainSeparator(var)
         }
     }
-
     impl ::std::convert::From<MinimumLiquidityCall> for IUniswapV2PairCalls {
         fn from(var: MinimumLiquidityCall) -> Self {
             IUniswapV2PairCalls::MinimumLiquidity(var)
         }
     }
-
     impl ::std::convert::From<PermitTypehashCall> for IUniswapV2PairCalls {
         fn from(var: PermitTypehashCall) -> Self {
             IUniswapV2PairCalls::PermitTypehash(var)
         }
     }
-
     impl ::std::convert::From<AllowanceCall> for IUniswapV2PairCalls {
         fn from(var: AllowanceCall) -> Self {
             IUniswapV2PairCalls::Allowance(var)
         }
     }
-
     impl ::std::convert::From<ApproveCall> for IUniswapV2PairCalls {
         fn from(var: ApproveCall) -> Self {
             IUniswapV2PairCalls::Approve(var)
         }
     }
-
     impl ::std::convert::From<BalanceOfCall> for IUniswapV2PairCalls {
         fn from(var: BalanceOfCall) -> Self {
             IUniswapV2PairCalls::BalanceOf(var)
         }
     }
-
     impl ::std::convert::From<BurnCall> for IUniswapV2PairCalls {
         fn from(var: BurnCall) -> Self {
             IUniswapV2PairCalls::Burn(var)
         }
     }
-
     impl ::std::convert::From<DecimalsCall> for IUniswapV2PairCalls {
         fn from(var: DecimalsCall) -> Self {
             IUniswapV2PairCalls::Decimals(var)
         }
     }
-
     impl ::std::convert::From<FactoryCall> for IUniswapV2PairCalls {
         fn from(var: FactoryCall) -> Self {
             IUniswapV2PairCalls::Factory(var)
         }
     }
-
     impl ::std::convert::From<GetReservesCall> for IUniswapV2PairCalls {
         fn from(var: GetReservesCall) -> Self {
             IUniswapV2PairCalls::GetReserves(var)
         }
     }
-
     impl ::std::convert::From<InitializeCall> for IUniswapV2PairCalls {
         fn from(var: InitializeCall) -> Self {
             IUniswapV2PairCalls::Initialize(var)
         }
     }
-
     impl ::std::convert::From<KlastCall> for IUniswapV2PairCalls {
         fn from(var: KlastCall) -> Self {
             IUniswapV2PairCalls::Klast(var)
         }
     }
-
     impl ::std::convert::From<MintCall> for IUniswapV2PairCalls {
         fn from(var: MintCall) -> Self {
             IUniswapV2PairCalls::Mint(var)
         }
     }
-
     impl ::std::convert::From<NameCall> for IUniswapV2PairCalls {
         fn from(var: NameCall) -> Self {
             IUniswapV2PairCalls::Name(var)
         }
     }
-
     impl ::std::convert::From<NoncesCall> for IUniswapV2PairCalls {
         fn from(var: NoncesCall) -> Self {
             IUniswapV2PairCalls::Nonces(var)
         }
     }
-
     impl ::std::convert::From<PermitCall> for IUniswapV2PairCalls {
         fn from(var: PermitCall) -> Self {
             IUniswapV2PairCalls::Permit(var)
         }
     }
-
     impl ::std::convert::From<Price0CumulativeLastCall> for IUniswapV2PairCalls {
         fn from(var: Price0CumulativeLastCall) -> Self {
             IUniswapV2PairCalls::Price0CumulativeLast(var)
         }
     }
-
     impl ::std::convert::From<Price1CumulativeLastCall> for IUniswapV2PairCalls {
         fn from(var: Price1CumulativeLastCall) -> Self {
             IUniswapV2PairCalls::Price1CumulativeLast(var)
         }
     }
-
     impl ::std::convert::From<SkimCall> for IUniswapV2PairCalls {
         fn from(var: SkimCall) -> Self {
             IUniswapV2PairCalls::Skim(var)
         }
     }
-
     impl ::std::convert::From<SwapCall> for IUniswapV2PairCalls {
         fn from(var: SwapCall) -> Self {
             IUniswapV2PairCalls::Swap(var)
         }
     }
-
     impl ::std::convert::From<SymbolCall> for IUniswapV2PairCalls {
         fn from(var: SymbolCall) -> Self {
             IUniswapV2PairCalls::Symbol(var)
         }
     }
-
     impl ::std::convert::From<SyncCall> for IUniswapV2PairCalls {
         fn from(var: SyncCall) -> Self {
             IUniswapV2PairCalls::Sync(var)
         }
     }
-
     impl ::std::convert::From<Token0Call> for IUniswapV2PairCalls {
         fn from(var: Token0Call) -> Self {
             IUniswapV2PairCalls::Token0(var)
         }
     }
-
     impl ::std::convert::From<Token1Call> for IUniswapV2PairCalls {
         fn from(var: Token1Call) -> Self {
             IUniswapV2PairCalls::Token1(var)
         }
     }
-
     impl ::std::convert::From<TotalSupplyCall> for IUniswapV2PairCalls {
         fn from(var: TotalSupplyCall) -> Self {
             IUniswapV2PairCalls::TotalSupply(var)
         }
     }
-
     impl ::std::convert::From<TransferCall> for IUniswapV2PairCalls {
         fn from(var: TransferCall) -> Self {
             IUniswapV2PairCalls::Transfer(var)
         }
     }
-
     impl ::std::convert::From<TransferFromCall> for IUniswapV2PairCalls {
         fn from(var: TransferFromCall) -> Self {
             IUniswapV2PairCalls::TransferFrom(var)

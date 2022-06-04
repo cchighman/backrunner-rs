@@ -11,34 +11,30 @@ mod uniswapv2factory_mod {
 
     pub static UNISWAPV2FACTORY_ABI: ethers::contract::Lazy<ethers::core::abi::Abi> =
         ethers::contract::Lazy::new(|| {
-            serde_json::from_str("[{\"type\":\"constructor\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"_feeToSetter\",\"type\":\"address\"}]},{\"type\":\"function\",\"name\":\"allPairs\",\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":true,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"allPairsLength\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":true,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"createPair\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenA\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenB\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"address\",\"name\":\"pair\",\"type\":\"address\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"feeTo\",\"inputs\":[],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":true,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"feeToSetter\",\"inputs\":[],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":true,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getPair\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":true,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"setFeeTo\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"_feeTo\",\"type\":\"address\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"setFeeToSetter\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"_feeToSetter\",\"type\":\"address\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"PairCreated\",\"inputs\":[{\"name\":\"token0\",\"type\":\"address\",\"indexed\":true},{\"name\":\"token1\",\"type\":\"address\",\"indexed\":true},{\"name\":\"pair\",\"type\":\"address\",\"indexed\":false},{\"name\":\"\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false}]").expect("invalid abi")
+            serde_json :: from_str ("[{\"type\":\"constructor\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"_feeToSetter\",\"type\":\"address\"}]},{\"type\":\"function\",\"name\":\"allPairs\",\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":true,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"allPairsLength\",\"inputs\":[],\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"constant\":true,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"createPair\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenA\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenB\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"address\",\"name\":\"pair\",\"type\":\"address\"}],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"feeTo\",\"inputs\":[],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":true,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"feeToSetter\",\"inputs\":[],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":true,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"getPair\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"constant\":true,\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"setFeeTo\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"_feeTo\",\"type\":\"address\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"setFeeToSetter\",\"inputs\":[{\"internalType\":\"address\",\"name\":\"_feeToSetter\",\"type\":\"address\"}],\"outputs\":[],\"constant\":false,\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"PairCreated\",\"inputs\":[{\"name\":\"token0\",\"type\":\"address\",\"indexed\":true},{\"name\":\"token1\",\"type\":\"address\",\"indexed\":true},{\"name\":\"pair\",\"type\":\"address\",\"indexed\":false},{\"name\":\"\",\"type\":\"uint256\",\"indexed\":false}],\"anonymous\":false}]") . expect ("invalid abi")
         });
-
     #[derive(Clone)]
     pub struct UniswapV2Factory<M>(ethers::contract::Contract<M>);
-
     impl<M> std::ops::Deref for UniswapV2Factory<M> {
         type Target = ethers::contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
     }
-
-    impl<M: Middleware> std::fmt::Debug for UniswapV2Factory<M> {
+    impl<M: ethers::providers::Middleware> std::fmt::Debug for UniswapV2Factory<M> {
         fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
             f.debug_tuple(stringify!(UniswapV2Factory))
                 .field(&self.address())
                 .finish()
         }
     }
-
-    impl<'a, M: Middleware> UniswapV2Factory<M> {
+    impl<'a, M: ethers::providers::Middleware> UniswapV2Factory<M> {
         #[doc = r" Creates a new contract instance with the specified `ethers`"]
         #[doc = r" client at the given `Address`. The contract derefs to a `ethers::Contract`"]
         #[doc = r" object"]
         pub fn new<T: Into<ethers::core::types::Address>>(
             address: T,
-            client: std::sync::Arc<M>,
+            client: ::std::sync::Arc<M>,
         ) -> Self {
             let contract = ethers::contract::Contract::new(
                 address.into(),
@@ -129,15 +125,14 @@ mod uniswapv2factory_mod {
             self.0.event_with_filter(Default::default())
         }
     }
-
     #[derive(
         Clone,
         Debug,
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthEvent,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthEvent,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethevent(
         name = "PairCreated",
@@ -151,7 +146,6 @@ mod uniswapv2factory_mod {
         pub pair: ethers::core::types::Address,
         pub p3: ethers::core::types::U256,
     }
-
     #[doc = "Container type for all input parameters for the `allPairs`function with signature `allPairs(uint256)` and selector `[30, 61, 209, 139]`"]
     #[derive(
         Clone,
@@ -159,12 +153,11 @@ mod uniswapv2factory_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "allPairs", abi = "allPairs(uint256)")]
     pub struct AllPairsCall(pub ethers::core::types::U256);
-
     #[doc = "Container type for all input parameters for the `allPairsLength`function with signature `allPairsLength()` and selector `[87, 79, 43, 163]`"]
     #[derive(
         Clone,
@@ -172,12 +165,11 @@ mod uniswapv2factory_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "allPairsLength", abi = "allPairsLength()")]
     pub struct AllPairsLengthCall;
-
     #[doc = "Container type for all input parameters for the `createPair`function with signature `createPair(address,address)` and selector `[201, 198, 83, 150]`"]
     #[derive(
         Clone,
@@ -185,15 +177,14 @@ mod uniswapv2factory_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "createPair", abi = "createPair(address,address)")]
     pub struct CreatePairCall {
         pub token_a: ethers::core::types::Address,
         pub token_b: ethers::core::types::Address,
     }
-
     #[doc = "Container type for all input parameters for the `feeTo`function with signature `feeTo()` and selector `[1, 126, 126, 88]`"]
     #[derive(
         Clone,
@@ -201,12 +192,11 @@ mod uniswapv2factory_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "feeTo", abi = "feeTo()")]
     pub struct FeeToCall;
-
     #[doc = "Container type for all input parameters for the `feeToSetter`function with signature `feeToSetter()` and selector `[9, 75, 116, 21]`"]
     #[derive(
         Clone,
@@ -214,12 +204,11 @@ mod uniswapv2factory_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "feeToSetter", abi = "feeToSetter()")]
     pub struct FeeToSetterCall;
-
     #[doc = "Container type for all input parameters for the `getPair`function with signature `getPair(address,address)` and selector `[230, 164, 57, 5]`"]
     #[derive(
         Clone,
@@ -227,15 +216,14 @@ mod uniswapv2factory_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "getPair", abi = "getPair(address,address)")]
     pub struct GetPairCall(
         pub ethers::core::types::Address,
         pub ethers::core::types::Address,
     );
-
     #[doc = "Container type for all input parameters for the `setFeeTo`function with signature `setFeeTo(address)` and selector `[244, 105, 1, 237]`"]
     #[derive(
         Clone,
@@ -243,14 +231,13 @@ mod uniswapv2factory_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "setFeeTo", abi = "setFeeTo(address)")]
     pub struct SetFeeToCall {
         pub fee_to: ethers::core::types::Address,
     }
-
     #[doc = "Container type for all input parameters for the `setFeeToSetter`function with signature `setFeeToSetter(address)` and selector `[162, 231, 74, 246]`"]
     #[derive(
         Clone,
@@ -258,15 +245,14 @@ mod uniswapv2factory_mod {
         Default,
         Eq,
         PartialEq,
-        ethers::contract::EthCall,
-        ethers::contract::EthDisplay,
+        ethers :: contract :: EthCall,
+        ethers :: contract :: EthDisplay,
     )]
     #[ethcall(name = "setFeeToSetter", abi = "setFeeToSetter(address)")]
     pub struct SetFeeToSetterCall {
         pub fee_to_setter: ethers::core::types::Address,
     }
-
-    #[derive(Debug, Clone, PartialEq, Eq, ethers::contract::EthAbiType)]
+    #[derive(Debug, Clone, PartialEq, Eq, ethers :: contract :: EthAbiType)]
     pub enum UniswapV2FactoryCalls {
         AllPairs(AllPairsCall),
         AllPairsLength(AllPairsLengthCall),
@@ -277,7 +263,6 @@ mod uniswapv2factory_mod {
         SetFeeTo(SetFeeToCall),
         SetFeeToSetter(SetFeeToSetterCall),
     }
-
     impl ethers::core::abi::AbiDecode for UniswapV2FactoryCalls {
         fn decode(data: impl AsRef<[u8]>) -> Result<Self, ethers::core::abi::AbiError> {
             if let Ok(decoded) =
@@ -322,7 +307,6 @@ mod uniswapv2factory_mod {
             Err(ethers::core::abi::Error::InvalidData.into())
         }
     }
-
     impl ethers::core::abi::AbiEncode for UniswapV2FactoryCalls {
         fn encode(self) -> Vec<u8> {
             match self {
@@ -337,9 +321,8 @@ mod uniswapv2factory_mod {
             }
         }
     }
-
-    impl std::fmt::Display for UniswapV2FactoryCalls {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    impl ::std::fmt::Display for UniswapV2FactoryCalls {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match self {
                 UniswapV2FactoryCalls::AllPairs(element) => element.fmt(f),
                 UniswapV2FactoryCalls::AllPairsLength(element) => element.fmt(f),
@@ -352,50 +335,42 @@ mod uniswapv2factory_mod {
             }
         }
     }
-
-    impl From<AllPairsCall> for UniswapV2FactoryCalls {
+    impl ::std::convert::From<AllPairsCall> for UniswapV2FactoryCalls {
         fn from(var: AllPairsCall) -> Self {
             UniswapV2FactoryCalls::AllPairs(var)
         }
     }
-
-    impl From<AllPairsLengthCall> for UniswapV2FactoryCalls {
+    impl ::std::convert::From<AllPairsLengthCall> for UniswapV2FactoryCalls {
         fn from(var: AllPairsLengthCall) -> Self {
             UniswapV2FactoryCalls::AllPairsLength(var)
         }
     }
-
-    impl From<CreatePairCall> for UniswapV2FactoryCalls {
+    impl ::std::convert::From<CreatePairCall> for UniswapV2FactoryCalls {
         fn from(var: CreatePairCall) -> Self {
             UniswapV2FactoryCalls::CreatePair(var)
         }
     }
-
-    impl From<FeeToCall> for UniswapV2FactoryCalls {
+    impl ::std::convert::From<FeeToCall> for UniswapV2FactoryCalls {
         fn from(var: FeeToCall) -> Self {
             UniswapV2FactoryCalls::FeeTo(var)
         }
     }
-
-    impl From<FeeToSetterCall> for UniswapV2FactoryCalls {
+    impl ::std::convert::From<FeeToSetterCall> for UniswapV2FactoryCalls {
         fn from(var: FeeToSetterCall) -> Self {
             UniswapV2FactoryCalls::FeeToSetter(var)
         }
     }
-
-    impl From<GetPairCall> for UniswapV2FactoryCalls {
+    impl ::std::convert::From<GetPairCall> for UniswapV2FactoryCalls {
         fn from(var: GetPairCall) -> Self {
             UniswapV2FactoryCalls::GetPair(var)
         }
     }
-
-    impl From<SetFeeToCall> for UniswapV2FactoryCalls {
+    impl ::std::convert::From<SetFeeToCall> for UniswapV2FactoryCalls {
         fn from(var: SetFeeToCall) -> Self {
             UniswapV2FactoryCalls::SetFeeTo(var)
         }
     }
-
-    impl From<SetFeeToSetterCall> for UniswapV2FactoryCalls {
+    impl ::std::convert::From<SetFeeToSetterCall> for UniswapV2FactoryCalls {
         fn from(var: SetFeeToSetterCall) -> Self {
             UniswapV2FactoryCalls::SetFeeToSetter(var)
         }
