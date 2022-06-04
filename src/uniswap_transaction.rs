@@ -1,22 +1,12 @@
-use std::ops::Div;
-use std::str::FromStr;
-use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
-use ethers::prelude::*;
-use ethers::core::abi::Tokenize;
-use ethers::prelude::{Address, Signer, SignerMiddleware, U256};
 
 use ethers::core::types::transaction::eip2718::TypedTransaction;
-use ethers::providers::{Http, Provider};
-use ethers::signers::{coins_bip39::English, MnemonicBuilder};
+use ethers::prelude::*;
+use ethers::prelude::{Address, U256};
 
 use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
 use crate::uniswap_providers::UniswapProviders;
-
-use crate::sequence_token::SequenceToken;
-use ethers::contract::Lazy;
-use futures::StreamExt;
-use num_traits::FromPrimitive;
+use crate::uniswap_providers::UniswapProviders::{CONTRACT_ADDRESS, FROM_ADDRESS};
 
 pub fn get_valid_timestamp(future_millis: U256) -> U256 {
     let start = SystemTime::now();
@@ -33,14 +23,13 @@ pub async fn flash_swap_v2(
     pair_id: Address,
     in_amt: U256,
     out_amt: U256,
-    calldata: ethers::core::types::Bytes,
+    calldata: Bytes,
 ) -> TypedTransaction {
-    
     let pair_contract = UniswapV2Pair::new(pair_id, *UniswapProviders::MAINNET_ETH_CLIENT);
 
-    let contract_call = pair_contract.swap(in_amt, out_amt, UniswapProviders::CONTRACT_ADDRESS, calldata);
+    let contract_call = pair_contract.swap(in_amt, out_amt, *CONTRACT_ADDRESS, calldata);
     let mut tx = contract_call.tx;
-    tx.set_from(UniswapProviders::FROM_ADDRESS);
+    tx.set_from(*FROM_ADDRESS);
     tx
 }
 

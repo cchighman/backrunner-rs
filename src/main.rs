@@ -10,18 +10,19 @@
     unused_mut
 )]
 
-use arb_thread_pool::spawn;
+use std::collections::HashMap;
+use std::env;
+use std::fs::File;
+use std::io::{BufReader, BufWriter};
+use std::io::{Read, Write};
+use std::sync::Arc;
+
 use async_std::prelude::*;
 use async_std::prelude::*;
 use ethers::prelude::Address;
 use futures_util::{FutureExt, TryFutureExt};
 use itertools::Itertools;
 use rayon::prelude::*;
-use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufReader, BufWriter};
-use std::io::{Read, Write};
-use std::sync::Arc;
 
 use arbitrage_path::ArbitragePath;
 use crypto_pair::{CryptoPair, CryptoPairs};
@@ -29,6 +30,7 @@ use utils::uniswapv2_utils::{populate_sushiswap_pairs, populate_uniswapv2_pairs}
 
 use crate::three_path_sequence::{cyclic_order, is_arbitrage_pair};
 
+pub mod UniswapProviders;
 pub mod arb_signal;
 pub mod arb_thread_pool;
 pub mod arbitrage_path;
@@ -43,12 +45,11 @@ pub mod graphql_uniswapv3;
 pub mod sequence_token;
 pub mod swap_route;
 pub mod three_path_sequence;
+pub mod uniswap_providers;
 mod uniswap_transaction;
 pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
 pub mod utils;
-pub mod uniswap_providers;
-pub mod UniswapProviders;
 
 /*
    Grafana API Key: eyJrIjoiVjY3bzNoWTFnTTNyTUpCVXRoUUJxcXZPTXJGbE1nVmUiLCJuIjoiYmFja3J1bm5lciIsImlkIjoxfQ==
@@ -64,9 +65,6 @@ pub mod UniswapProviders;
      Discord Webhook URL: https://discord.com/api/webhooks/982463881354035241/6XmX7RP90l1LW50WrLSsgnJPAQNM0Woqa2pG7Kk693ujqGQYdMr9jHoClgU6MmJXrpI0
 RUSTFLAGS="-C target-cpu=native" cargo build --release
      */
-
-use std::env;
-use std::future::ready;
 
 #[allow(dead_code)]
 #[async_std::main]

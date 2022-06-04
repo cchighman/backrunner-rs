@@ -1,27 +1,25 @@
-use bigdecimal::BigDecimal;
 use std::ops::Mul;
 use std::str::FromStr;
 use std::sync::Arc;
 
-use ethabi::Token;
-
-use crate::arb_thread_pool::spawn;
-use crate::crypto_math::*;
-use crate::swap_route::SwapRoute;
+use bigdecimal::BigDecimal;
+use bigdecimal::FromPrimitive;
 use bigdecimal::ToPrimitive;
-use ethers::prelude::{Address, U256};
+use ethabi::Token;
+use ethers::prelude::U256;
+use ethers::types::transaction::eip2718::TypedTransaction;
 use future::ready;
 use futures::{future, StreamExt};
 use futures_signals::{map_ref, signal::SignalExt};
-use num_traits::real::Real;
 use rayon::prelude::*;
 
+use crate::arb_thread_pool::spawn;
+use crate::crypto_math::*;
 use crate::flashbot_strategy::FlashbotStrategy;
-use crate::sequence_token::SequenceToken;
+use crate::swap_route::SwapRoute;
 use crate::three_path_sequence::ThreePathSequence;
 use crate::uniswap_transaction::*;
-use bigdecimal::FromPrimitive;
-use ethers::types::transaction::eip2718::TypedTransaction;
+
 /* Babylonian Sqrt */
 impl ArbitragePath {
     /* TODO - For each pair */
@@ -226,11 +224,10 @@ impl ArbitragePath {
                 SwapRoute::route_calldata(trade_vec).await,
             )
             .await;
-            
+
             println!("Flash Tx: {}", flash_tx.data().unwrap());
             let result = FlashbotStrategy::do_flashbot_mainnet(flash_tx).await;
             dbg!(result);
-            
         }
     }
 

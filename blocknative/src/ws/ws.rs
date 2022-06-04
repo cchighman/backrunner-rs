@@ -427,7 +427,7 @@ mod tests {
 
     use crate::{
         models::{Network, System},
-        ws::models::{WatchConfig, WatchRequest},
+        ws::models::WatchConfig,
     };
 
     use super::*;

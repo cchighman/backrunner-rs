@@ -1,9 +1,10 @@
+use std::{collections::HashMap, fmt};
+
 use chrono::Utc;
 // Code adapted from: https://github.com/althea-net/guac_rs/tree/master/web3/src/jsonrpc
 // use ethers_core::types::U256;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use std::{collections::HashMap, fmt};
 use thiserror::Error;
 
 use crate::models::Blockchain;

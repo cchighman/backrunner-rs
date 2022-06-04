@@ -1,10 +1,11 @@
 use std::fmt;
 
-use crate::dex_pool::DexPool;
-use crate::utils::common::DIRECTION;
 use ethers::prelude::{Address, U256};
 use futures_signals::signal::{Mutable, MutableSignal};
 use serde::{Deserialize, Serialize};
+
+use crate::dex_pool::DexPool;
+use crate::utils::common::DIRECTION;
 
 pub struct PairUpdateParams {}
 fn string_to_static_str(s: String) -> &'static str {

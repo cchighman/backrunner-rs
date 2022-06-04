@@ -7,6 +7,7 @@ mod uniswapv2pair_mod {
     #![allow(clippy::type_complexity)]
     #![allow(unused_imports)]
 
+    use ethereum_types::Address;
     use ethers::providers::Middleware;
 
     pub static UNISWAPV2PAIR_ABI: ethers::contract::Lazy<ethers::core::abi::Abi> =
@@ -213,7 +214,7 @@ mod uniswapv2pair_mod {
             &self,
             amount_0_out: ethers::core::types::U256,
             amount_1_out: ethers::core::types::U256,
-            to: ethers::core::types::Address,
+            to: Address,
             data: ethers::core::types::Bytes,
         ) -> ethers::contract::builders::ContractCall<M, ()> {
             self.0

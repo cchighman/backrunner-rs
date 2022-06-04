@@ -1,11 +1,12 @@
 use std::collections::HashMap;
 use std::str::FromStr;
 
+use ethers::prelude::{Address, U256};
+
 use crate::crypto_pair::CryptoPair;
 use crate::dex_pool::DexPool;
 use crate::graphql_uniswapv2;
 use crate::uniswapv2_pairs::uniswap_pairs::UniswapPairsPairsTokens;
-use ethers::prelude::{Address, U256};
 
 pub async fn uniswapv2_unpack_pairs(
     pairs: graphql_client::Response<graphql_uniswapv2::uniswap_pairs::ResponseData>,

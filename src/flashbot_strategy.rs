@@ -1,37 +1,16 @@
-use crate::contracts::bindings::ierc20::IERC20;
-use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
-use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
-
-use crate::sequence_token::SequenceToken;
-use anyhow::Result;
-<<<<<<< HEAD
-=======
 use std::env;
+use std::time::SystemTime;
 use std::time::UNIX_EPOCH;
 
->>>>>>> refs/remotes/origin/main
-use ethers::contract::Lazy;
-use crate::swap_route::SwapRoute;
-use ethers::core::abi::Tokenize;
+use anyhow::Result;
 use ethers::core::types::transaction::eip2718::TypedTransaction;
-use ethers::prelude::k256::ecdsa::SigningKey;
 use ethers::prelude::*;
-use ethers::prelude::{Address, Signer, SignerMiddleware, Wallet, U256};
-use ethers::prelude::{BlockId, BlockNumber};
-use ethers::signers::{coins_bip39::English, MnemonicBuilder};
-use ethers_flashbots::BundleRequest;
+use ethers::prelude::{Signer, SignerMiddleware, U256};
+use ethers_flashbots::{BundleRequest, FlashbotsMiddleware};
 use ethers_flashbots::PendingBundleError;
-use lazy_static::__Deref;
-use crate::uniswap_providers::TIMESTAMP_SEED;
-use rand::thread_rng;
-use std::env;
-
-use std::str::FromStr;
-use std::sync::Arc;
 use url::Url;
-use std::time::SystemTime;
 
-
+use crate::uniswap_providers::UniswapProviders::TIMESTAMP_SEED;
 
 #[derive(Clone)]
 pub struct FlashbotStrategy {
@@ -84,9 +63,9 @@ pub async fn do_flashbot_goerli(tx: &mut TypedTransaction) -> Result<()> {
 
     let block_number = client.inner().inner().get_block_number().await?;
     let signature = client.signer().sign_transaction(&tx).await?;
-    let bundle = BundleRequest::new()
+    let bundle = get_new
+
         .push_transaction(tx.rlp_signed(client.signer().chain_id(), &signature))
-        .set_block(block_number + 1);
 
     // Simulate it
     let simulated_bundle = client.inner().simulate_bundle(&bundle).await?;
