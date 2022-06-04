@@ -1,0 +1,58 @@
+[
+    {
+        "type": "lldb",
+        "request": "launch",
+        "name": "Debug unit tests in library 'backrunner-rs'",
+        "cargo": {
+            "args": [
+                "test",
+                "--no-run",
+                "--lib",
+                "--package=backrunner-rs"
+            ],
+            "filter": {
+                "name": "backrunner-rs",
+                "kind": "lib"
+            }
+        },
+        "args": [],
+        "cwd": "${workspaceFolder}"
+    },
+    {
+        "type": "lldb",
+        "request": "launch",
+        "name": "Debug executable 'backrunner-rs'",
+        "cargo": {
+            "args": [
+                "build",
+                "--bin=backrunner-rs",
+                "--package=backrunner-rs"
+            ],
+            "filter": {
+                "name": "backrunner-rs",
+                "kind": "bin"
+            }
+        },
+        "args": [],
+        "cwd": "${workspaceFolder}"
+    },
+    {
+        "type": "lldb",
+        "request": "launch",
+        "name": "Debug unit tests in executable 'backrunner-rs'",
+        "cargo": {
+            "args": [
+                "test",
+                "--no-run",
+                "--bin=backrunner-rs",
+                "--package=backrunner-rs"
+            ],
+            "filter": {
+                "name": "backrunner-rs",
+                "kind": "bin"
+            }
+        },
+        "args": [],
+        "cwd": "${workspaceFolder}"
+    }
+]
