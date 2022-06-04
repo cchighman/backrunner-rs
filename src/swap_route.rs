@@ -1,12 +1,13 @@
 use std::time::SystemTime;
 
+use crate::uniswap_providers::UniswapProviders::UNISWAP_PROVIDERS;
 use anyhow;
+use anyhow::Result;
 use ethers::abi::Token;
 use ethers::prelude::*;
 use ethers::prelude::{Address, U256};
 use ethers::providers::Middleware;
-
-use crate::uniswap_providers::UniswapProviders;
+use std::time::UNIX_EPOCH;
 
 #[derive(Clone)]
 pub struct SwapRoute {
@@ -112,10 +113,10 @@ impl SwapRoute {
     }
     pub fn get_valid_timestamp(&self) -> U256 {
         let start = SystemTime::now();
-        let since_epoch = start.duration_since(UniswapProviders::UNIX_EPOCH).unwrap();
+        let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
         let time_millis = since_epoch
             .as_millis()
-            .checked_add(UniswapProviders::TIMESTAMP_SEED)
+            .checked_add(*UNISWAP_PROVIDERS.TIMESTAMP_SEED)
             .unwrap();
         return U256::from(time_millis);
     }

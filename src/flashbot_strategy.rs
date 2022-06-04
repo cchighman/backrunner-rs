@@ -9,6 +9,12 @@ use ethers::prelude::*;
 use ethers::prelude::{Signer, SignerMiddleware, U256};
 use ethers_flashbots::{BundleRequest, FlashbotsMiddleware};
 use ethers_flashbots::PendingBundleError;
+use lazy_static::__Deref;
+use crate::uniswap_providers::TIMESTAMP_SEED;
+use rand::thread_rng;
+
+use std::str::FromStr;
+use std::sync::Arc;
 use url::Url;
 
 use crate::uniswap_providers::UniswapProviders::TIMESTAMP_SEED;
@@ -27,7 +33,7 @@ impl FlashbotStrategy {
     pub fn get_valid_timestamp() -> U256 {
         let start = SystemTime::now();
         let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
-        let time_millis = since_epoch.as_millis().checked_add(*TIMESTAMP_SEED).unwrap();
+        let time_millis = since_epoch.as_millis().checked_add(TIMESTAMP_SEED).unwrap();
         return U256::from(time_millis);
     }
 
@@ -64,13 +70,13 @@ impl FlashbotStrategy {
 // Goerli
 // https://goerli.infura.io/v3/0ab0b9c9d5bf44818399aea45b5ade51
 // wss://goerli.infura.io/ws/v3/0ab0b9c9d5bf44818399aea45b5ade51
-
+/* */
     pub async fn do_flashbot_goerli(tx: &mut TypedTransaction) -> Result<()> {
         // Connect to the network - using URL used by metamask
         let provider =
             Provider::<Http>::try_from("https://goerli.infura.io/v3/0ab0b9c9d5bf44818399aea45b5ade51")?;
 
-        let private_key = env::var("7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236")?;
+        let private_key = "7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236";
         let bundle_signer = private_key.parse::<LocalWallet>()?;
         let wallet = private_key.parse::<LocalWallet>()?;
 
@@ -314,13 +320,8 @@ async fn get_bundle_for_test<M: 'static + Middleware, S: 'static + Signer>(
     };
     Ok(bundle)
 }
-<<<<<<< HEAD
-/*
-=======
 
-    }
-/* 
->>>>>>> refs/remotes/origin/main
+
 #[test]
 pub fn test() {
     // Connect to the network
@@ -363,5 +364,5 @@ pub fn test() {
     println!("Receipt: {}\n", serde_json::to_string(&receipt).unwrap());
 }
  */
-    */
+
     
