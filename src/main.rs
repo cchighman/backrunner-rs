@@ -129,7 +129,7 @@ async fn main() {
     if args.contains(&"run".to_string()) {
         println!("Running..");
         /* Read Pairs from file */
-        let path = if args.len() > 2 {
+        let path = if args.len() > 2 && !args.contains(&"RUST_BACKTRACE=1".to_string()) {
             args[1].clone().to_string()
         } else {
             "pairs_new.json".clone().to_string()

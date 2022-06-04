@@ -4,7 +4,7 @@ use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
 
 use crate::sequence_token::SequenceToken;
 use anyhow::Result;
-use env::var;
+use std::env;
 use ethers::contract::Lazy;
 use ethers::core::abi::Tokenize;
 use ethers::core::types::transaction::eip2718::TypedTransaction;
@@ -16,7 +16,7 @@ use ethers_flashbots::BundleRequest;
 use ethers_flashbots::*;
 use lazy_static::__Deref;
 use rand::thread_rng;
-use std::env;
+
 use std::str::FromStr;
 use std::sync::Arc;
 use url::Url;
@@ -160,7 +160,7 @@ pub(crate) async fn do_flashbot_mainnet(tx: &TypedTransaction) -> Result<()> {
         ),
         wallet,
     );
-    dbg!(client.clone());
+    dbg!(&client);
     let block_number = client.inner().inner().get_block_number().await?;
     let signature = client.signer().sign_transaction(&tx).await?;
     let bundle = BundleRequest::new()
