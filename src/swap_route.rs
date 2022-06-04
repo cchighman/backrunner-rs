@@ -53,7 +53,7 @@ impl SwapRoute {
             router,
         }
     }
-
+/* 
     pub async fn swap_eth_for_exact_tokens(&self) -> Bytes {
         (*ROUTER_CONTRACT)
             .swap_eth_for_exact_tokens(
@@ -117,11 +117,11 @@ impl SwapRoute {
             .unwrap()
     }
 
-    /*
+    /
     Provided some amount for some pair, return abi-encoded data for swap
      */
     pub async fn calldata(&self) -> ethers::core::types::Bytes {
-        /*
+        /* 
         match (
             self.pair.0.get_symbol().as_str(),
             self.pair.1.get_symbol().as_str(),
@@ -133,7 +133,7 @@ impl SwapRoute {
             (_, _) => self.swap_tokens_for_exact_tokens(),
         }
         */
-        self.swap_tokens_for_exact_tokens().await
+        //self.swap_tokens_for_exact_tokens().await
     }
     fn get_valid_timestamp(&self) -> U256 {
         let start = SystemTime::now();
@@ -141,7 +141,7 @@ impl SwapRoute {
         let time_millis = since_epoch.as_millis().checked_add(TIMESTAMP_SEED).unwrap();
         return U256::from(time_millis);
     }
-}
+
 
 pub async fn route_calldata(swap_routes: Vec<SwapRoute>) -> Bytes {
     /* For each pair, get abi-encoded swap call */
@@ -167,3 +167,6 @@ pub async fn route_calldata(swap_routes: Vec<SwapRoute>) -> Bytes {
     ];
     Bytes::from(abi::encode(&tokens))
 }
+}
+
+
