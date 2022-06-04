@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 
+=======
+pub mod UniswapProviders {
+>>>>>>> parent of 6c40e7b... Optimize
     use std::convert::TryFrom;
     use std::fmt;
     use std::ops::Deref;
@@ -36,11 +40,12 @@
         }
     }
 
+<<<<<<< HEAD
     pub static UNISWAP_PROVIDERS: Lazy<Arc<UniswapProviders>> =
     Lazy::new(|| {
         Arc::new(UniswapProviders::new())});
-        
-    
+
+
     #[derive(Clone)]
     pub struct UniswapProviders {
         pub CONTRACT_ADDRESS :Address,
@@ -74,13 +79,13 @@
                     wallet
                 };
             }
-            
+
             let mainnet_bot_signer =  {
                 let private_key = "7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236";
                 let wallet = private_key.parse::<LocalWallet>()?;
                 let wallet = wallet.with_chain_id(1u64);
                 wallet
-            };   
+            };
 
             let mainnet_provider = {
                 Provider::<Http>::try_from("https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3")
@@ -95,7 +100,7 @@
                 .unwrap(),
                 (mainnet_bot_signer).clone())
             };
-            
+
 
             let mainnet_flashbots_client = SignerMiddleware::new(
                 FlashbotsMiddleware::new(
@@ -125,8 +130,24 @@
             }
             Self
         }
-    
-    
+
+
+=======
+    /*
+    #[derive(Clone)]
+    pub struct UniswapProviders {
+        pub providers: u8
+    }
+
+    impl UniswapProviders {
+        pub fn new() -> Self {
+            Self {
+                providers: 5,
+            }
+        }
+    }
+    */
+>>>>>>> parent of 6c40e7b... Optimize
     //  Mainnet
     // https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3
     // wss://mainnet.infura.io/ws/v3/20ca45667c5d4fa6b259b9a36babe5c3
@@ -136,7 +157,11 @@
     // wss://goerli.infura.io/ws/v3/0ab0b9c9d5bf44818399aea45b5ade51
 
     /*
+<<<<<<< HEAD
     pub async fn GOERLI_WALLET: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
+=======
+    pub static GOERLI_WALLET: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
+>>>>>>> parent of 6c40e7b... Optimize
         MnemonicBuilder::<English>::default()
             .phrase("unveil spoon stable govern diesel park glory visa lucky teach aspect spy")
             .index(0u32)
@@ -146,7 +171,11 @@
             .with_chain_id(5_u64)
     });
 
+<<<<<<< HEAD
     pub async fn FLASHBOTS_GOERLI_PROVIDER: Lazy<
+=======
+    pub static FLASHBOTS_GOERLI_PROVIDER: Lazy<
+>>>>>>> parent of 6c40e7b... Optimize
         Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>,
     > = Lazy::new(|| {
         Arc::new(SignerMiddleware::new(
@@ -169,7 +198,11 @@
             .with_chain_id(3_u64)
     });
 
+<<<<<<< HEAD
     pub async fn ROPSTEN_PROVIDER: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>> =
+=======
+    pub static ROPSTEN_PROVIDER: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>> =
+>>>>>>> parent of 6c40e7b... Optimize
         Lazy::new(|| {
             Arc::new(SignerMiddleware::new(
                 Provider::<Http>::try_from(
@@ -181,10 +214,11 @@
         });
 
     */
+<<<<<<< HEAD
     // Ropsten Uniswap v2
     // Router: 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
-    
-/* 
+
+/*
          pub async fn ROPSTEN_PROVIDER: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>> =
         Lazy::new(|| {
             Arc::new(SignerMiddleware::new(
@@ -202,4 +236,71 @@
     pub async fn ROUTER_CONTRACT: Lazy<u8
     > = Lazy::new(|| 7);
         }*/
-    
+
+=======
+
+    pub static MAINNET_BOT_SIGNER: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
+        let private_key = "7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236";
+        let wallet = private_key.parse::<LocalWallet>().unwrap();
+        let wallet = wallet.with_chain_id(1u64);
+        wallet
+    });
+
+    pub static MAINNET_BUNDLE_SIGNER: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
+        let private_key = "7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236";
+        let wallet = private_key.parse::<LocalWallet>().unwrap();
+        let wallet = wallet.with_chain_id(1u64);
+        wallet
+    });
+
+    pub static TIMESTAMP_SEED: u128 = 30000_u128;
+    pub static MAX_AMOUNT: Lazy<U256> =
+        Lazy::new(|| U256::from_str("9999999999999999999999999999999999").unwrap());
+
+    pub static TO_ADDRESS: Lazy<Address> =
+        Lazy::new(|| Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap());
+
+    pub static CONTRACT_ADDRESS: Lazy<Address> =
+        Lazy::new(|| Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap());
+
+    pub static FROM_ADDRESS: Lazy<Address> =
+        Lazy::new(|| Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap());
+
+    // Ropsten Uniswap v2
+    // Router: 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
+    static MAINNET_ROUTER_V2_ADDY: Lazy<Address> =
+        Lazy::new(|| Address::from_str("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D").unwrap());
+
+    pub static MAINNET_PROVIDER: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>> =
+        Lazy::new(|| {
+            Arc::new(SignerMiddleware::new(
+                Provider::<Http>::try_from(
+                    "https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3",
+                )
+                .unwrap(),
+                (*MAINNET_BOT_SIGNER.deref()).clone(),
+            ))
+        });
+
+    pub static MAINNET_FLASHBOTS_CLIENT: Lazy<
+        Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>,
+    > = Lazy::new(|| {
+        SignerMiddleware::new(
+            FlashbotsMiddleware::new(
+                MAINNET_PROVIDER,
+                Url::parse("https://relay.flashbots.net")?,
+                MAINNET_BUNDLE_SIGNER,
+            ),
+            MAINNET_BOT_SIGNER,
+        )
+    });
+
+    pub static MAINNET_ETH_CLIENT: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>> =
+        Lazy::new(|| Arc::new(SignerMiddleware::new(MAINNET_PROVIDER, MAINNET_BOT_SIGNER)));
+
+    /*
+    pub static ROUTER_CONTRACT: Lazy<u8
+    > = Lazy::new(|| 7);
+        }*/
+}
+>>>>>>> parent of 6c40e7b... Optimize
