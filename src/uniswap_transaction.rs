@@ -1,5 +1,5 @@
 use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
-use crate::uniswap_providers::UniswapProviders::UNISWAP_PROVIDERS;
+use crate::uniswap_providers::UNISWAP_PROVIDERS;
 use anyhow;
 use anyhow::Result;
 use ethers::core::types::transaction::eip2718::TypedTransaction;
@@ -27,17 +27,17 @@ pub async fn flash_swap_v2(
 ) -> Result<TypedTransaction> {
     let pair_contract = UniswapV2Pair::new(
         pair_id,
-        Arc::new(*UNISWAP_PROVIDERS.MAINNET_ETH_CLIENT.clone()),
+        Arc::new(&UNISWAP_PROVIDERS.MAINNET_ETH_CLIENT
     );
 
     let contract_call = pair_contract.swap(
         in_amt,
         out_amt,
-        *UNISWAP_PROVIDERS.CONTRACT_ADDRESS,
+        &UNISWAP_PROVIDERS.CONTRACT_ADDRESS,
         calldata,
     );
     let mut tx = contract_call.tx;
-    tx.set_from(*UNISWAP_PROVIDERS.FROM_ADDRESS);
+    tx.set_from(*&UNISWAP_PROVIDERS.FROM_ADDRESS);
     Ok(tx)
 }
 

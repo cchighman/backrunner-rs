@@ -10,14 +10,13 @@ use ethers::prelude::{Signer, SignerMiddleware, U256};
 use ethers_flashbots::{BundleRequest, FlashbotsMiddleware};
 use ethers_flashbots::PendingBundleError;
 use lazy_static::__Deref;
-use crate::uniswap_providers::TIMESTAMP_SEED;
+use crate::uniswap_providers::UNISWAP_PROVIDERS;
 use rand::thread_rng;
 
 use std::str::FromStr;
-use std::sync::Arc;
+
 use url::Url;
 
-use crate::uniswap_providers::UniswapProviders::TIMESTAMP_SEED;
 
 #[derive(Clone)]
 pub struct FlashbotStrategy {
@@ -33,14 +32,14 @@ impl FlashbotStrategy {
     pub fn get_valid_timestamp() -> U256 {
         let start = SystemTime::now();
         let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
-        let time_millis = since_epoch.as_millis().checked_add(TIMESTAMP_SEED).unwrap();
+        let time_millis = since_epoch.as_millis().checked_add(*&UNISWAP_PROVIDERS.TIMESTAMP_SEED).unwrap();
         return U256::from(time_millis);
     }
 
     async fn get_bundle_for_test<M: 'static + Middleware, S: 'static + Signer>(
         client: &SignerMiddleware<M, S>,
     ) -> Result<BundleRequest> {
-        let mut nounce = client.get_transaction_count(*UNISWAP_PROVIDERS.MAINNET_BOT_SIGNER.address(), None).await?;
+        let mut nounce = client.get_transaction_count(&UNISWAP_PROVIDERS.MAINNET_BOT_SIGNER.address(), None).await?;
 
         let mut tx: TypedTransaction = TransactionRequest::pay("vitalik.eth", 100).into();
         let bundle = BundleRequest::new();
@@ -95,11 +94,11 @@ impl FlashbotStrategy {
 
       let x: SignerMiddleware<FlashbotsMiddleware<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>, Wallet<SigningKey>>, Wallet<SigningKey>> =   SignerMiddleware::new(
             FlashbotsMiddleware::new(
-                *crate::uniswap_providers::UniswapProviders::MAINNET_PROVIDER,
+                *UNISWAP_PROVIDERS.MAINNET_MIDDLEWARE.clone(),
                 Url::parse("https://relay.flashbots.net").unwrap(),
-                *crate::uniswap_providers::UniswapProviders::MAINNET_BUNDLE_SIGNER,
+                *UNISWAP_PROVIDERS.MAINNET_BUNDLE_SIGNER.clone(),
             ),
-            *crate::uniswap_providers::UniswapProviders::MAINNET_BOT_SIGNER
+            *UNISWAP_PROVIDERS.MAINNET_BOT_SIGNER.clone()
         )
 
         let block_number = client.inner().inner().get_block_number().await?;

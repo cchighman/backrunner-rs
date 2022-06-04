@@ -1,6 +1,6 @@
 use std::time::SystemTime;
 
-use crate::uniswap_providers::UniswapProviders::UNISWAP_PROVIDERS;
+use crate::uniswap_providers::UNISWAP_PROVIDERS;
 use anyhow;
 use anyhow::Result;
 use ethers::abi::Token;
