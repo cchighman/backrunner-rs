@@ -33,7 +33,6 @@ pub mod arb_signal;
 pub mod arb_thread_pool;
 pub mod arbitrage_path;
 pub mod arbitrage_paths;
-
 pub mod contracts;
 pub mod crypto_math;
 pub mod crypto_pair;
@@ -48,6 +47,7 @@ mod uniswap_transaction;
 pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
 pub mod utils;
+pub mod uniswap_providers;
 
 /*
    Grafana API Key: eyJrIjoiVjY3bzNoWTFnTTNyTUpCVXRoUUJxcXZPTXJGbE1nVmUiLCJuIjoiYmFja3J1bm5lciIsImlkIjoxfQ==

@@ -11,11 +11,7 @@ use ethers::providers::{Http, Provider};
 use ethers::signers::Signer;
 use ethers::signers::Wallet;
 
-<<<<<<< HEAD
-use lazy_static::lazy::Lazy;
-=======
 use ethers::contract::Lazy;
->>>>>>> refs/remotes/origin/main
 
 use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
 use anyhow;
@@ -31,101 +27,13 @@ use std::ops::Deref;
 use std::{collections::HashMap, fs::File, io, thread, time};
 use stream_cancel::Tripwire;
 use url::Url;
+use crate::uniswap_providers::MAINNET_PROVIDER;
+use crate::uniswap_providers::TO_ADDRESS;
+use crate::uniswap_providers::MAX_AMOUNT;
+use crate::uniswap_providers::ROUTER_CONTRACT;
+use crate::uniswap_providers::TIMESTAMP_SEED;
 
 use std::env;
-/*
-pub static GOERLI_WALLET: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
-    MnemonicBuilder::<English>::default()
-        .phrase("unveil spoon stable govern diesel park glory visa lucky teach aspect spy")
-        .index(0u32)
-        .unwrap()
-        .build()
-        .unwrap()
-        .with_chain_id(5_u64)
-});
-
-
-  
-
-pub static FLASHBOTS_GOERLI_PROVIDER: Lazy<
-    Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>,
-> = Lazy::new(|| {
-    Arc::new(SignerMiddleware::new(
-        FlashbotsMiddleware::new(
-            Provider::<Http>::try_from("https://mainnet.eth.aragon.network").unwrap(),
-            Url::parse("https://relay.flashbots.net").unwrap(),
-            LocalWallet::new(&mut thread_rng()),
-        ),
-        LocalWallet::new(&mut thread_rng()),
-    ))
-});
-
-pub(crate) static ROPSTEN_WALLET: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
-    MnemonicBuilder::<English>::default()
-        .phrase("unveil spoon stable govern diesel park glory visa lucky teach aspect spy")
-        .index(0u32)
-        .unwrap()
-        .build()
-        .unwrap()
-        .with_chain_id(3_u64)
-});
-
-pub static ROPSTEN_PROVIDER: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>> =
-    Lazy::new(|| {
-        Arc::new(SignerMiddleware::new(
-            Provider::<Http>::try_from(
-                "https://ropsten.infura.io/v3/7b15aafb575849f4ab4eaccc2725b4a7",
-            )
-            .unwrap(),
-            (*ROPSTEN_WALLET.deref()).clone(),
-        ))
-    });
-
-*/
-pub static MAINNET_BOT_SIGNER: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
-    let private_key = env::var("7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236").unwrap();
-    let wallet = private_key.parse::<LocalWallet>().unwrap();
-    let wallet = wallet.with_chain_id(1u64);
-    wallet
-});
-
-pub static MAINNET_BUNDLE_SIGNER: Lazy<Wallet<SigningKey>> = Lazy::new(|| {
-    let private_key = env::var("7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236").unwrap();
-    let wallet = private_key.parse::<LocalWallet>().unwrap();
-    let wallet = wallet.with_chain_id(1u64);
-    wallet
-});
-
-pub static TIMESTAMP_SEED: u128 = 30000_u128;
-pub static MAX_AMOUNT: Lazy<U256> =
-    Lazy::new(|| U256::from_str("9999999999999999999999999999999999").unwrap());
-
-pub static TO_ADDRESS: Lazy<Address> =
-    Lazy::new(|| Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap());
-
-// Ropsten Uniswap v2
-// Router: 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
-static MAINNET_ROUTER_V2_ADDY: Lazy<Address> =
-    Lazy::new(|| Address::from_str("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D").unwrap());
-
-    
-pub static MAINNET_PROVIDER: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>> =
-Lazy::new(|| {
-    Arc::new(SignerMiddleware::new(
-        Provider::<Http>::try_from(
-            "https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3",
-        )
-        .unwrap(),
-        (*MAINNET_BOT_SIGNER.deref()).clone(),
-    ))
-});
-
-
-pub static ROUTER_CONTRACT: Lazy<
-    UniswapV2Router02<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>,
-> = Lazy::new(|| UniswapV2Router02::new(*MAINNET_ROUTER_V2_ADDY, Arc::clone(&*MAINNET_PROVIDER)));
-
-
 #[derive(Clone)]
 pub struct SwapRoute {
     pub pair: (Address, Address),
