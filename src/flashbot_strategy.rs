@@ -4,23 +4,23 @@ use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
 
 use crate::sequence_token::SequenceToken;
 use anyhow::Result;
-use std::env;
 use ethers::contract::Lazy;
 use ethers::core::abi::Tokenize;
 use ethers::core::types::transaction::eip2718::TypedTransaction;
 use ethers::prelude::k256::ecdsa::SigningKey;
 use ethers::prelude::*;
 use ethers::prelude::{Address, Signer, SignerMiddleware, Wallet, U256};
+use ethers::prelude::{BlockId, BlockNumber};
 use ethers::signers::{coins_bip39::English, MnemonicBuilder};
 use ethers_flashbots::BundleRequest;
-use ethers_flashbots::*;
+use ethers_flashbots::PendingBundleError;
 use lazy_static::__Deref;
 use rand::thread_rng;
+use std::env;
 
 use std::str::FromStr;
 use std::sync::Arc;
 use url::Url;
-
 
 //  Mainnet
 // https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3
@@ -252,7 +252,7 @@ async fn get_bundle_for_test<M: 'static + Middleware, S: 'static + Signer>(
     };
     Ok(bundle)
 }
-/* 
+/*
 #[test]
 pub fn test() {
     // Connect to the network

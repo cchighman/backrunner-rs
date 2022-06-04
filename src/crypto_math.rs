@@ -427,11 +427,15 @@ pub fn optimize_a_prime(
     let eq2 = (&a2 + &nine_seven * &delta_b) * (&b2 - &delta_c);
     let eq3 = (&a3 + &nine_seven * &delta_c) * (&b3 - &delta_a_prime);
 
-    let first_eq = if eq1.eq(&a1.mul(&b1)) { true } else { false };
+    let first_eq = if !eq1.is_integer() && eq1.round(3).eq(&a1.mul(&b1).round(3)) {
+        true
+    } else {
+        false
+    };
     let second_eq = if eq2.eq(&a2.mul(&b2)) { true } else { false };
     let third_eq = if eq3.eq(&a3.mul(&b3)) { true } else { false };
 
-    if first_eq || second_eq || third_eq {
+    if !first_eq || !second_eq || !third_eq {
         println!("Deltas don't equal");
     }
 
