@@ -7,7 +7,7 @@ use ethabi::Token;
 
 use crate::arb_thread_pool::spawn;
 use crate::crypto_math::*;
-use crate::swap_route::{route_calldata, SwapRoute};
+use crate::swap_route::SwapRoute;
 use bigdecimal::ToPrimitive;
 use ethers::prelude::{Address, U256};
 use future::ready;
@@ -16,7 +16,7 @@ use futures_signals::{map_ref, signal::SignalExt};
 use num_traits::real::Real;
 use rayon::prelude::*;
 
-use crate::flashbot_strategy::do_flashbot_mainnet;
+use crate::flashbot_strategy::FlashbotStrategy;
 use crate::sequence_token::SequenceToken;
 use crate::three_path_sequence::ThreePathSequence;
 use crate::uniswap_transaction::*;
@@ -222,13 +222,14 @@ impl ArbitragePath {
                 sequence.a1().token.pair_id().clone(),
                 source_amt,
                 dest_amt,
-                route_calldata(trade_vec).await,
+                SwapRoute::route_calldata(trade_vec).await,
             )
             .await;
-            dbg!(flash_tx.clone());
-/* 
-            do_flashbot_mainnet(&flash_tx).await;
-            */
+            
+            println!("Flash Tx: {}", flash_tx.data().unwrap());
+            FlashbotStrategy::do_flashbot_mainnet(flash_tx).await;
+        
+            
         }
     }
 
