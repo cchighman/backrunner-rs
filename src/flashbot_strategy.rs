@@ -295,13 +295,8 @@ async fn get_bundle_for_test<M: 'static + Middleware, S: 'static + Signer>(
     };
     Ok(bundle)
 }
-<<<<<<< HEAD
-/*
-=======
 
-    }
-/* 
->>>>>>> refs/remotes/origin/main
+/*
 #[test]
 pub fn test() {
     // Connect to the network
@@ -344,5 +339,5 @@ pub fn test() {
     println!("Receipt: {}\n", serde_json::to_string(&receipt).unwrap());
 }
  */
-    */
+
     
