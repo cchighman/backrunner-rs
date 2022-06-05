@@ -1,3 +1,4 @@
+use std::str::FromStr;
 use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
 use anyhow;
 use anyhow::Result;
@@ -125,10 +126,7 @@ mod tests {
             .unwrap();
 
         println!("Approve? {}", weth_approve);
-        let router_contract = UniswapV2Router02::new(
-            Address::from_str("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D").unwrap(),
-            Arc::clone(&client),
-        );
+
         let addy = Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap();
         let path = vec![
             Address::from_str("0xc778417E063141139Fce010982780140Aa0cD5Ab").unwrap(),
@@ -177,3 +175,11 @@ mod tests {
     }
     }
  */
+fn test() {
+let call = router_contract.swap_tokens_for_exact_tokens(
+U256::from_dec_str("1").unwrap(),
+U256::from_dec_str("").unwrap(),
+path.clone(),
+addy,
+timestamp,
+}

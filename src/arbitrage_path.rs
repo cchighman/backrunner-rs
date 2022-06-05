@@ -246,7 +246,6 @@ impl ArbitragePath {
     //noinspection RsTypeCheck
 
     pub async fn init(&self, arb_ref: Arc<ArbitragePath>) {
-    
         let value6 = self.sequence.a3().get_signal();
         let value7 = self.sequence.b3().get_signal();
 
