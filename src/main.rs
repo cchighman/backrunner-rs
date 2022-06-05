@@ -18,7 +18,6 @@ use std::io::{Read, Write};
 use std::sync::Arc;
 
 use async_std::prelude::*;
-use async_std::prelude::*;
 use ethers::prelude::Address;
 use futures_util::{FutureExt, TryFutureExt};
 use itertools::Itertools;
@@ -29,7 +28,7 @@ use crypto_pair::{CryptoPair, CryptoPairs};
 use utils::uniswapv2_utils::{populate_sushiswap_pairs, populate_uniswapv2_pairs};
 
 use crate::three_path_sequence::{cyclic_order, is_arbitrage_pair};
-
+pub mod uniswap_providers;
 pub mod arb_signal;
 pub mod arb_thread_pool;
 pub mod arbitrage_path;
@@ -44,8 +43,7 @@ pub mod graphql_uniswapv3;
 pub mod sequence_token;
 pub mod swap_route;
 pub mod three_path_sequence;
-pub mod uniswap_providers;
-mod uniswap_transaction;
+pub mod uniswap_transaction;
 pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
 pub mod utils;
@@ -163,7 +161,7 @@ async fn main() {
                 .await
                 .unwrap();
             let arb_path = ArbitragePath::new(sequence);
-            arb_path.init(arb_path.clone());
+            arb_path.init(arb_path.clone()).await;
             arb_paths.push(arb_path);
         }
 

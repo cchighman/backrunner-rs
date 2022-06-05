@@ -15,11 +15,11 @@ use rayon::prelude::*;
 
 use crate::arb_thread_pool::spawn;
 use crate::crypto_math::*;
-use crate::flashbot_strategy::FlashbotStrategy;
 use crate::swap_route::SwapRoute;
 use crate::three_path_sequence::ThreePathSequence;
-use crate::uniswap_providers::UNISWAP_PROVIDERS;
+use super::uniswap_providers::*;
 use crate::uniswap_transaction::*;
+use crate::flashbot_strategy::utils::*;
 
 /* Babylonian Sqrt */
 impl ArbitragePath {
@@ -33,8 +33,7 @@ impl ArbitragePath {
         for token in 0..self.sequence.sequence.len() {
             path_str = path_str.to_owned() + " - " + self.sequence.sequence[token].get_symbol();
         }
-
-        return path_str;
+        path_str
     }
 
     pub async fn arb_index(&self) -> BigDecimal {
@@ -217,19 +216,24 @@ impl ArbitragePath {
                 ),
             )
             .await;
-
+               
             let flash_tx: TypedTransaction = flash_swap_v2(
                 sequence.a1().token.pair_id().clone(),
                 source_amt,
                 dest_amt,
-                SwapRoute::route_calldata(trade_vec)
+                SwapRoute::route_calldata(trade_vec).await.unwrap()
             ).await.unwrap();
 
-            println!("Flash Tx: {}", flash_tx.data().unwrap());
-            let result = FlashbotStrategy::do_flashbot_mainnet(flash_tx).await.unwrap();
-            dbg!(result);
+            println!("Flash Tx: {}", &flash_tx.data().unwrap());
+            let bundle_result = send_flashswap_bundle(flash_tx).await;
+            if bundle_result.as_ref().is_err() {
+                println!("Flash bundle could not be submitted.  Reason: {:#}", bundle_result.as_ref().err().unwrap());
+            } else {
+                let bundle_hash = bundle_result.as_ref().unwrap();
+                println!("### Successful Bundle - tx hash: {:#}", &bundle_hash);
+            }
         
-        }; 
+        } 
     }
 
     pub async fn dec_to_u256(delta_a: &BigDecimal, delta_b: &BigDecimal) -> (U256, U256) {
@@ -270,7 +274,6 @@ impl ArbitragePath {
 
             if v > BigDecimal::from_f64(1.05).unwrap() {
                 spawn(ArbitragePath::calculate(arb_ref.sequence.clone()));
-                ready(());
             };
             ready(())
         });

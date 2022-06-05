@@ -157,7 +157,7 @@ pub fn is_arbitrage_pair(crypto_path: &Vec<CryptoPair>) -> bool {
     return false;
 }
 
-/*
+
 #[test]
 pub fn test_is_arbitrage_pair_true() {
     let pair1 = CryptoPair::new(DexPool {
@@ -411,4 +411,4 @@ pub fn test_cyclic_order() {
     arb_path.calculate();
 }
 
-*/
+

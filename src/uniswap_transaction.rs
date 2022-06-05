@@ -1,5 +1,4 @@
 use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
-use crate::uniswap_providers::UNISWAP_PROVIDERS;
 use anyhow;
 use anyhow::Result;
 use ethers::core::types::transaction::eip2718::TypedTransaction;
@@ -7,6 +6,9 @@ use ethers::prelude::*;
 use ethers::prelude::{Address, U256};
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
+use super::uniswap_providers::*;
+
+
 
 pub fn get_valid_timestamp(future_millis: U256) -> U256 {
     let start = SystemTime::now();
@@ -25,20 +27,17 @@ pub async fn flash_swap_v2(
     out_amt: U256,
     calldata: Bytes,
 ) -> Result<TypedTransaction> {
+    
     let pair_contract = UniswapV2Pair::new(
-        pair_id,
-        Arc::new(&UNISWAP_PROVIDERS.MAINNET_ETH_CLIENT));
-
+        pair_id, mainnet::client.clone());
+    
     let contract_call = pair_contract.swap(
         in_amt,
         out_amt,
-        UNISWAP_PROVIDERS.CONTRACT_ADDRESS.clone(),
-        calldata,
-    );
-    let mut tx = contract_call.tx;
-    tx.set_from(*&UNISWAP_PROVIDERS.FROM_ADDRESS);
-    Ok(tx)
+        mainnet::flash_contract.clone(),
+        calldata);
 
+    Ok(contract_call.tx)
 }
 /*
 #[test]
