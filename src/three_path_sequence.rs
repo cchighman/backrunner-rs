@@ -152,9 +152,10 @@ pub fn is_arbitrage_pair(crypto_path: &Vec<CryptoPair>) -> bool {
         || scenario_7
         || scenario_8
     {
-        return true;
+        true
+    } else {
+    false
     }
-    return false;
 }
 
 

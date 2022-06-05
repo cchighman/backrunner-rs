@@ -40,7 +40,7 @@ pub async fn flash_swap_v2(
 
     Ok(contract_call.tx)
 }
-/*
+/* 
 #[test]
 pub fn test() {
     Abigen::new("UniswapV3", "./uniswapv3.json")
@@ -49,9 +49,6 @@ pub fn test() {
         .unwrap()
         .write_to_file("contracts/bindings/uniswap_v3_router");
 }
-#[cfg(test)]
-mod tests {
-    use super::*;
 
     async fn swap_eth_for_exact() {
         // Ropsten Uniswap v2
@@ -173,13 +170,6 @@ mod tests {
         dbg!("Result:  {#:?}", result1.call().await);
         */
     }
-    }
- */
-fn test() {
-let call = router_contract.swap_tokens_for_exact_tokens(
-U256::from_dec_str("1").unwrap(),
-U256::from_dec_str("").unwrap(),
-path.clone(),
-addy,
-timestamp,
 }
+
+*/

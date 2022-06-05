@@ -24,3 +24,4 @@ pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
 pub mod utils;
 pub mod uniswap_providers;
+pub mod two_path_sequence;
