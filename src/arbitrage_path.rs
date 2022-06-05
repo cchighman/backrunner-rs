@@ -56,182 +56,183 @@ impl ArbitragePath {
             BigDecimal::from_str(&*sequence.b3().get_reserve().to_string()).unwrap(),
         );
 
-        if result.is_none() {
-            return;
-        }
-        let (delta_a, delta_b, delta_c, delta_a_prime, profit) = result.unwrap();
-        let method = "optimize_a_prime";
-        println!(
-            "Method: {}  Profit: {:.3?}
-                Trade {:.2?} {} for {:.2?} {} at price {:.3?}
-                \t\t{} Reserves:  {} Ratio: {:.2?}  {} Reserves:  {:.3?} Ratio: {:.3?}
-                Trade {:.2?} {} for {:.2?} {} at price {:.3?}
-                \t\t{} Reserves:  {:.3?} Ratio: {:.2?}  {} Reserves:  {:.3?} Ratio: {:.3?}
-                Trade {:.2?} {} for {:.2?} {} at price {:.3?}
-                \t\t{} Reserves:  {:.3?}  Ratio: {:.2?} {} Reserves:  {:.3?} Ratio: {:.3?}",
-            method,
-            profit.to_f64().unwrap(),
-            delta_a.to_f64().unwrap(),
-            &sequence.a1().get_symbol(),
-            delta_b.to_f64().unwrap(),
-            &sequence.b1().get_symbol(),
-            (BigDecimal::from_str(&*sequence.a1().get_reserve().to_string()).unwrap()
-                / BigDecimal::from_str(&*sequence.b1().get_reserve().to_string()).unwrap())
-            .to_f64()
-            .unwrap(),
-            sequence.a1().get_symbol(),
-            sequence.a1().get_reserve(),
-            (BigDecimal::from_str(&*sequence.a1().get_reserve().to_string()).unwrap()
-                / BigDecimal::from_str(&*sequence.b1().get_reserve().to_string()).unwrap())
-            .to_f64()
-            .unwrap(),
-            sequence.b1().get_symbol(),
-            sequence.b1().get_reserve(),
-            (BigDecimal::from_str(&*sequence.b1().get_reserve().to_string()).unwrap()
-                / BigDecimal::from_str(&*sequence.a1().get_reserve().to_string()).unwrap())
-            .to_f64()
-            .unwrap(),
-            delta_b.to_f64().unwrap(),
-            sequence.a2().get_symbol(),
-            delta_c.to_f64().unwrap(),
-            sequence.b2().get_symbol(),
-            ((BigDecimal::from_str(&*sequence.a2().get_reserve().to_string()).unwrap()
-                / BigDecimal::from_str(
-                    &*10_i128.pow(sequence.a2().get_decimal() as u32).to_string()
-                )
-                .unwrap())
-                / (BigDecimal::from_str(&*sequence.b2().get_reserve().to_string()).unwrap()
+        if !result.is_none() {
+            let (delta_a, delta_b, delta_c, delta_a_prime, profit) = result.unwrap();
+            let method = "optimize_a_prime";
+            println!(
+                "Method: {}  Profit: {:.3?}
+                    Trade {:.2?} {} for {:.2?} {} at price {:.3?}
+                    \t\t{} Reserves:  {} Ratio: {:.2?}  {} Reserves:  {:.3?} Ratio: {:.3?}
+                    Trade {:.2?} {} for {:.2?} {} at price {:.3?}
+                    \t\t{} Reserves:  {:.3?} Ratio: {:.2?}  {} Reserves:  {:.3?} Ratio: {:.3?}
+                    Trade {:.2?} {} for {:.2?} {} at price {:.3?}
+                    \t\t{} Reserves:  {:.3?}  Ratio: {:.2?} {} Reserves:  {:.3?} Ratio: {:.3?}",
+                method,
+                profit.to_f64().unwrap(),
+                delta_a.to_f64().unwrap(),
+                &sequence.a1().get_symbol(),
+                delta_b.to_f64().unwrap(),
+                &sequence.b1().get_symbol(),
+                (BigDecimal::from_str(&*sequence.a1().get_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.b1().get_reserve().to_string()).unwrap())
+                .to_f64()
+                .unwrap(),
+                sequence.a1().get_symbol(),
+                sequence.a1().get_reserve(),
+                (BigDecimal::from_str(&*sequence.a1().get_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.b1().get_reserve().to_string()).unwrap())
+                .to_f64()
+                .unwrap(),
+                sequence.b1().get_symbol(),
+                sequence.b1().get_reserve(),
+                (BigDecimal::from_str(&*sequence.b1().get_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.a1().get_reserve().to_string()).unwrap())
+                .to_f64()
+                .unwrap(),
+                delta_b.to_f64().unwrap(),
+                sequence.a2().get_symbol(),
+                delta_c.to_f64().unwrap(),
+                sequence.b2().get_symbol(),
+                ((BigDecimal::from_str(&*sequence.a2().get_reserve().to_string()).unwrap()
                     / BigDecimal::from_str(
-                        &*10_i128.pow(sequence.b2().get_decimal() as u32).to_string()
+                        &*10_i128.pow(sequence.a2().get_decimal() as u32).to_string()
                     )
-                    .unwrap()))
-            .to_f64()
-            .unwrap(),
-            sequence.a2().get_symbol(),
-            sequence.a2().get_reserve(),
-            (BigDecimal::from_str(&*sequence.a2().get_reserve().to_string()).unwrap()
-                / BigDecimal::from_str(&*sequence.b2().get_reserve().to_string()).unwrap())
-            .to_f64()
-            .unwrap(),
-            sequence.b2().get_symbol(),
-            sequence.b2().get_reserve(),
-            (BigDecimal::from_str(&*sequence.b2().get_reserve().to_string()).unwrap()
-                / BigDecimal::from_str(&*sequence.a2().get_reserve().to_string()).unwrap())
-            .to_f64()
-            .unwrap(),
-            delta_c.to_f64().unwrap(),
-            sequence.a3().get_symbol(),
-            delta_a_prime.to_f64().unwrap(),
-            sequence.b3().get_symbol(),
-            (BigDecimal::from_str(&*sequence.a3().get_reserve().to_string()).unwrap()
-                / BigDecimal::from_str(
-                    &*10_i128.pow(sequence.a3().get_decimal() as u32).to_string()
-                )
+                    .unwrap())
+                    / (BigDecimal::from_str(&*sequence.b2().get_reserve().to_string()).unwrap()
+                        / BigDecimal::from_str(
+                            &*10_i128.pow(sequence.b2().get_decimal() as u32).to_string()
+                        )
+                        .unwrap()))
+                .to_f64()
+                .unwrap(),
+                sequence.a2().get_symbol(),
+                sequence.a2().get_reserve(),
+                (BigDecimal::from_str(&*sequence.a2().get_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.b2().get_reserve().to_string()).unwrap())
+                .to_f64()
+                .unwrap(),
+                sequence.b2().get_symbol(),
+                sequence.b2().get_reserve(),
+                (BigDecimal::from_str(&*sequence.b2().get_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.a2().get_reserve().to_string()).unwrap())
+                .to_f64()
+                .unwrap(),
+                delta_c.to_f64().unwrap(),
+                sequence.a3().get_symbol(),
+                delta_a_prime.to_f64().unwrap(),
+                sequence.b3().get_symbol(),
+                (BigDecimal::from_str(&*sequence.a3().get_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(
+                        &*10_i128.pow(sequence.a3().get_decimal() as u32).to_string()
+                    )
+                    .unwrap()
+                    / (BigDecimal::from_str(&*sequence.b3().get_reserve().to_string()).unwrap()
+                        / BigDecimal::from_str(
+                            &*10_i128.pow(sequence.b3().get_decimal() as u32).to_string()
+                        )
+                        .unwrap()))
+                .to_f64()
+                .unwrap(),
+                sequence.a3().get_symbol(),
+                sequence.a3().get_reserve(),
+                (BigDecimal::from_str(&*sequence.a3().get_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.b3().get_reserve().to_string()).unwrap())
+                .to_f64()
+                .unwrap(),
+                sequence.b3().get_symbol(),
+                sequence.b3().get_reserve(),
+                (BigDecimal::from_str(&*sequence.b3().get_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.a3().get_reserve().to_string()).unwrap())
+                .to_f64()
                 .unwrap()
-                / (BigDecimal::from_str(&*sequence.b3().get_reserve().to_string()).unwrap()
-                    / BigDecimal::from_str(
-                        &*10_i128.pow(sequence.b3().get_decimal() as u32).to_string()
-                    )
-                    .unwrap()))
-            .to_f64()
-            .unwrap(),
-            sequence.a3().get_symbol(),
-            sequence.a3().get_reserve(),
-            (BigDecimal::from_str(&*sequence.a3().get_reserve().to_string()).unwrap()
-                / BigDecimal::from_str(&*sequence.b3().get_reserve().to_string()).unwrap())
-            .to_f64()
-            .unwrap(),
-            sequence.b3().get_symbol(),
-            sequence.b3().get_reserve(),
-            (BigDecimal::from_str(&*sequence.b3().get_reserve().to_string()).unwrap()
-                / BigDecimal::from_str(&*sequence.a3().get_reserve().to_string()).unwrap())
-            .to_f64()
-            .unwrap()
-        );
+            );
 
-        let (source_amt, dest_amt) = ArbitragePath::dec_to_u256(
-            &delta_a.clone().mul(
-                BigDecimal::from_i128(10_i128.pow(sequence.a1().get_decimal() as u32)).unwrap(),
-            ),
-            &delta_b.clone().mul(
-                BigDecimal::from_i128(10_i128.pow(sequence.b1().get_decimal() as u32)).unwrap(),
-            ),
-        )
-        .await;
+            let (source_amt, dest_amt) = ArbitragePath::dec_to_u256(
+                &delta_a.clone().mul(
+                    BigDecimal::from_i128(10_i128.pow(sequence.a1().get_decimal() as u32)).unwrap(),
+                ),
+                &delta_b.clone().mul(
+                    BigDecimal::from_i128(10_i128.pow(sequence.b1().get_decimal() as u32)).unwrap(),
+                ),
+            )
+            .await;
 
-        let trade1 = SwapRoute::new(
-            (
-                sequence.a1().get_id().clone(),
-                sequence.b1().get_id().clone(),
-            ),
-            source_amt.clone(),
-            dest_amt,
-            sequence.a1().token.pair.router.clone(),
-        );
+            let trade1 = SwapRoute::new(
+                (
+                    sequence.a1().get_id().clone(),
+                    sequence.b1().get_id().clone(),
+                ),
+                source_amt.clone(),
+                dest_amt,
+                sequence.a1().token.pair.router.clone(),
+            );
 
-        let (source_amt, dest_amt) = ArbitragePath::dec_to_u256(
-            &delta_b.clone().mul(
-                BigDecimal::from_i128(10_i128.pow(sequence.a2().get_decimal() as u32)).unwrap(),
-            ),
-            &delta_c.clone().mul(
-                BigDecimal::from_i128(10_i128.pow(sequence.b2().get_decimal() as u32)).unwrap(),
-            ),
-        )
-        .await;
+            let (source_amt, dest_amt) = ArbitragePath::dec_to_u256(
+                &delta_b.clone().mul(
+                    BigDecimal::from_i128(10_i128.pow(sequence.a2().get_decimal() as u32)).unwrap(),
+                ),
+                &delta_c.clone().mul(
+                    BigDecimal::from_i128(10_i128.pow(sequence.b2().get_decimal() as u32)).unwrap(),
+                ),
+            )
+            .await;
 
-        let trade2 = SwapRoute::new(
-            (
-                sequence.a2().get_id().clone(),
-                sequence.b2().get_id().clone(),
-            ),
-            source_amt,
-            dest_amt,
-            sequence.a2().token.pair.router.clone(),
-        );
+            let trade2 = SwapRoute::new(
+                (
+                    sequence.a2().get_id().clone(),
+                    sequence.b2().get_id().clone(),
+                ),
+                source_amt,
+                dest_amt,
+                sequence.a2().token.pair.router.clone(),
+            );
 
-        let (source_amt, dest_amt) = ArbitragePath::dec_to_u256(
-            &delta_c.clone().mul(
-                BigDecimal::from_i128(10_i128.pow(sequence.a3().get_decimal() as u32)).unwrap(),
-            ),
-            &delta_a_prime.clone().mul(
-                BigDecimal::from_i128(10_i128.pow(sequence.b3().get_decimal() as u32)).unwrap(),
-            ),
-        )
-        .await;
+            let (source_amt, dest_amt) = ArbitragePath::dec_to_u256(
+                &delta_c.clone().mul(
+                    BigDecimal::from_i128(10_i128.pow(sequence.a3().get_decimal() as u32)).unwrap(),
+                ),
+                &delta_a_prime.clone().mul(
+                    BigDecimal::from_i128(10_i128.pow(sequence.b3().get_decimal() as u32)).unwrap(),
+                ),
+            )
+            .await;
 
-        let trade3 = SwapRoute::new(
-            (
-                sequence.a3().get_id().clone(),
-                sequence.b3().get_id().clone(),
-            ),
-            source_amt,
-            dest_amt,
-            sequence.a3().token.pair.router.clone(),
-        );
+            let trade3 = SwapRoute::new(
+                (
+                    sequence.a3().get_id().clone(),
+                    sequence.b3().get_id().clone(),
+                ),
+                source_amt,
+                dest_amt,
+                sequence.a3().token.pair.router.clone(),
+            );
 
-        let trade_vec = vec![trade1, trade2, trade3];
-        let (source_amt, dest_amt) = ArbitragePath::dec_to_u256(
-            &delta_a.clone().mul(
-                BigDecimal::from_i128(10_i128.pow(sequence.a1().get_decimal() as u32)).unwrap(),
-            ),
-            &delta_b.clone().mul(
-                BigDecimal::from_i128(10_i128.pow(sequence.b1().get_decimal() as u32)).unwrap(),
-            ),
-        )
-        .await;
+            let trade_vec = vec![trade1, trade2, trade3];
+            let (source_amt, dest_amt) = ArbitragePath::dec_to_u256(
+                &delta_a.clone().mul(
+                    BigDecimal::from_i128(10_i128.pow(sequence.a1().get_decimal() as u32)).unwrap(),
+                ),
+                &delta_b.clone().mul(
+                    BigDecimal::from_i128(10_i128.pow(sequence.b1().get_decimal() as u32)).unwrap(),
+                ),
+            )
+            .await;
 
-        let flash_tx: TypedTransaction = flash_swap_v2(
-            sequence.a1().token.pair_id().clone(),
-            source_amt,
-            dest_amt,
-            SwapRoute::route_calldata(trade_vec).await,
-        )
-        .await
-        .unwrap();
+            let flash_tx: TypedTransaction = flash_swap_v2(
+                sequence.a1().token.pair_id().clone(),
+                source_amt,
+                dest_amt,
+                SwapRoute::route_calldata(trade_vec).await,
+            )
+            .await
+            .unwrap();
 
-        println!("Flash Tx: {}", flash_tx.data().unwrap());
-        let result = FlashbotStrategy::do_flashbot_mainnet(flash_tx).await;
-        dbg!(result);
+            println!("Flash Tx: {}", flash_tx.data().unwrap());
+            let result = FlashbotStrategy::do_flashbot_mainnet(flash_tx)
+                .await
+                .unwrap();
+            dbg!(result);
+        };
     }
 
     pub async fn dec_to_u256(delta_a: &BigDecimal, delta_b: &BigDecimal) -> (U256, U256) {
@@ -244,8 +245,6 @@ impl ArbitragePath {
     //noinspection RsTypeCheck
 
     pub async fn init(&self, arb_ref: Arc<ArbitragePath>) {
-        type Output = ();
-
         let value6 = self.sequence.a3().get_signal();
         let value7 = self.sequence.b3().get_signal();
 
@@ -273,6 +272,7 @@ impl ArbitragePath {
 
             if v > BigDecimal::from_f64(1.05).unwrap() {
                 spawn(ArbitragePath::calculate(arb_ref.sequence.clone()));
+                ready(());
             };
             ready(())
         });
