@@ -3,8 +3,7 @@
     use std::ops::Deref;
     use std::str::FromStr;
     use std::sync::Arc;
-
-    //use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
+    use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
     use anyhow;
     use ethers::contract::Lazy;
     use ethers::core::k256::ecdsa::SigningKey;
@@ -54,10 +53,11 @@
         pub MAINNET_PROVIDER :  Provider<Http>,
         pub MAINNET_MIDDLEWARE :  SignerMiddleware<Provider<Http>, Wallet<SigningKey>> ,
        // pub MAINNET_FLASHBOTS_CLIENT : SignerMiddleware<FlashbotsMiddleware<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>, Wallet<SigningKey>>, Wallet<SigningKey>>,
-        pub MAINNET_ETH_CLIENT : SignerMiddleware<Provider<Http>, Wallet<SigningKey>>
+        pub MAINNET_ETH_CLIENT : SignerMiddleware<Provider<Http>, Wallet<SigningKey>>,
+       // pub ROUTER_CONTRACT_V2: UniswapV2Router02<M>
  }
 
-    impl UniswapProviders {
+        impl UniswapProviders {
             pub fn new() -> Self {
             let timestamp_seed =  30000_u128;
             let to_address =Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap();
@@ -107,6 +107,8 @@
 //pub fn new(inner: M, relay_url: impl Into<Url>, relay_signer: S) -> Self {
             let mainnet_eth_client = SignerMiddleware::new(mainnet_provider.clone(), mainnet_bot_signer.clone());
             
+
+
             Self {
                 CONTRACT_ADDRESS: contact_address,
                 FROM_ADDRESS: from_address,
@@ -120,7 +122,8 @@
                 MAINNET_PROVIDER: mainnet_provider.clone(),
                 MAINNET_MIDDLEWARE: mainnet_middleware,
                // MAINNET_FLASHBOTS_CLIENT: mainnet_flashbots_client,
-                MAINNET_ETH_CLIENT: mainnet_eth_client,
+                MAINNET_ETH_CLIENT: mainnet_eth_client.clone(),
+                //ROUTER_CONTRACT_V2: router_contract_v2.clone(),
             }
             
         }
@@ -196,10 +199,3 @@
             ))
         });
 */
-
-
-    /*
-    pub async fn ROUTER_CONTRACT: Lazy<u8
-    > = Lazy::new(|| 7);
-        }*/
-

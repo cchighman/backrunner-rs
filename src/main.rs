@@ -163,7 +163,7 @@ async fn main() {
                 .await
                 .unwrap();
             let arb_path = ArbitragePath::new(sequence);
-            arb_path.init(arb_path.clone()).await;
+            arb_path.init(arb_path.clone());
             arb_paths.push(arb_path);
         }
 
