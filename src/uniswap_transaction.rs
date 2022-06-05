@@ -1,22 +1,14 @@
-use std::ops::Div;
 use std::str::FromStr;
+use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
+use crate::uniswap_providers::UNISWAP_PROVIDERS;
+use anyhow;
+use anyhow::Result;
+use ethers::core::types::transaction::eip2718::TypedTransaction;
+use ethers::prelude::*;
+use ethers::prelude::{Address, U256};
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
-use ethers::prelude::*;
-use ethers::core::abi::Tokenize;
-use ethers::prelude::{Address, Signer, SignerMiddleware, U256};
-
-use ethers::core::types::transaction::eip2718::TypedTransaction;
-use ethers::providers::{Http, Provider};
-use ethers::signers::{coins_bip39::English, MnemonicBuilder};
-
-use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
-use crate::uniswap_providers::{FROM_ADDRESS,CONTRACT_ADDRESS};
-
-use crate::sequence_token::SequenceToken;
-use ethers::contract::Lazy;
-use futures::StreamExt;
-use num_traits::FromPrimitive;
+use crate::contracts::bindings::uniswap_v2_router_02::UniswapV2Router02;
 
 pub fn get_valid_timestamp(future_millis: U256) -> U256 {
     let start = SystemTime::now();
@@ -33,28 +25,23 @@ pub async fn flash_swap_v2(
     pair_id: Address,
     in_amt: U256,
     out_amt: U256,
-    calldata: ethers::core::types::Bytes,
-) -> TypedTransaction {
-    let provider = Provider::<Http>::try_from(
-        "https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3",
-    ).unwrap();
+    calldata: Bytes,
+) -> Result<TypedTransaction> {
+    let pair_contract = UniswapV2Pair::new(
+        pair_id,
+        Arc::new(&UNISWAP_PROVIDERS.MAINNET_ETH_CLIENT));
 
-    let private_key = "7005b56052be4776bffe00ff781879c65aa87ac3d5f8945c0452f27e11fa9236";
-    let wallet = private_key.parse::<LocalWallet>().unwrap();
-    let wallet = wallet.with_chain_id(1u64);
-   
-    let client = Arc::new(SignerMiddleware::new(provider, wallet));
-    let pair_contract = UniswapV2Pair::new(pair_id, Arc::clone(&client));
+    let contract_call = pair_contract.swap(
+        in_amt,
+        out_amt,
+        UNISWAP_PROVIDERS.CONTRACT_ADDRESS.clone(),
+        calldata,
+    );
 
-    let contract_call = pair_contract.swap(in_amt, out_amt, *CONTRACT_ADDRESS, calldata);
     let mut tx = contract_call.tx;
-    //tx = tx.with_chain_id(1);
-    tx.set_from(*FROM_ADDRESS);
-    tx
-}
+    tx.set_from(*&UNISWAP_PROVIDERS.FROM_ADDRESS);
+    Ok(tx)
 
-pub fn reserves_to_amount(reserve0: u128, decimal0: i32, reserve1: u128, decimal1: i32) -> f64 {
-    return f64::powi(10.0, (decimal0 - decimal1).abs()) * reserve1 as f64 / reserve0 as f64;
 }
 /*
 #[test]
@@ -142,10 +129,7 @@ mod tests {
             .unwrap();
 
         println!("Approve? {}", weth_approve);
-        let router_contract = UniswapV2Router02::new(
-            Address::from_str("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D").unwrap(),
-            Arc::clone(&client),
-        );
+
         let addy = Address::from_str("0x5C1201e06F2EB55dDf656F0a82e57cF92F634273").unwrap();
         let path = vec![
             Address::from_str("0xc778417E063141139Fce010982780140Aa0cD5Ab").unwrap(),
@@ -194,3 +178,11 @@ mod tests {
     }
     }
  */
+fn test() {
+let call = router_contract.swap_tokens_for_exact_tokens(
+U256::from_dec_str("1").unwrap(),
+U256::from_dec_str("").unwrap(),
+path.clone(),
+addy,
+timestamp,
+}

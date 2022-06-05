@@ -1,26 +1,26 @@
-use bigdecimal::BigDecimal;
 use std::ops::Mul;
 use std::str::FromStr;
 use std::sync::Arc;
 
-use ethabi::Token;
-
-use crate::arb_thread_pool::spawn;
-use crate::crypto_math::*;
-use crate::swap_route::SwapRoute;
+use bigdecimal::BigDecimal;
+use bigdecimal::FromPrimitive;
 use bigdecimal::ToPrimitive;
-use ethers::prelude::{Address, U256};
+use ethabi::Token;
+use ethers::prelude::U256;
+use ethers::types::transaction::eip2718::TypedTransaction;
 use future::ready;
 use futures::{future, StreamExt};
 use futures_signals::{map_ref, signal::SignalExt};
-use num_traits::real::Real;
 use rayon::prelude::*;
 
+use crate::arb_thread_pool::spawn;
+use crate::crypto_math::*;
 use crate::flashbot_strategy::FlashbotStrategy;
-use crate::sequence_token::SequenceToken;
+use crate::swap_route::SwapRoute;
 use crate::three_path_sequence::ThreePathSequence;
+use crate::uniswap_providers::UNISWAP_PROVIDERS;
 use crate::uniswap_transaction::*;
-use bigdecimal::FromPrimitive;
+
 /* Babylonian Sqrt */
 impl ArbitragePath {
     /* TODO - For each pair */
@@ -61,12 +61,12 @@ impl ArbitragePath {
             let method = "optimize_a_prime";
             println!(
                 "Method: {}  Profit: {:.3?}
-                Trade {:.2?} {} for {:.2?} {} at price {:.3?}
-                \t\t{} Reserves:  {} Ratio: {:.2?}  {} Reserves:  {:.3?} Ratio: {:.3?}
-                Trade {:.2?} {} for {:.2?} {} at price {:.3?}
-                \t\t{} Reserves:  {:.3?} Ratio: {:.2?}  {} Reserves:  {:.3?} Ratio: {:.3?}
-                Trade {:.2?} {} for {:.2?} {} at price {:.3?}
-                \t\t{} Reserves:  {:.3?}  Ratio: {:.2?} {} Reserves:  {:.3?} Ratio: {:.3?}",
+                    Trade {:.2?} {} for {:.2?} {} at price {:.3?}
+                    \t\t{} Reserves:  {} Ratio: {:.2?}  {} Reserves:  {:.3?} Ratio: {:.3?}
+                    Trade {:.2?} {} for {:.2?} {} at price {:.3?}
+                    \t\t{} Reserves:  {:.3?} Ratio: {:.2?}  {} Reserves:  {:.3?} Ratio: {:.3?}
+                    Trade {:.2?} {} for {:.2?} {} at price {:.3?}
+                    \t\t{} Reserves:  {:.3?}  Ratio: {:.2?} {} Reserves:  {:.3?} Ratio: {:.3?}",
                 method,
                 profit.to_f64().unwrap(),
                 delta_a.to_f64().unwrap(),
@@ -218,19 +218,21 @@ impl ArbitragePath {
             )
             .await;
 
-            let flash_tx = flash_swap_v2(
+            let flash_tx: TypedTransaction = flash_swap_v2(
                 sequence.a1().token.pair_id().clone(),
                 source_amt,
                 dest_amt,
                 SwapRoute::route_calldata(trade_vec).await,
             )
-            .await;
-            
+            .await
+            .unwrap();
+
             println!("Flash Tx: {}", flash_tx.data().unwrap());
-            FlashbotStrategy::do_flashbot_mainnet(flash_tx).await;
-        
-            
-        }
+            let result = FlashbotStrategy::do_flashbot_mainnet(flash_tx)
+                .await
+                .unwrap();
+            dbg!(result);
+        };
     }
 
     pub async fn dec_to_u256(delta_a: &BigDecimal, delta_b: &BigDecimal) -> (U256, U256) {
@@ -243,8 +245,6 @@ impl ArbitragePath {
     //noinspection RsTypeCheck
 
     pub async fn init(&self, arb_ref: Arc<ArbitragePath>) {
-        type Output = ();
-
         let value6 = self.sequence.a3().get_signal();
         let value7 = self.sequence.b3().get_signal();
 
@@ -272,6 +272,7 @@ impl ArbitragePath {
 
             if v > BigDecimal::from_f64(1.05).unwrap() {
                 spawn(ArbitragePath::calculate(arb_ref.sequence.clone()));
+                ready(());
             };
             ready(())
         });

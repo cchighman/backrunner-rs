@@ -10,18 +10,19 @@
     unused_mut
 )]
 
-use arb_thread_pool::spawn;
+use std::collections::HashMap;
+use std::env;
+use std::fs::File;
+use std::io::{BufReader, BufWriter};
+use std::io::{Read, Write};
+use std::sync::Arc;
+
 use async_std::prelude::*;
 use async_std::prelude::*;
 use ethers::prelude::Address;
 use futures_util::{FutureExt, TryFutureExt};
 use itertools::Itertools;
 use rayon::prelude::*;
-use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufReader, BufWriter};
-use std::io::{Read, Write};
-use std::sync::Arc;
 
 use arbitrage_path::ArbitragePath;
 use crypto_pair::{CryptoPair, CryptoPairs};
@@ -43,11 +44,11 @@ pub mod graphql_uniswapv3;
 pub mod sequence_token;
 pub mod swap_route;
 pub mod three_path_sequence;
+pub mod uniswap_providers;
 mod uniswap_transaction;
 pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
 pub mod utils;
-pub mod uniswap_providers;
 
 /*
    Grafana API Key: eyJrIjoiVjY3bzNoWTFnTTNyTUpCVXRoUUJxcXZPTXJGbE1nVmUiLCJuIjoiYmFja3J1bm5lciIsImlkIjoxfQ==
@@ -61,10 +62,8 @@ pub mod uniswap_providers;
      Discord Client Secret: lREE9D8B7qrKsyfqJQqkegNrPhTCGsa2
      Discord Invite Link: https://discord.com/api/oauth2/authorize?client_id=982459497320689684&permissions=8&redirect_uri=http%3A%2F%2Fwww.google.com&response_type=code&scope=identify%20email%20rpc.notifications.read%20rpc%20gdm.join%20guilds.members.read%20guilds.join%20connections%20guilds%20rpc.activities.write%20rpc.voice.write%20rpc.voice.read%20bot%20webhook.incoming%20messages.read%20applications.builds.upload%20applications.builds.read%20dm_channels.read%20voice%20relationships.read%20activities.write%20activities.read%20applications.entitlements%20applications.store.update%20applications.commands
      Discord Webhook URL: https://discord.com/api/webhooks/982463881354035241/6XmX7RP90l1LW50WrLSsgnJPAQNM0Woqa2pG7Kk693ujqGQYdMr9jHoClgU6MmJXrpI0
-*/
-
-use std::env;
-use std::future::ready;
+RUSTFLAGS="-C target-cpu=native" cargo build --release
+     */
 
 #[allow(dead_code)]
 #[async_std::main]
@@ -164,7 +163,7 @@ async fn main() {
                 .await
                 .unwrap();
             let arb_path = ArbitragePath::new(sequence);
-            arb_path.init(arb_path.clone()).await;
+            arb_path.init(arb_path.clone());
             arb_paths.push(arb_path);
         }
 

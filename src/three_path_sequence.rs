@@ -1,20 +1,11 @@
-use crate::arbitrage_path::ArbitragePath;
-use crate::sequence_token::SequenceToken;
-use crate::utils::common::DIRECTION;
-use ethers::prelude::{Address, U256};
-use futures_signals::map_ref;
-use futures_signals::signal::{MutableSignal, SignalExt};
-use num_bigint::BigInt;
 use std::collections::HashMap;
-use std::future::ready;
-use std::ops::Mul;
-use std::str::FromStr;
 use std::sync::Arc;
 
-use crate::arb_thread_pool::spawn;
+use ethers::prelude::Address;
+
 use crate::crypto_pair::CryptoPair;
-use crate::dex_pool::DexPool;
-use crate::uniswapv2_pairs::uniswap_pairs::UniswapPairsPairsTokens;
+use crate::sequence_token::SequenceToken;
+use crate::utils::common::DIRECTION;
 
 #[derive(Debug, Clone)]
 pub struct ThreePathSequence {

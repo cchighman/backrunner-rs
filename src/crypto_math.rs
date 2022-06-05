@@ -5,7 +5,6 @@ use std::sync::Arc;
 use bigdecimal::BigDecimal;
 use ethereum_types::U512;
 use ethers::prelude::U256;
-
 use num_traits::real::Real;
 use num_traits::{FromPrimitive, Pow, ToPrimitive, Zero};
 
@@ -424,34 +423,36 @@ pub fn optimize_a_prime(
     let delta_a_prime = (&b3 * &nine_seven * &delta_c) / (&a3 + &nine_seven * &delta_c);
     let profit = &delta_a_prime - &delta_a;
 
-    let eq1 = U256::from(((&a1 + &nine_seven * &delta_a) * (&b1 - &delta_b)).to_u128().unwrap()).div(U256::from(100));
+    let eq1 = U256::from(
+        ((&a1 + &nine_seven * &delta_a) * (&b1 - &delta_b))
+            .to_u128()
+            .unwrap(),
+    )
+    .div(U256::from(100));
     let comp_1 = U256::from((&a1.clone().mul(&b1)).to_u128().unwrap()).div(U256::from(100));
-    
-    let eq2 = U256::from(((&a2 + &nine_seven * &delta_b) * (&b2 - &delta_c)).to_u128().unwrap()).div(U256::from(100));
+
+    let eq2 = U256::from(
+        ((&a2 + &nine_seven * &delta_b) * (&b2 - &delta_c))
+            .to_u128()
+            .unwrap(),
+    )
+    .div(U256::from(100));
     let comp_2 = U256::from((&a2.clone().mul(&b2)).to_u128().unwrap()).div(U256::from(100));
 
-    let eq3 = U256::from(((&a3 + &nine_seven * &delta_c) * (&b3 - &delta_a_prime)).to_u128().unwrap()).div(U256::from(100));
+    let eq3 = U256::from(
+        ((&a3 + &nine_seven * &delta_c) * (&b3 - &delta_a_prime))
+            .to_u128()
+            .unwrap(),
+    )
+    .div(U256::from(100));
     let comp_3 = U256::from((&a3.clone().mul(&b3)).to_u128().unwrap()).div(U256::from(100));
-
 
     let ten = U256::from(10);
     let first_eq = (eq1.clone() - comp_1.clone()) < ten.clone();
     let second_eq = (eq2.clone() - comp_2.clone()) < ten.clone();
     let third_eq = (eq3.clone() - comp_3.clone()) < ten.clone();
 
-    if !first_eq || !second_eq || !third_eq {
-      //  dbg!("delta not equal",&first_eq, &eq1.to_string().split_once(".").unwrap().0,&a1*&b1, &second_eq, &eq2.to_string().split_once(".").unwrap().0,&a2*&b2, &third_eq, &eq3.to_string().split_once(".").unwrap().0,&a3*&b3, &delta_a, &delta_b, &delta_c, &delta_a_prime);
-    }else {
-        //dbg!("EQUAL",&first_eq, &a2*&b1, &second_eq, &a2*&b2, &third_eq, &a3*&b3, &delta_a, &delta_b, &delta_c, &delta_a_prime);
-    }
-
-    /*
-        if profit <= BigDecimal::zero() {
-
-            return None;
-        }
-    */
-    return Some((delta_a, delta_b, delta_c, delta_a_prime, profit));
+    Some((delta_a, delta_b, delta_c, delta_a_prime, profit))
 }
 
 pub fn method_c(token_a_left: U512, token_a_right: U512, token_b_left: U512, token_b_right: U512) {
