@@ -224,9 +224,10 @@ impl ArbitragePath {
             sequence.a1().token.pair_id().clone(),
             source_amt,
             dest_amt,
-            SwapRoute::route_calldata(trade_vec).await
+            SwapRoute::route_calldata(trade_vec).await,
         )
-        .await.unwrap();
+        .await
+        .unwrap();
 
         println!("Flash Tx: {}", flash_tx.data().unwrap());
         let result = FlashbotStrategy::do_flashbot_mainnet(flash_tx).await;
