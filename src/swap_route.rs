@@ -14,7 +14,7 @@ use std::str::FromStr;
 use ethers_flashbots::FlashbotsMiddleware;
 use super::uniswap_providers::*;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct SwapRoute {
     pub pair: (Address, Address),
     pub source_amount: U256,
@@ -33,24 +33,24 @@ impl SwapRoute {
     }
 
     pub async fn swap_tokens_for_exact_tokens(&self) -> Result<Bytes, anyhow::Error> {
-        /*
+    
         let router_contract = UniswapV2Router02::new(
             mainnet::router_v2.clone(),
             mainnet::client.clone());
-        
+         
         let payload = router_contract.swap_tokens_for_exact_tokens(
                 self.dest_amount,
                 mainnet::max_amount.clone(),
                 vec![
-                    Address::from_str(&*self.pair.0.to_string())?,
-                    Address::from_str(&*self.pair.1.to_string())?,
+                    self.pair.0,
+                    self.pair.1
                 ],
                 mainnet::to.clone(),
                 mainnet::get_valid_timestamp(),
             ).calldata().unwrap();
             Ok(payload)
-            */
-            Ok(Bytes::from(vec![3_u8, 1_u8]))
+            
+            //Ok(Bytes::from(vec![3_u8, 1_u8]))
     }
         
     /*

@@ -37,21 +37,28 @@ pub mod utils {
         Ok(bundle)
     }
 
-    pub async fn send_flashswap_bundle(mut tx: TypedTransaction) -> Result<H256,anyhow::Error> {
+    pub async fn send_flashswap_bundle(txs: Vec<TypedTransaction>) -> Result<H256,anyhow::Error> {
         println!("do_flashbot_mainnet");
 
-        let mut nonce = mainnet::flashbots_client.get_transaction_count(mainnet::wallet.address().clone(), Some(BlockId::from(BlockNumber::Latest))).await?;
+        let nonce = mainnet::flashbots_client.get_transaction_count(mainnet::wallet.address().clone(), Some(BlockId::from(BlockNumber::Latest))).await?;
     
         let block_number = mainnet::flashbots_client.inner().inner().get_block_number().await.unwrap();
         println!("Block Number: {}", block_number);
-        tx.set_nonce(nonce);
-        tx.set_gas_price(U256::from(300000000000u64));
-        tx.set_gas(U256::from(400000));
         
-        let signature = mainnet::flashbots_client.signer().sign_transaction(&tx).await?;
-        let bundle = new_bundle_request().await?;
-        let bundle = bundle.push_transaction(tx.rlp_signed(mainnet::flashbots_client.signer().chain_id(), &signature));
-             
+        let mut bundle = new_bundle_request().await?;
+        
+        for mut tx in txs {
+
+            if tx.nonce().is_none() {
+                tx.set_nonce(nonce);
+                tx.set_gas_price(U256::from(300000000000u64));
+                tx.set_gas(U256::from(400000));
+            }
+            
+            let signature = mainnet::flashbots_client.signer().sign_transaction(&tx).await?;
+            bundle = bundle.push_transaction(tx.rlp_signed(mainnet::flashbots_client.signer().chain_id(), &signature));          
+        }
+
         // Simulate it
         let simulated_bundle = mainnet::flashbots_client.inner().simulate_bundle(&bundle).await?;
         println!("Simulated bundle: {:?}", simulated_bundle);
@@ -59,7 +66,6 @@ pub mod utils {
         // Send it
         let pending_bundle = mainnet::flashbots_client.inner().send_bundle(&bundle).await?;
 
-      
         match pending_bundle.await {
             Ok(bundle_hash) => {
                 println!("Bundle with hash {:?} was included in target block",bundle_hash);
@@ -73,8 +79,6 @@ pub mod utils {
         }
     }
 }
-
-
 
 /* //  Mainnet
 // https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3

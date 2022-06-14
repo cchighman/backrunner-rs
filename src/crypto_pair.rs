@@ -1,8 +1,10 @@
 use std::fmt;
 
+
 use ethers::prelude::{Address, U256};
 use futures_signals::signal::{Mutable, MutableSignal};
 use serde::{Deserialize, Serialize};
+use ethers::core::types::transaction::eip2718::TypedTransaction;
 
 use crate::dex_pool::DexPool;
 use crate::utils::common::DIRECTION;
@@ -25,8 +27,11 @@ impl CryptoPair {
     pub fn new(pair: DexPool) -> Self {
         Self {
             pair: pair.clone(),
-            left_reserves: Mutable::new(pair.token0.reserve.clone()),
-            right_reserves: Mutable::new(pair.token1.reserve.clone()),
+            pending_left_reserves: Mutable::new(pair.token0.reserve.clone()),
+            pending_right_reserves: Mutable::new(pair.token1.reserve.clone()),
+            confirmed_left_reserves: Mutable::new(pair.token0.reserve.clone()),
+            confirmed_right_reserves: Mutable::new(pair.token1.reserve.clone()),
+            pending_txs:  Default::default()
         }
     }
 
@@ -61,12 +66,20 @@ impl CryptoPair {
         }
     }
 
-    pub fn left_reserves(&self) -> U256 {
-        return self.left_reserves.get();
+    pub fn confirmed_left_reserves(&self) -> U256 {
+        return self.confirmed_left_reserves.get();
     }
 
-    pub fn right_reserves(&self) -> U256 {
-        return self.right_reserves.get();
+    pub fn confirmed_right_reserves(&self) -> U256 {
+        return self.confirmed_right_reserves.get();
+    }
+
+    pub fn pending_left_reserves(&self) -> U256 {
+        return self.pending_left_reserves.get();
+    }
+
+    pub fn pending_right_reserves(&self) -> U256 {
+        return self.pending_right_reserves.get();
     }
 
     pub fn pair_id(&self) -> &Address {
@@ -102,49 +115,98 @@ impl CryptoPair {
     }
 
     pub fn update(&self, new: &U256) {
-        self.left_reserves.set(&self.left_reserves.get() + new);
-        self.right_reserves
-            .set(&self.right_reserves.get() + new.clone());
+        self.pending_left_reserves.set(&self.pending_left_reserves.get() + new);
+        
     }
 
-    pub fn left_reserves_signal(&self) -> MutableSignal<U256> {
-        self.left_reserves.signal()
+    pub fn pending_left_reserves_signal(&self) -> MutableSignal<U256> {
+        self.pending_left_reserves.signal()
     }
 
-    pub fn get_reserves_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
+
+    pub fn pending_right_reserves_signal(&self) -> MutableSignal<U256> {
+        self.pending_right_reserves.signal()
+    }
+
+    pub fn confirmed_left_reserves_signal(&self) -> MutableSignal<U256> {
+        self.confirmed_left_reserves.signal()
+    }
+
+
+    pub fn confirmed_right_reserves_signal(&self) -> MutableSignal<U256> {
+        self.confirmed_right_reserves.signal()
+    }
+
+
+    pub fn get_pending_reserves_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
         if direction == DIRECTION::Left {
-            return self.left_reserves_signal();
+            return self.pending_left_reserves_signal();
         } else {
-            return self.right_reserves_signal();
+            return self.pending_right_reserves_signal();
+        }
+    }
+
+    pub fn get_confirmed_reserves_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
+        if direction == DIRECTION::Left {
+            return self.confirmed_left_reserves_signal();
+        } else {
+            return self.confirmed_right_reserves_signal();
+        }
+    }
+
+    pub fn get_pending_reserve(&self, direction: DIRECTION) -> U256 {
+        if direction == DIRECTION::Left {
+            return self.pending_left_reserves();
+        } else {
+            return self.pending_right_reserves();
+        }
+    }
+
+    pub fn get_confirmed_reserve(&self, direction: DIRECTION) -> U256 {
+        if direction == DIRECTION::Left {
+            return self.confirmed_left_reserves();
+        } else {
+            return self.confirmed_right_reserves();
         }
     }
 
     pub fn get_reserve(&self, direction: DIRECTION) -> U256 {
         if direction == DIRECTION::Left {
-            return self.left_reserves();
+            return self.confirmed_left_reserves();
         } else {
-            return self.right_reserves();
+            return self.confirmed_right_reserves();
         }
     }
 
-    pub fn get_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
+    pub fn get_pending_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
         if direction == DIRECTION::Left {
-            return self.left_reserves_signal();
+            return self.pending_left_reserves_signal();
         } else {
-            return self.right_reserves_signal();
+            return self.pending_right_reserves_signal();
         }
     }
 
-    pub fn right_reserves_signal(&self) -> MutableSignal<U256> {
-        self.right_reserves.signal()
+    pub fn get_confirmed_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
+        if direction == DIRECTION::Left {
+            return self.confirmed_left_reserves_signal();
+        } else {
+            return self.confirmed_right_reserves_signal();
+        }
+    }
+    
+    pub fn get_pending_txs(&self)->Vec<TypedTransaction> {
+        self.pending_txs.get_cloned()
     }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CryptoPair {
     pub(crate) pair: DexPool,
-    pub(crate) left_reserves: Mutable<U256>,
-    pub(crate) right_reserves: Mutable<U256>,
+    pub(crate) pending_left_reserves: Mutable<U256>,
+    pub(crate) pending_right_reserves: Mutable<U256>,
+    pub(crate) confirmed_left_reserves: Mutable<U256>,
+    pub(crate) confirmed_right_reserves: Mutable<U256>,
+    pub(crate) pending_txs: Mutable<Vec<TypedTransaction>>
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CryptoPairs {

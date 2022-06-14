@@ -66,8 +66,8 @@ pub fn get_amounts_out(amountIn: U512, paths: &Vec<Arc<CryptoPair>>) -> Vec<U512
         */
         amounts.push(get_amount_out(
             amounts[i],
-            U512::from_dec_str(&*paths[i].left_reserves().to_string()).unwrap(),
-            U512::from_dec_str(&*paths[i].right_reserves().to_string()).unwrap(),
+            U512::from_dec_str(&*paths[i].pending_left_reserves().to_string()).unwrap(),
+            U512::from_dec_str(&*paths[i].pending_right_reserves().to_string()).unwrap(),
         ));
     }
     return amounts;
@@ -87,8 +87,8 @@ pub fn get_amounts_in(amountOut: U512, paths: &Vec<Arc<CryptoPair>>) -> [U512; 1
         );
         amounts[i - 1] = get_amount_in(
             amounts[i],
-            U512::from_dec_str(&*paths[i].right_reserves().to_string()).unwrap(),
-            U512::from_dec_str(&*paths[i].left_reserves().to_string()).unwrap(),
+            U512::from_dec_str(&*paths[i].pending_right_reserves().to_string()).unwrap(),
+            U512::from_dec_str(&*paths[i].pending_left_reserves().to_string()).unwrap(),
         );
     }
     return amounts;

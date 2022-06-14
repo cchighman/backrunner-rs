@@ -18,16 +18,20 @@ use std::io::{Read, Write};
 use std::sync::Arc;
 
 use async_std::prelude::*;
+//use backrunner_rs::two_path_sequence::{is_arbitrage_pair,cyclic_order};
 use ethers::prelude::Address;
 use futures_util::{FutureExt, TryFutureExt};
 use itertools::Itertools;
 use rayon::prelude::*;
 
-use arbitrage_path::ArbitragePath;
+
 use crypto_pair::{CryptoPair, CryptoPairs};
 use utils::uniswapv2_utils::{populate_sushiswap_pairs, populate_uniswapv2_pairs};
+use color_eyre::{eyre::eyre, eyre::Report, Section};
 
-use crate::three_path_sequence::{cyclic_order, is_arbitrage_pair};
+use std::any::Any;
+
+use backrunner_rs::three_path_sequence::{cyclic_order as other_cyclic_order, is_arbitrage_pair as other_is_arbitrage_pair};
 pub mod uniswap_providers;
 pub mod arb_signal;
 pub mod arb_thread_pool;
@@ -42,11 +46,15 @@ pub mod graphql_uniswapv2;
 pub mod graphql_uniswapv3;
 pub mod sequence_token;
 pub mod swap_route;
+pub mod two_path_sequence;
 pub mod three_path_sequence;
 pub mod uniswap_transaction;
 pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
 pub mod utils;
+pub mod path_sequence;
+pub mod path_sequence_factory;
+
 
 /*
    Grafana API Key: eyJrIjoiVjY3bzNoWTFnTTNyTUpCVXRoUUJxcXZPTXJGbE1nVmUiLCJuIjoiYmFja3J1bm5lciIsImlkIjoxfQ==
@@ -63,12 +71,13 @@ pub mod utils;
 RUSTFLAGS="-C target-cpu=native" cargo build --release
      */
 
+
 #[allow(dead_code)]
 #[async_std::main]
-async fn main() {
+async fn main()->Result<(), Report> {
     let args: Vec<String> = env::args().collect();
-
-    tracing_subscriber::fmt::init();
+    color_eyre::install()?;
+  
     /*
     TODO
     1.) Populate paths from GraphQL
@@ -79,7 +88,7 @@ async fn main() {
 
     let mut crypto_pairs: HashMap<Address, Arc<CryptoPair>> = HashMap::new();
     let mut crypto_pairs_unsafe: HashMap<Address, CryptoPair> = HashMap::new();
-    let mut arb_paths: Vec<Arc<ArbitragePath>> = Default::default();
+    let mut arb_paths: Vec<Arc<(dyn Any + 'static + Sync + Send)>> = Default::default();
 
     println!("Test - ");
     /* 1.) Populate a map of all possible crypto pairs */
@@ -107,7 +116,9 @@ async fn main() {
             y.push(crypto_paths[0].clone());
             y.push(crypto_paths[1].clone());
             y.push(crypto_paths[2].clone());
-            if is_arbitrage_pair(&y) {
+
+            if three_path_sequence::is_arbitrage_pair(&y) {
+                println!("{}-{}", crypto_paths[0].pair_symbol(), crypto_paths[1].pair_symbol());
                 let mut y_2 = Vec::default();
                 y_2.push(crypto_paths[0].clone());
                 y_2.push(crypto_paths[1].clone());
@@ -116,7 +127,7 @@ async fn main() {
             }
         });
         println!("ser_pairs: {}", ser_pairs.pairs.len());
-        let file = File::create("pairs.json").unwrap();
+        let file = File::create("pairs_2_500.json").unwrap();
         let mut writer = BufWriter::new(file);
 
         serde_json::to_writer(&mut writer, &ser_pairs).unwrap();
@@ -126,10 +137,10 @@ async fn main() {
     if args.contains(&"run".to_string()) || args.len() == 1 {
         println!("Running..");
         /* Read Pairs from file */
-        let path = if args.len() > 2 && !args.contains(&"RUST_BACKTRACE=1".to_string()) {
+        let path = if args.len() > 2 && !args.contains(&"RUST_BACKTRACE=full".to_string()) {
             args[1].clone().to_string()
         } else {
-            "pairs_new.json".clone().to_string()
+            "pairs_2_500.json".clone().to_string()
         };
         println!("path: {}", path.clone());
         let file = File::open(path).unwrap();
@@ -157,12 +168,10 @@ async fn main() {
         Next we want to create arbitrage paths based on the contents of the serialized vector, except we will instead look to the map map above for references.
          */
         for unordered_pair in cached_pairs.pairs {
-            let sequence = cyclic_order(unordered_pair.clone(), &crypto_pairs)
+            let sequence = path_sequence_factory::create(unordered_pair.clone(), &crypto_pairs)
                 .await
                 .unwrap();
-            let arb_path = ArbitragePath::new(sequence);
-            arb_path.init(arb_path.clone()).await;
-            arb_paths.push(arb_path);
+            arb_paths.push(sequence);
         }
 
         println!("pairs: {}, paths: {}", &crypto_pairs.len(), arb_paths.len());
@@ -182,3 +191,4 @@ async fn main() {
         println!("Simulated Pair Updated.");
     }
 }
+

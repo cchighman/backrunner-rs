@@ -2,10 +2,8 @@ use std::borrow::Borrow;
 use std::collections::HashMap;
 use std::string::String;
 use std::sync::Arc;
-
-use crate::arbitrage_path::ArbitragePath;
 use crate::crypto_pair::CryptoPair;
-
+/* 
 impl ArbitragePaths {
     pub fn new() -> ArbitragePaths {
         ArbitragePaths {}
@@ -320,3 +318,4 @@ impl ArbitragePaths {
 pub struct ArbitragePaths {}
 
 pub struct Intolterator {}
+*/

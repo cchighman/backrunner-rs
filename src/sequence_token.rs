@@ -35,12 +35,20 @@ impl SequenceToken {
         &self.id
     }
 
-    pub fn get_reserve(&self) -> U256 {
-        self.token.get_reserve(self.token_direction.clone())
+    pub fn get_pending_reserve(&self) -> U256 {
+        self.token.get_pending_reserve(self.token_direction.clone())
     }
 
-    pub fn get_signal(&self) -> MutableSignal<U256> {
-        self.token.get_signal(self.token_direction.clone())
+    pub fn get_confirmed_reserve(&self) -> U256 {
+        self.token.get_confirmed_reserve(self.token_direction.clone())
+    }
+
+    pub fn get_pending_signal(&self) -> MutableSignal<U256> {
+        self.token.get_pending_signal(self.token_direction.clone())
+    }
+
+    pub fn get_confirmed_signal(&self) -> MutableSignal<U256> {
+        self.token.get_confirmed_signal(self.token_direction.clone())
     }
 
     pub fn get_decimal(&self) -> i32 {

@@ -30,6 +30,7 @@ graphql_client = { version="*", features = ["reqwest-blocking"] }
 #moka = "*"
 futures-signals = "*"
 #eventbus = "*"
+async-trait = "*"
 #criterion = "*"
 num-bigint ={ version = "*", features = ["serde"] }
 bigdecimal = { version = "*", features = ["serde"] }
@@ -54,5 +55,5 @@ lazy_static = "*"
 ethers = {version = "*", features = ["ws","abigen"]}
 libmath = "*"
 url = "*"
-
+color-eyre = "0.6.1"
 stream-cancel ="*"
