@@ -13,11 +13,12 @@
 use std::collections::HashMap;
 use std::env;
 use std::fs::File;
-use std::io::{BufReader, BufWriter};
+use std::io::{BufReader, BufWriter, stdout};
 use std::io::{Read, Write};
 use std::sync::Arc;
 
 use async_std::prelude::*;
+use curl::easy::List;
 //use backrunner_rs::two_path_sequence::{is_arbitrage_pair,cyclic_order};
 use ethers::prelude::Address;
 use futures_util::{FutureExt, TryFutureExt};
@@ -68,8 +69,28 @@ pub mod path_sequence_factory;
      Discord Client Secret: lREE9D8B7qrKsyfqJQqkegNrPhTCGsa2
      Discord Invite Link: https://discord.com/api/oauth2/authorize?client_id=982459497320689684&permissions=8&redirect_uri=http%3A%2F%2Fwww.google.com&response_type=code&scope=identify%20email%20rpc.notifications.read%20rpc%20gdm.join%20guilds.members.read%20guilds.join%20connections%20guilds%20rpc.activities.write%20rpc.voice.write%20rpc.voice.read%20bot%20webhook.incoming%20messages.read%20applications.builds.upload%20applications.builds.read%20dm_channels.read%20voice%20relationships.read%20activities.write%20activities.read%20applications.entitlements%20applications.store.update%20applications.commands
      Discord Webhook URL: https://discord.com/api/webhooks/982463881354035241/6XmX7RP90l1LW50WrLSsgnJPAQNM0Woqa2pG7Kk693ujqGQYdMr9jHoClgU6MmJXrpI0
-RUSTFLAGS="-C target-cpu=native" cargo build --release
-     */
+    RUSTFLAGS="-C target-cpu=native" cargo build --release
+    New token created
+    Key:
+    59877d4b-3f52-4df2-95e4-e03da24954cd
+    Secret:
+    JxTuoYxDo0QJ
+    To configure relay CLI, run the following command:
+    relay login -k 59877d4b-3f52-4df2-95e4-e03da24954cd -s JxTuoYxDo0QJ
+    To use credentials as an environment variables:
+                
+    export RELAY_KEY=59877d4b-3f52-4df2-95e4-e03da24954cd
+    export RELAY_SECRET=JxTuoYxDo0QJ
+
+                
+    To create Kubernetes Secret:
+                
+    kubectl create secret generic whr-credentials \
+        --from-literal=key=59877d4b-3f52-4df2-95e4-e03da24954cd \
+        --from-literal=secret=JxTuoYxDo0QJ
+    Webhook:  https://mvdugj7gh2ansfe4jhz65z.hooks.webhookrelay.com
+    BlockNative Key: 3b21bf22-0a3e-4908-9b2f-c9ac37c31b7b  - secret: 5e0323d1-80bc-4ec3-a8dc-25cab8ff0706
+*/
 
 
 #[allow(dead_code)]
@@ -110,6 +131,11 @@ async fn main()->Result<(), Report> {
         let mut new_vec: Vec<Vec<CryptoPair>> = Vec::default();
         let mut ser_pairs = CryptoPairs { pairs: new_vec };
 
+        use serde_json::{json, Value};
+        let addy = "test";
+        use std::collections::HashSet;
+        let mut r: HashSet<Address> = Default::default();
+
         t.iter().for_each(|crypto_paths| {
             let mut y = Vec::default();
 
@@ -118,14 +144,47 @@ async fn main()->Result<(), Report> {
             y.push(crypto_paths[2].clone());
 
             if three_path_sequence::is_arbitrage_pair(&y) {
-                println!("{}-{}", crypto_paths[0].pair_symbol(), crypto_paths[1].pair_symbol());
+                println!("{}-{:.?} {}-{:.?} {}-{:.?}", crypto_paths[0].pair_symbol(), crypto_paths[0].pair_id(), crypto_paths[1].pair_symbol(), crypto_paths[1].pair_id(), crypto_paths[2].pair_symbol(), crypto_paths[2].pair_id());
                 let mut y_2 = Vec::default();
                 y_2.push(crypto_paths[0].clone());
                 y_2.push(crypto_paths[1].clone());
                 y_2.push(crypto_paths[2].clone());
-                ser_pairs.pairs.push(y_2);
-            }
+
+       
+                    r.insert(crypto_paths[0].pair_id().clone());                    
+                    r.insert(crypto_paths[1].pair_id().clone());
+                    r.insert(crypto_paths[2].pair_id().clone());
+                    ser_pairs.pairs.push(y_2);
+            }        
         });
+    
+    for a in r {
+    
+    let watch_addy = json!({"apiKey":"3b21bf22-0a3e-4908-9b2f-c9ac37c31b7b","address": a,"blockchain":"ethereum","networks":["main"]});
+
+    use curl::easy::Easy;
+    let mut easy = Easy::new();
+    
+    easy.url("https://api.blocknative.com/address").unwrap();
+    easy.post(true).unwrap();
+    let mut list = List::new();
+    list.append("Content-type: application/json").unwrap();
+    easy.http_headers(list).unwrap();
+    easy.post_field_size(watch_addy.to_string().as_bytes().len() as u64).unwrap();
+
+    let mut transfer = easy.transfer();
+    transfer.write_function(|data| {
+        stdout().write_all(data).unwrap();
+        Ok(data.len())
+    })?;
+
+    transfer.read_function(|buf| {
+    Ok(std::io::Read::read(&mut watch_addy.to_string().as_bytes(), buf).unwrap_or(0))
+    }).unwrap();
+    transfer.perform().unwrap();
+    
+    }
+
         println!("ser_pairs: {}", ser_pairs.pairs.len());
         let file = File::create("pairs_2_500.json").unwrap();
         let mut writer = BufWriter::new(file);

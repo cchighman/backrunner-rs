@@ -40,6 +40,7 @@ clap = { version = "3.1.18", features = ["derive"] }
 log = "^0.4"
 sim = "*"
 env_logger = "^0.5"
+curl = { version = "*", features = ["ssl"]}
 dashmap = "*"
 crypto-bigint = "*"
 itertools = "0.10.3"
@@ -48,11 +49,11 @@ itertools = "0.10.3"
 # sage - knowledge graph
 #asyncplusplus= "*"
 #thread_id = "*"
-num-rational = "*"
+num-rational = { version = "*", features = ["serde"]}
 num-traits = "*"
 ethabi = "*"
 lazy_static = "*"
-ethers = {version = "*", features = ["ws","abigen"]}
+ethers = {version = "*", features = ["ws","abigen", "openssl"]}
 libmath = "*"
 url = "*"
 color-eyre = "0.6.1"

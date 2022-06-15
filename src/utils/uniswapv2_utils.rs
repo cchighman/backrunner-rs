@@ -14,7 +14,6 @@ pub async fn uniswapv2_unpack_pairs(
     dex: String,
     router: Address,
 ) {
-    dbg!(&router);
     for pair in pairs.data.unwrap().pairs {
         let uni_pair = DexPool {
             token0: UniswapPairsPairsTokens {
@@ -79,3 +78,4 @@ pub async fn populate_sushiswap_pairs(pair_map: &mut HashMap<Address, CryptoPair
     )
     .await;
 }
+

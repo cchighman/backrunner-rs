@@ -51,6 +51,10 @@ pub static client: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>
 pub static infura_provider_http: Lazy<Provider::<Http>> = 
     Lazy::new(|| Provider::<Http>::try_from("https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3").unwrap());
 
+/* 
+pub static infura_provider_wss: Lazy<Provider::<Ws>> = 
+    Lazy::new(|| Provider::<Ws>::connect("wss://mainnet.infura.io/ws/v3/20ca45667c5d4fa6b259b9a36babe5c3"));
+*/
 
 pub static router_v2: Lazy<Address> = Lazy::new(|| Address::from_str("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D").unwrap());
 pub static flash_contract: Lazy<Address> = Lazy::new(|| Address::from_str("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D").unwrap());
