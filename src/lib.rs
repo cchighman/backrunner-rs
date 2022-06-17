@@ -30,6 +30,7 @@ pub mod two_path_sequence;
 pub mod path_sequence;
 pub mod path_sequence_factory;
 pub mod pending_tx_monitor;
+pub mod transaction_log_utils;
 
 use crate::three_path_sequence::ThreePathSequence;
 use crate::two_path_sequence::TwoPathSequence;
