@@ -28,6 +28,12 @@
     // https://goerli.infura.io/v3/0ab0b9c9d5bf44818399aea45b5ade51
     // wss://goerli.infura.io/ws/v3/0ab0b9c9d5bf44818399aea45b5ade51
 
+    // Alchemy Mainnet - Trace / Debug APIs
+    // API Key: EcNibd4j6LaA9r9pJJRkyAVRvZ_MvKk7
+    // https://eth-mainnet.alchemyapi.io/v2/EcNibd4j6LaA9r9pJJRkyAVRvZ_MvKk7
+    // wss://eth-mainnet.alchemyapi.io/v2/EcNibd4j6LaA9r9pJJRkyAVRvZ_MvKk7
+
+
 pub mod mainnet {
        use super::*;
     
@@ -46,8 +52,13 @@ pub static flashbots_bundle_signer: Lazy<Wallet<SigningKey>> = Lazy::new(|| priv
 
 pub static wallet: Lazy<Wallet<SigningKey>> = Lazy::new(|| private_key.parse::<LocalWallet>().unwrap().with_chain_id(1u64));
 
+/* Clients */
 pub static client: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>> = Lazy::new(|| Arc::new(SignerMiddleware::new(infura_provider_http.clone(), wallet.clone())));
+pub static alchemy_http_client: Lazy<Arc<SignerMiddleware<Provider<Http>, Wallet<SigningKey>>>> = Lazy::new(|| Arc::new(SignerMiddleware::new(infura_provider_http.clone(), wallet.clone())));
 
+/* Providers */
+pub static alchemy_provider_http: Lazy<Provider::<Http>> = 
+    Lazy::new(|| Provider::<Http>::try_from("https://eth-mainnet.alchemyapi.io/v2/EcNibd4j6LaA9r9pJJRkyAVRvZ_MvKk7").unwrap());
 pub static infura_provider_http: Lazy<Provider::<Http>> = 
     Lazy::new(|| Provider::<Http>::try_from("https://mainnet.infura.io/v3/20ca45667c5d4fa6b259b9a36babe5c3").unwrap());
 
