@@ -11,7 +11,7 @@ use super::uniswap_providers::*;
 
 
 
-pub fn get_valid_timestamp(future_millis: U256) -> U256 {
+pub fn valid_timestamp(future_millis: U256) -> U256 {
     let start = SystemTime::now();
     let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
     let time_millis = since_epoch
@@ -129,7 +129,7 @@ pub fn test() {
             Address::from_str("0xc778417E063141139Fce010982780140Aa0cD5Ab").unwrap(),
             Address::from_str("0x110a13FC3efE6A245B50102D2d79B3E76125Ae83").unwrap(),
         ];
-        let timestamp = get_valid_timestamp(U256::from(30000));
+        let timestamp = valid_timestamp(U256::from(30000));
         /* Amount out is amount we want then multiply by 10^(decimals) */
         let call = router_contract.swap_tokens_for_exact_tokens(
             U256::from_dec_str("1").unwrap(),
@@ -143,14 +143,14 @@ pub fn test() {
         let result = call.send().await.unwrap().await.unwrap();
         dbg!("Timestamp:  {#:?}", timestamp);
         dbg!("Result:  {#:?}", result);
-        let reserves = pair_contract.get_reserves().call().await.unwrap();
+        let reserves = pair_contract.reserves().call().await.unwrap();
 
         let amount_in =
-            router_contract.get_amounts_in(U256::from_dec_str("1").unwrap(), path.clone());
+            router_contract.amounts_in(U256::from_dec_str("1").unwrap(), path.clone());
 
         let amt = amount_in.call().await.unwrap();
         let amount_out =
-            router_contract.get_amounts_out(U256::from_dec_str("130").unwrap(), path.clone());
+            router_contract.amounts_out(U256::from_dec_str("130").unwrap(), path.clone());
 
         let amt1 = amount_out.call().await.unwrap();
         dbg!(

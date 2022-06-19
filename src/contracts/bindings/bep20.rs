@@ -27,7 +27,7 @@ impl Bep20Token {
     ) -> Bep20Token {
         Bep20Token {
             token_contract_address: token_contract_address.clone(),
-            token_contract: util::Util::get_contract(
+            token_contract: util::Util::contract(
                 &token_contract_address,
                 &token_contract_abi_path,
                 provider.clone(),
@@ -37,7 +37,7 @@ impl Bep20Token {
     }
 
     #[instrument]
-    pub async fn get_name(&self) -> String {
+    pub async fn name(&self) -> String {
         self.token_contract
             .method::<_, String>("name", ())
             .unwrap()
@@ -47,7 +47,7 @@ impl Bep20Token {
     }
 
     #[instrument]
-    pub async fn get_symbol(&self) -> String {
+    pub async fn symbol(&self) -> String {
         self.token_contract
             .method::<_, String>("symbol", ())
             .unwrap()
@@ -57,7 +57,7 @@ impl Bep20Token {
     }
 
     #[instrument]
-    pub async fn get_balance(&self, address: &str) -> U256 {
+    pub async fn balance(&self, address: &str) -> U256 {
         self.token_contract
             .method::<_, U256>("balanceOf", Address::from_str(address).unwrap())
             .unwrap()
@@ -67,7 +67,7 @@ impl Bep20Token {
     }
 
     #[instrument]
-    pub async fn get_decimals(&self) -> I256 {
+    pub async fn decimals(&self) -> I256 {
         self.token_contract
             .method::<_, I256>("decimals", ())
             .unwrap()
@@ -77,7 +77,7 @@ impl Bep20Token {
     }
 
     #[instrument]
-    pub async fn get_total_supply(&self) -> U256 {
+    pub async fn total_supply(&self) -> U256 {
         self.token_contract
             .method::<_, U256>("totalSupply", ())
             .unwrap()
@@ -87,7 +87,7 @@ impl Bep20Token {
     }
 
     #[instrument]
-    pub async fn get_spend_allowance(&self, owner: &str, spender: Address) -> U256 {
+    pub async fn spend_allowance(&self, owner: &str, spender: Address) -> U256 {
         self.token_contract
             .method::<_, U256>(
                 "allowance",
@@ -138,7 +138,7 @@ impl Bep20Token {
     }
 
     #[instrument]
-    pub fn get_token_address(&self) -> &Address {
+    pub fn token_address(&self) -> &Address {
         &self.token_contract_address
     }
 }

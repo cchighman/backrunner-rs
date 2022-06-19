@@ -68,7 +68,7 @@ impl<Factory> PoolInfoFetcher<Factory> {
 
     /// Retrieves the scaling exponents for the specified tokens.
     async fn scaling_exponents(&self, tokens: &[H160]) -> Result<Vec<u8>> {
-        let token_infos = self.token_infos.get_token_infos(tokens).await;
+        let token_infos = self.token_infos.token_infos(tokens).await;
         tokens
             .iter()
             .map(|token| {
@@ -89,11 +89,11 @@ impl<Factory> PoolInfoFetcher<Factory> {
     ) -> Result<PoolInfo> {
         let pool = self.base_pool_at(pool_address);
 
-        let pool_id = H256(pool.methods().get_pool_id().call().await?.0);
+        let pool_id = H256(pool.methods().pool_id().call().await?.0);
         let (tokens, _, _) = self
             .vault
             .methods()
-            .get_pool_tokens(Bytes(pool_id.0))
+            .pool_tokens(Bytes(pool_id.0))
             .call()
             .await?;
         let scaling_exponents = self.scaling_exponents(&tokens).await?;
@@ -115,16 +115,16 @@ impl<Factory> PoolInfoFetcher<Factory> {
     ) -> BoxFuture<'static, Result<PoolState>> {
         let pool_contract = self.base_pool_at(pool.address);
         let paused = pool_contract
-            .get_paused_state()
+            .paused_state()
             .block(block)
             .batch_call(batch);
         let swap_fee = pool_contract
-            .get_swap_fee_percentage()
+            .swap_fee_percentage()
             .block(block)
             .batch_call(batch);
         let balances = self
             .vault
-            .get_pool_tokens(Bytes(pool.id.0))
+            .pool_tokens(Bytes(pool.id.0))
             .block(block)
             .batch_call(batch);
 
@@ -370,18 +370,18 @@ mod tests {
         let web3 = mock.web3();
 
         let pool = mock.deploy(BalancerV2BasePool::raw_contract().abi.clone());
-        pool.expect_call(BalancerV2BasePool::signatures().get_pool_id())
+        pool.expect_call(BalancerV2BasePool::signatures().pool_id())
             .returns(Bytes(pool_id.0));
 
         let vault = mock.deploy(BalancerV2Vault::raw_contract().abi.clone());
         vault
-            .expect_call(BalancerV2Vault::signatures().get_pool_tokens())
+            .expect_call(BalancerV2Vault::signatures().pool_tokens())
             .predicate((predicate::eq(Bytes(pool_id.0)),))
             .returns((tokens.to_vec(), vec![], U256::zero()));
 
         let mut token_infos = MockTokenInfoFetching::new();
         token_infos
-            .expect_get_token_infos()
+            .expect_token_infos()
             .withf(move |t| t == tokens)
             .returning(move |_| {
                 hashmap! {
@@ -424,14 +424,14 @@ mod tests {
         let web3 = mock.web3();
 
         let pool = mock.deploy(BalancerV2BasePool::raw_contract().abi.clone());
-        pool.expect_call(BalancerV2BasePool::signatures().get_paused_state())
+        pool.expect_call(BalancerV2BasePool::signatures().paused_state())
             .returns((false, 0.into(), 0.into()));
-        pool.expect_call(BalancerV2BasePool::signatures().get_swap_fee_percentage())
+        pool.expect_call(BalancerV2BasePool::signatures().swap_fee_percentage())
             .returns(bfp!("0.003").as_uint256());
 
         let vault = mock.deploy(BalancerV2Vault::raw_contract().abi.clone());
         vault
-            .expect_call(BalancerV2Vault::signatures().get_pool_tokens())
+            .expect_call(BalancerV2Vault::signatures().pool_tokens())
             .predicate((predicate::eq(Bytes(pool_id.0)),))
             .returns((
                 tokens.to_vec(),
@@ -496,14 +496,14 @@ mod tests {
         let web3 = mock.web3();
 
         let pool = mock.deploy(BalancerV2BasePool::raw_contract().abi.clone());
-        pool.expect_call(BalancerV2BasePool::signatures().get_paused_state())
+        pool.expect_call(BalancerV2BasePool::signatures().paused_state())
             .returns((false, 0.into(), 0.into()));
-        pool.expect_call(BalancerV2BasePool::signatures().get_swap_fee_percentage())
+        pool.expect_call(BalancerV2BasePool::signatures().swap_fee_percentage())
             .returns(0.into());
 
         let vault = mock.deploy(BalancerV2Vault::raw_contract().abi.clone());
         vault
-            .expect_call(BalancerV2Vault::signatures().get_pool_tokens())
+            .expect_call(BalancerV2Vault::signatures().pool_tokens())
             .predicate((predicate::eq(Bytes(Default::default())),))
             .returns((
                 vec![H160([1; 20]), H160([4; 20])],
@@ -548,9 +548,9 @@ mod tests {
         let web3 = mock.web3();
 
         let pool = mock.deploy(BalancerV2WeightedPool::raw_contract().abi.clone());
-        pool.expect_call(BalancerV2WeightedPool::signatures().get_paused_state())
+        pool.expect_call(BalancerV2WeightedPool::signatures().paused_state())
             .returns((false, 0.into(), 0.into()));
-        pool.expect_call(BalancerV2WeightedPool::signatures().get_swap_fee_percentage())
+        pool.expect_call(BalancerV2WeightedPool::signatures().swap_fee_percentage())
             .returns(swap_fee.as_uint256());
 
         let pool_info = weighted::PoolInfo {
@@ -592,7 +592,7 @@ mod tests {
 
         let vault = mock.deploy(BalancerV2Vault::raw_contract().abi.clone());
         vault
-            .expect_call(BalancerV2Vault::signatures().get_pool_tokens())
+            .expect_call(BalancerV2Vault::signatures().pool_tokens())
             .predicate((predicate::eq(Bytes(pool_info.common.id.0)),))
             .returns((
                 pool_info.common.tokens.clone(),
@@ -649,14 +649,14 @@ mod tests {
         let web3 = mock.web3();
 
         let pool = mock.deploy(BalancerV2WeightedPool::raw_contract().abi.clone());
-        pool.expect_call(BalancerV2WeightedPool::signatures().get_paused_state())
+        pool.expect_call(BalancerV2WeightedPool::signatures().paused_state())
             .returns((true, 0.into(), 0.into()));
-        pool.expect_call(BalancerV2WeightedPool::signatures().get_swap_fee_percentage())
+        pool.expect_call(BalancerV2WeightedPool::signatures().swap_fee_percentage())
             .returns(Default::default());
 
         let vault = mock.deploy(BalancerV2Vault::raw_contract().abi.clone());
         vault
-            .expect_call(BalancerV2Vault::signatures().get_pool_tokens())
+            .expect_call(BalancerV2Vault::signatures().pool_tokens())
             .returns(Default::default());
 
         let mut factory = MockFactoryIndexing::new();
@@ -711,14 +711,14 @@ mod tests {
         let web3 = mock.web3();
 
         let pool = mock.deploy(BalancerV2WeightedPool::raw_contract().abi.clone());
-        pool.expect_call(BalancerV2WeightedPool::signatures().get_paused_state())
+        pool.expect_call(BalancerV2WeightedPool::signatures().paused_state())
             .returns((false, 0.into(), 0.into()));
-        pool.expect_call(BalancerV2WeightedPool::signatures().get_swap_fee_percentage())
+        pool.expect_call(BalancerV2WeightedPool::signatures().swap_fee_percentage())
             .returns(Default::default());
 
         let vault = mock.deploy(BalancerV2Vault::raw_contract().abi.clone());
         vault
-            .expect_call(BalancerV2Vault::signatures().get_pool_tokens())
+            .expect_call(BalancerV2Vault::signatures().pool_tokens())
             .returns(Default::default());
 
         let mut factory = MockFactoryIndexing::new();
@@ -765,7 +765,7 @@ mod tests {
     async fn scaling_exponent_error_on_missing_info() {
         let mut token_infos = MockTokenInfoFetching::new();
         token_infos
-            .expect_get_token_infos()
+            .expect_token_infos()
             .returning(|_| hashmap! {});
 
         let pool_info_fetcher = PoolInfoFetcher {
@@ -783,7 +783,7 @@ mod tests {
     async fn scaling_exponent_error_on_missing_decimals() {
         let token = H160([0xff; 20]);
         let mut token_infos = MockTokenInfoFetching::new();
-        token_infos.expect_get_token_infos().returning(move |_| {
+        token_infos.expect_token_infos().returning(move |_| {
             hashmap! {
                 token => TokenInfo { decimals: None, symbol: None },
             }

@@ -11,13 +11,13 @@ use num_traits::{FromPrimitive, Pow, ToPrimitive, Zero};
 use crate::crypto_pair::CryptoPair;
 
 // given an input amount of an asset and pair reserves, returns the maximum output amount of the other asset
-pub fn get_amount_out(amountIn: U512, reserveIn: U512, reserveOut: U512) -> U512 {
+pub fn amount_out(amountIn: U512, reserveIn: U512, reserveOut: U512) -> U512 {
     let amountInWithFee = amountIn.mul(U512::from(997));
     let numerator: U512 = amountInWithFee.mul(reserveOut);
     let denominator: U512 = reserveIn.mul(U512::from(1000)).add(amountInWithFee);
     /*
     println!(
-        "get_amount_out - numerator: {}  denominator: {}  ratio: {}",
+        "amount_out - numerator: {}  denominator: {}  ratio: {}",
         numerator,
         denominator,
         numerator / denominator
@@ -27,11 +27,11 @@ pub fn get_amount_out(amountIn: U512, reserveIn: U512, reserveOut: U512) -> U512
 }
 
 // given an output amount of an asset and pair reserves, returns a required input amount of the other asset
-pub fn get_amount_in(amountOut: U512, reserveIn: U512, reserveOut: U512) -> U512 {
+pub fn amount_in(amountOut: U512, reserveIn: U512, reserveOut: U512) -> U512 {
     let numerator = reserveIn * amountOut * 1000;
     /*
         println!(
-            "get_amount_in - amountOut: {}  reserveIn: {}  reserveOut: {}",
+            "amount_in - amountOut: {}  reserveIn: {}  reserveOut: {}",
             amountOut, reserveIn, reserveOut
         );
     */
@@ -42,7 +42,7 @@ pub fn get_amount_in(amountOut: U512, reserveIn: U512, reserveOut: U512) -> U512
     let denom: U512 = denominator.unwrap().mul(997);
     /*
     println!(
-        "get_amount_in - numerator: {}  denominator: {}  ratio: {}",
+        "amount_in - numerator: {}  denominator: {}  ratio: {}",
         numerator,
         denom,
         numerator / denom
@@ -52,19 +52,19 @@ pub fn get_amount_in(amountOut: U512, reserveIn: U512, reserveOut: U512) -> U512
     return numerator / denom;
 }
 
-pub fn get_amounts_out(amountIn: U512, paths: &Vec<Arc<CryptoPair>>) -> Vec<U512> {
+pub fn amounts_out(amountIn: U512, paths: &Vec<Arc<CryptoPair>>) -> Vec<U512> {
     let mut amounts = Vec::new();
 
     amounts.push(amountIn);
     for i in 0..paths.len() {
         /*
         println!(
-            "get_amounts_out - pair - left: {}  right: {}",
+            "amounts_out - pair - left: {}  right: {}",
             paths[i].left_id(),
             paths[i].right_id()
         );
         */
-        amounts.push(get_amount_out(
+        amounts.push(amount_out(
             amounts[i],
             U512::from_dec_str(&*paths[i].pending_left_reserves().to_string()).unwrap(),
             U512::from_dec_str(&*paths[i].pending_right_reserves().to_string()).unwrap(),
@@ -73,19 +73,19 @@ pub fn get_amounts_out(amountIn: U512, paths: &Vec<Arc<CryptoPair>>) -> Vec<U512
     return amounts;
 }
 
-pub fn get_amounts_in(amountOut: U512, paths: &Vec<Arc<CryptoPair>>) -> [U512; 10] {
-    println!("get_amounts_in -");
+pub fn amounts_in(amountOut: U512, paths: &Vec<Arc<CryptoPair>>) -> [U512; 10] {
+    println!("amounts_in -");
     let mut amounts: [U512; 10] = [U512::zero(); 10];
 
     amounts[paths.len() - 1] = amountOut;
     for i in (0..paths.len()).rev() {
         println!(
-            "get_amounts_in - pair - left: {}  right: {} i: {}",
+            "amounts_in - pair - left: {}  right: {} i: {}",
             paths[i].left_id(),
             paths[i].right_id(),
             i
         );
-        amounts[i - 1] = get_amount_in(
+        amounts[i - 1] = amount_in(
             amounts[i],
             U512::from_dec_str(&*paths[i].pending_right_reserves().to_string()).unwrap(),
             U512::from_dec_str(&*paths[i].pending_left_reserves().to_string()).unwrap(),
@@ -293,11 +293,11 @@ pub fn test_compute_profit_trade() {
     println!("Result: {}", result.unwrap().1);
 }
 
-pub fn get_amount_out_2(amount_out: f64, reserve_in: f64, reserve_out: f64) -> f64 {
+pub fn amount_out_2(amount_out: f64, reserve_in: f64, reserve_out: f64) -> f64 {
     return (0.997 * amount_out * reserve_in / (reserve_out - amount_out * 0.997)).add(1.0);
 }
 
-pub fn get_amount_in_2(amount_out: f64, reserve_in: f64, reserve_out: f64) -> f64 {
+pub fn amount_in_2(amount_out: f64, reserve_in: f64, reserve_out: f64) -> f64 {
     return (0.997 * amount_out * reserve_in / (reserve_out - amount_out * 0.997)).add(1.0);
 }
 
@@ -502,7 +502,7 @@ pub fn test() {
         U512::from_dec_str("173104761817512388434611").unwrap(),
         U512::from_dec_str("398580838174598015836773").unwrap(),
     );
-    let r = get_amount_out(
+    let r = amount_out(
         "1871429067395935300".parse().unwrap(),
         "1842208280352161713545".parse().unwrap(),
         "1930853909833275722".parse().unwrap(),
@@ -543,9 +543,6 @@ pub fn reserves_to_amount(reserve0: u128, decimal0: i32, reserve1: u128, decimal
     return f64::powi(10.0, (decimal0 - decimal1).abs()) * reserve1 as f64 / reserve0 as f64;
 }
 
-pub fn amount_to_reserves(reserve0: u128, decimal0: i32, reserve1: u128, decimal1: i32) -> f64 {
-    return f64::powi(10.0, (decimal0 - decimal1).abs()) * reserve1 as f64 / reserve0 as f64;
-}
 
 #[test]
 fn test1() {
@@ -608,8 +605,8 @@ fn test1() {
         before_arb_sushi_1.clone(),
     );*/
     println!(
-        "get_amount_out: 1.94 WETH for {} ALPHA",
-        get_amount_out_2(
+        "amount_out: 1.94 WETH for {} ALPHA",
+        amount_out_2(
             34107.0,
             before_arb_sushi_0.to_string().parse::<f64>().unwrap(),
             before_arb_sushi_1.to_string().parse::<f64>().unwrap()
@@ -618,8 +615,8 @@ fn test1() {
     );
 
     println!(
-        "get_amount_in: {} ALPHA for 3.23 WETH",
-        get_amount_in_2(
+        "amount_in: {} ALPHA for 3.23 WETH",
+        amount_in_2(
             1.94,
             before_arb_sushi_0.to_string().parse::<f64>().unwrap(),
             before_arb_sushi_1.to_string().parse::<f64>().unwrap()

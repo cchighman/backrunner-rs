@@ -1,5 +1,6 @@
 use bigdecimal::BigDecimal;
-use num::{BigInt, BigRational};
+use num_bigint::BigInt;
+use num_rational::BigRational;
 use serde::{de, Deserialize, Deserializer, Serializer};
 use serde_with::{DeserializeAs, SerializeAs};
 use std::{borrow::Cow, convert::TryInto, str::FromStr};
@@ -47,7 +48,7 @@ where
         })?;
     let (x, exp) = big_decimal.into_bigint_and_exponent();
     let numerator_bytes = x.to_bytes_le();
-    let base = num::bigint::BigInt::from_bytes_le(numerator_bytes.0, &numerator_bytes.1);
+    let base = BigInt::from_bytes_le(numerator_bytes.0, &numerator_bytes.1);
     let ten = BigRational::new(10.into(), 1.into());
     let numerator = BigRational::new(base, 1.into());
     Ok(numerator

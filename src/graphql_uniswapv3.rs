@@ -15,7 +15,7 @@ pub type BigInt = String;
 pub struct UniswapPools;
 
 //noinspection ALL
-pub fn get_pools(
+pub fn pools(
     endpoint: &str,
 ) -> std::result::Result<Response<uniswap_pools::ResponseData>, reqwest::Error> {
     let client = Client::builder()

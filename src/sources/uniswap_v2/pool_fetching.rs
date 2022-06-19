@@ -70,8 +70,8 @@ impl Pool {
 
     /// Given an input amount and token, returns the maximum output amount and address of the other asset.
     /// Returns None if operation not possible due to arithmetic issues (e.g. over or underflow)
-    fn get_amount_out(&self, token_in: H160, amount_in: U256) -> Option<(U256, H160)> {
-        let (reserve_in, reserve_out, token_out) = self.get_relative_reserves(token_in);
+    fn amount_out(&self, token_in: H160, amount_in: U256) -> Option<(U256, H160)> {
+        let (reserve_in, reserve_out, token_out) = self.relative_reserves(token_in);
         Some((
             self.amount_out(amount_in, reserve_in, reserve_out)?,
             token_out,
@@ -80,8 +80,8 @@ impl Pool {
 
     /// Given an output amount and token, returns a required input amount and address of the other asset.
     /// Returns None if operation not possible due to arithmetic issues (e.g. over or underflow, reserve too small)
-    fn get_amount_in(&self, token_out: H160, amount_out: U256) -> Option<(U256, H160)> {
-        let (reserve_out, reserve_in, token_in) = self.get_relative_reserves(token_out);
+    fn amount_in(&self, token_out: H160, amount_out: U256) -> Option<(U256, H160)> {
+        let (reserve_out, reserve_in, token_in) = self.relative_reserves(token_out);
         Some((
             self.amount_in(amount_out, reserve_in, reserve_out)?,
             token_in,
@@ -93,8 +93,8 @@ impl Pool {
     /// - the pool's reserve of token provided
     /// - the reserve of the other token
     /// - the pool's other token
-    /// This is essentially a helper method for shuffling values in `get_amount_in` and `get_amount_out`
-    fn get_relative_reserves(&self, token: H160) -> RelativeReserves {
+    /// This is essentially a helper method for shuffling values in `amount_in` and `amount_out`
+    fn relative_reserves(&self, token: H160) -> RelativeReserves {
         // https://github.com/Uniswap/uniswap-v2-periphery/blob/master/contracts/libraries/UniswapV2Library.sol#L53
         if token == self.tokens.get().0 {
             (
@@ -164,16 +164,16 @@ fn check_final_reserves(
 }
 
 impl BaselineSolvable for Pool {
-    fn get_amount_out(&self, out_token: H160, (in_amount, in_token): (U256, H160)) -> Option<U256> {
-        self.get_amount_out(in_token, in_amount)
+    fn amount_out(&self, out_token: H160, (in_amount, in_token): (U256, H160)) -> Option<U256> {
+        self.amount_out(in_token, in_amount)
             .map(|(out_amount, token)| {
                 assert_eq!(token, out_token);
                 out_amount
             })
     }
 
-    fn get_amount_in(&self, in_token: H160, (out_amount, out_token): (U256, H160)) -> Option<U256> {
-        self.get_amount_in(out_token, out_amount)
+    fn amount_in(&self, in_token: H160, (out_amount, out_token): (U256, H160)) -> Option<U256> {
+        self.amount_in(out_token, out_amount)
             .map(|(in_amount, token)| {
                 assert_eq!(token, in_token);
                 in_amount
@@ -255,7 +255,7 @@ impl PoolReading for DefaultPoolReader {
         let token0 = ERC20::at(&self.web3, pair.get().0);
         let token1 = ERC20::at(&self.web3, pair.get().1);
 
-        let reserves = pair_contract.get_reserves().block(block).batch_call(batch);
+        let reserves = pair_contract.reserves().block(block).batch_call(batch);
         let token0_balance = token0
             .balance_of(pair_address)
             .block(block)
@@ -324,37 +324,37 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_get_amounts_out() {
+    fn test_amounts_out() {
         let sell_token = H160::from_low_u64_be(1);
         let buy_token = H160::from_low_u64_be(2);
 
         // Even Pool
         let pool = Pool::uniswap(TokenPair::new(sell_token, buy_token).unwrap(), (100, 100));
         assert_eq!(
-            pool.get_amount_out(sell_token, 10.into()),
+            pool.amount_out(sell_token, 10.into()),
             Some((9.into(), buy_token))
         );
         assert_eq!(
-            pool.get_amount_out(sell_token, 100.into()),
+            pool.amount_out(sell_token, 100.into()),
             Some((49.into(), buy_token))
         );
         assert_eq!(
-            pool.get_amount_out(sell_token, 1000.into()),
+            pool.amount_out(sell_token, 1000.into()),
             Some((90.into(), buy_token))
         );
 
         //Uneven Pool
         let pool = Pool::uniswap(TokenPair::new(sell_token, buy_token).unwrap(), (200, 50));
         assert_eq!(
-            pool.get_amount_out(sell_token, 10.into()),
+            pool.amount_out(sell_token, 10.into()),
             Some((2.into(), buy_token))
         );
         assert_eq!(
-            pool.get_amount_out(sell_token, 100.into()),
+            pool.amount_out(sell_token, 100.into()),
             Some((16.into(), buy_token))
         );
         assert_eq!(
-            pool.get_amount_out(sell_token, 1000.into()),
+            pool.amount_out(sell_token, 1000.into()),
             Some((41.into(), buy_token))
         );
 
@@ -364,42 +364,42 @@ mod tests {
             (1u128 << 90, 1u128 << 90),
         );
         assert_eq!(
-            pool.get_amount_out(sell_token, 10u128.pow(20).into()),
+            pool.amount_out(sell_token, 10u128.pow(20).into()),
             Some((99_699_991_970_459_889_807u128.into(), buy_token))
         );
 
         // Overflow
-        assert_eq!(pool.get_amount_out(sell_token, U256::max_value()), None);
+        assert_eq!(pool.amount_out(sell_token, U256::max_value()), None);
     }
 
     #[test]
-    fn test_get_amounts_in() {
+    fn test_amounts_in() {
         let sell_token = H160::from_low_u64_be(1);
         let buy_token = H160::from_low_u64_be(2);
 
         // Even Pool
         let pool = Pool::uniswap(TokenPair::new(sell_token, buy_token).unwrap(), (100, 100));
         assert_eq!(
-            pool.get_amount_in(buy_token, 10.into()),
+            pool.amount_in(buy_token, 10.into()),
             Some((12.into(), sell_token))
         );
         assert_eq!(
-            pool.get_amount_in(buy_token, 99.into()),
+            pool.amount_in(buy_token, 99.into()),
             Some((9930.into(), sell_token))
         );
 
         // Buying more than possible
-        assert_eq!(pool.get_amount_in(buy_token, 100.into()), None);
-        assert_eq!(pool.get_amount_in(buy_token, 1000.into()), None);
+        assert_eq!(pool.amount_in(buy_token, 100.into()), None);
+        assert_eq!(pool.amount_in(buy_token, 1000.into()), None);
 
         //Uneven Pool
         let pool = Pool::uniswap(TokenPair::new(sell_token, buy_token).unwrap(), (200, 50));
         assert_eq!(
-            pool.get_amount_in(buy_token, 10.into()),
+            pool.amount_in(buy_token, 10.into()),
             Some((51.into(), sell_token))
         );
         assert_eq!(
-            pool.get_amount_in(buy_token, 49.into()),
+            pool.amount_in(buy_token, 49.into()),
             Some((9830.into(), sell_token))
         );
 
@@ -409,7 +409,7 @@ mod tests {
             (1u128 << 90, 1u128 << 90),
         );
         assert_eq!(
-            pool.get_amount_in(buy_token, 10u128.pow(20).into()),
+            pool.amount_in(buy_token, 10u128.pow(20).into()),
             Some((100_300_910_810_367_424_267u128.into(), sell_token)),
         );
     }

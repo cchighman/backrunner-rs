@@ -5,6 +5,8 @@ use ethers::prelude::*;
 use super::*;
 use std::collections::HashMap;
 use async_trait::*;
+use std::any::Any;
+use async_trait::async_trait;
 
 #[async_trait]
 pub trait PathSequence {

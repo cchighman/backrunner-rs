@@ -12,7 +12,7 @@ use crate::dex_pool::DexPool;
 use crate::graphql_uniswapv3;
 use crate::uniswapv2_pairs::uniswap_pairs::UniswapPairsPairsTokens;
 use crate::uniswapv3_pools::uniswap_pools::{UniswapPoolsPoolsToken0, UniswapPoolsPoolsToken1};
-use crate::utils::uniswap_v3_sdk::{get_amounts_for_liquidity, get_sqrt_ratio_at_tick, tick_range};
+use crate::utils::uniswap_v3_sdk::{amounts_for_liquidity, sqrt_ratio_at_tick, tick_range};
 
 #[derive(Clone)]
 pub struct UniswapPool {
@@ -31,7 +31,7 @@ pub struct UniswapPool {
 
 pub fn populate_uniswapv3_pools(pair_map: &mut DashMap<String, Vec<Arc<CryptoPair>>>) {
     let pairs =
-        graphql_uniswapv3::get_pools("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3")
+        graphql_uniswapv3::pools("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3")
             .unwrap();
     //dbg!("uniswap - {#:?}", pairs);
     uniswapv3_unpack_pairs(
@@ -53,9 +53,9 @@ pub fn uniswapv3_unpack_pairs(
 
         let [tick_lower, tick_upper] =
             tick_range(got_tick, pair.fee_tier.parse::<i32>().unwrap().div(5), 0);
-        let sqrt_lower = get_sqrt_ratio_at_tick(tick_lower);
-        let sqrt_upper = get_sqrt_ratio_at_tick(tick_upper);
-        let [reserve0, reserve1] = get_amounts_for_liquidity(
+        let sqrt_lower = sqrt_ratio_at_tick(tick_lower);
+        let sqrt_upper = sqrt_ratio_at_tick(tick_upper);
+        let [reserve0, reserve1] = amounts_for_liquidity(
             &BigInt::from_str(pair.sqrt_price.as_str()).unwrap(),
             &sqrt_lower,
             &sqrt_upper,

@@ -51,7 +51,7 @@ pub async fn uniswapv2_unpack_pairs(
 
 pub async fn populate_uniswapv2_pairs(pair_map: &mut HashMap<Address, CryptoPair>) {
     let pairs =
-        graphql_uniswapv2::get_pairs("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2")
+        graphql_uniswapv2::pairs("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2")
             .await
             .unwrap();
     //dbg!("uniswap - {#:?}", &pairs);
@@ -66,7 +66,7 @@ pub async fn populate_uniswapv2_pairs(pair_map: &mut HashMap<Address, CryptoPair
 
 pub async fn populate_sushiswap_pairs(pair_map: &mut HashMap<Address, CryptoPair>) {
     let pairs =
-        graphql_uniswapv2::get_pairs("https://api.thegraph.com/subgraphs/name/sushiswap/exchange")
+        graphql_uniswapv2::pairs("https://api.thegraph.com/subgraphs/name/sushiswap/exchange")
             .await
             .unwrap();
     //dbg!("sushi - {#:?}", pairs);

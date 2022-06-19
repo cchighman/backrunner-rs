@@ -133,7 +133,7 @@ mod uniswapv2router02_mod {
                 .expect("method not found (this should never happen)")
         }
         #[doc = "Calls the contract's `getAmountIn` (0x85f8c259) function"]
-        pub fn get_amount_in(
+        pub fn amount_in(
             &self,
             amount_out: ethers::core::types::U256,
             reserve_in: ethers::core::types::U256,
@@ -144,7 +144,7 @@ mod uniswapv2router02_mod {
                 .expect("method not found (this should never happen)")
         }
         #[doc = "Calls the contract's `getAmountOut` (0x054d50d4) function"]
-        pub fn get_amount_out(
+        pub fn amount_out(
             &self,
             amount_in: ethers::core::types::U256,
             reserve_in: ethers::core::types::U256,
@@ -155,7 +155,7 @@ mod uniswapv2router02_mod {
                 .expect("method not found (this should never happen)")
         }
         #[doc = "Calls the contract's `getAmountsIn` (0x1f00ca74) function"]
-        pub fn get_amounts_in(
+        pub fn amounts_in(
             &self,
             amount_out: ethers::core::types::U256,
             path: ::std::vec::Vec<ethers::core::types::Address>,
@@ -166,7 +166,7 @@ mod uniswapv2router02_mod {
                 .expect("method not found (this should never happen)")
         }
         #[doc = "Calls the contract's `getAmountsOut` (0xd06ca61f) function"]
-        pub fn get_amounts_out(
+        pub fn amounts_out(
             &self,
             amount_in: ethers::core::types::U256,
             path: ::std::vec::Vec<ethers::core::types::Address>,

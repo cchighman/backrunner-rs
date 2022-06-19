@@ -175,17 +175,17 @@ pub fn arb_index_signal(pairs: &Vec<Arc<CryptoPair>>) {
                 let future = r.for_each(move |v| ready(()));
                 spawn(future);
             }
-let C0 = self.get_arb_signal_from_index(2, SIDE::Left),
-let C1 =  self.get_arb_signal_from_index(2, SIDE::Right),
+let C0 = self.arb_signal_from_index(2, SIDE::Left),
+let C1 =  self.arb_signal_from_index(2, SIDE::Right),
 
-let D0 = self.get_arb_signal_from_index(3, SIDE::Left),
-let D1 =  self.get_arb_signal_from_index(3, SIDE::Right),
+let D0 = self.arb_signal_from_index(3, SIDE::Left),
+let D1 =  self.arb_signal_from_index(3, SIDE::Right),
 
-let E0 = self.get_arb_signal_from_index(4, SIDE::Left),
-let E1 =  self.get_arb_signal_from_index(4, SIDE::Right),
+let E0 = self.arb_signal_from_index(4, SIDE::Left),
+let E1 =  self.arb_signal_from_index(4, SIDE::Right),
 
-let F0 = self.get_arb_signal_from_index(5, SIDE::Left),
-let F1 =  self.get_arb_signal_from_index(5, SIDE::Right)
+let F0 = self.arb_signal_from_index(5, SIDE::Left),
+let F1 =  self.arb_signal_from_index(5, SIDE::Right)
 
 //       =>
 //          (*A0) // / (*C0 / *C1) / (*D0 / *D1) / (*E0 / *E1) / (*F0 / *F1)

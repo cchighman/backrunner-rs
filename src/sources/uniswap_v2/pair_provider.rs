@@ -20,11 +20,11 @@ impl PairProvider {
             buffer[20..40].copy_from_slice(&token1);
             keccak256(&buffer)
         };
-        create2_target_address(self.factory, &salt, &self.init_code_digest)
+        create2_taraddress(self.factory, &salt, &self.init_code_digest)
     }
 }
 
-fn create2_target_address(creator: H160, salt: &[u8; 32], init_code_digest: &[u8; 32]) -> H160 {
+fn create2_taraddress(creator: H160, salt: &[u8; 32], init_code_digest: &[u8; 32]) -> H160 {
     let mut preimage = [0xff; 85];
     preimage[1..21].copy_from_slice(creator.as_fixed_bytes());
     preimage[21..53].copy_from_slice(salt);

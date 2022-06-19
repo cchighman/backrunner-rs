@@ -46,7 +46,7 @@ impl PoolInitializing for EmptyPoolInitializer {
 #[async_trait::async_trait]
 impl PoolInitializing for BalancerSubgraphClient {
     async fn initialize_pools(&self) -> Result<RegisteredPools> {
-        let registered_pools = self.get_registered_pools().await?;
+        let registered_pools = self.registered_pools().await?;
         tracing::debug!(
             block = %registered_pools.fetched_block_number, pools = %registered_pools.pools.len(),
             "initialized registered pools",

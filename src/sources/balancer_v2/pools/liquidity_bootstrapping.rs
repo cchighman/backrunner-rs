@@ -63,11 +63,11 @@ impl FactoryIndexing for BalancerV2LiquidityBootstrappingPoolFactory {
         // Liquidity bootstrapping pools use dynamic weights, meaning that we
         // need to fetch them every time.
         let weights = pool_contract
-            .get_normalized_weights()
+            .normalized_weights()
             .block(block)
             .batch_call(batch);
         let swap_enabled = pool_contract
-            .get_swap_enabled()
+            .swap_enabled()
             .block(block)
             .batch_call(batch);
 
@@ -147,7 +147,7 @@ mod tests {
                 .clone(),
         );
         pool.expect_call(
-            BalancerV2LiquidityBootstrappingPool::signatures().get_normalized_weights(),
+            BalancerV2LiquidityBootstrappingPool::signatures().normalized_weights(),
         )
         .returns(
             tokens
@@ -155,7 +155,7 @@ mod tests {
                 .map(|token| token.weight.as_uint256())
                 .collect(),
         );
-        pool.expect_call(BalancerV2LiquidityBootstrappingPool::signatures().get_swap_enabled())
+        pool.expect_call(BalancerV2LiquidityBootstrappingPool::signatures().swap_enabled())
             .returns(true);
 
         let factory = dummy_contract!(BalancerV2LiquidityBootstrappingPoolFactory, H160::default());
@@ -209,10 +209,10 @@ mod tests {
                 .clone(),
         );
         pool.expect_call(
-            BalancerV2LiquidityBootstrappingPool::signatures().get_normalized_weights(),
+            BalancerV2LiquidityBootstrappingPool::signatures().normalized_weights(),
         )
         .returns(vec![bfp!("0.5").as_uint256(), bfp!("0.5").as_uint256()]);
-        pool.expect_call(BalancerV2LiquidityBootstrappingPool::signatures().get_swap_enabled())
+        pool.expect_call(BalancerV2LiquidityBootstrappingPool::signatures().swap_enabled())
             .returns(false);
 
         let factory = dummy_contract!(BalancerV2LiquidityBootstrappingPoolFactory, H160::default());

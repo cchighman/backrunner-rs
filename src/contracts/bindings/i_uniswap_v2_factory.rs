@@ -97,7 +97,7 @@ mod iuniswapv2factory_mod {
                 .expect("method not found (this should never happen)")
         }
         #[doc = "Calls the contract's `getPair` (0xe6a43905) function"]
-        pub fn get_pair(
+        pub fn pair(
             &self,
             token_a: ethers::core::types::Address,
             token_b: ethers::core::types::Address,

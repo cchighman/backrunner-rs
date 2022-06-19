@@ -26,6 +26,7 @@ use super::uniswap_providers::*;
 use crate::uniswap_transaction::*;
 use crate::flashbot_strategy::utils::*;
 use std::any::Any;
+use crate::utils::u256_decimal::format_units;
 
 
 #[derive(Debug, Clone)]
@@ -243,22 +244,27 @@ impl ThreePathSequence {
     pub fn path(&self) -> String {
         let mut path_str: String = Default::default();
         for token in 0..self.sequence.len() {
-            path_str = path_str.to_owned() + " - " + self.sequence[token].get_symbol();
+            path_str = path_str.to_owned() + " - " + self.sequence[token].symbol();
         }
         path_str
     }
 
-    pub async fn calculate(sequence: Arc<ThreePathSequence>) {
+
+
+    pub async fn calculate(sequence: Arc<ThreePathSequence>, pending: bool) {
         let result = optimize_a_prime(
-            BigDecimal::from_str(&*sequence.a1().get_pending_reserve().to_string()).unwrap(),
-            BigDecimal::from_str(&*sequence.b1().get_pending_reserve().to_string()).unwrap(),
-            BigDecimal::from_str(&*sequence.a2().get_pending_reserve().to_string()).unwrap(),
-            BigDecimal::from_str(&*sequence.b2().get_pending_reserve().to_string()).unwrap(),
-            BigDecimal::from_str(&*sequence.a3().get_pending_reserve().to_string()).unwrap(),
-            BigDecimal::from_str(&*sequence.b3().get_pending_reserve().to_string()).unwrap(),
+            BigDecimal::from_str(&*sequence.a1().pending_reserve().to_string()).unwrap(),
+            BigDecimal::from_str(&*sequence.b1().pending_reserve().to_string()).unwrap(),
+            BigDecimal::from_str(&*sequence.a2().pending_reserve().to_string()).unwrap(),
+            BigDecimal::from_str(&*sequence.b2().pending_reserve().to_string()).unwrap(),
+            BigDecimal::from_str(&*sequence.a3().pending_reserve().to_string()).unwrap(),
+            BigDecimal::from_str(&*sequence.b3().pending_reserve().to_string()).unwrap(),
         );
 
         if !result.is_none() {
+            dbg!(&sequence.a1().token.pair);
+            dbg!(&sequence.a2().token.pair);
+            dbg!(&sequence.a3().token.pair);
             let (delta_a, delta_b, delta_c, delta_a_prime, profit) = result.unwrap();
             let method = "optimize_a_prime";
             println!(
@@ -272,97 +278,97 @@ impl ThreePathSequence {
                 method,
                 profit.to_f64().unwrap(),
                 delta_a.to_f64().unwrap(),
-                &sequence.a1().get_symbol(),
+                &sequence.a1().symbol(),
                 delta_b.to_f64().unwrap(),
-                &sequence.b1().get_symbol(),
-                (BigDecimal::from_str(&*sequence.a1().get_pending_reserve().to_string()).unwrap()
-                    / BigDecimal::from_str(&*sequence.b1().get_pending_reserve().to_string()).unwrap())
+                &sequence.b1().symbol(),
+                (BigDecimal::from_str(&*sequence.a1().pending_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.b1().pending_reserve().to_string()).unwrap())
                 .to_f64()
                 .unwrap(),
-                sequence.a1().get_symbol(),
-                sequence.a1().get_pending_reserve(),
-                (BigDecimal::from_str(&*sequence.a1().get_pending_reserve().to_string()).unwrap()
-                    / BigDecimal::from_str(&*sequence.b1().get_pending_reserve().to_string()).unwrap())
+                sequence.a1().symbol(),
+                sequence.a1().pending_reserve(),
+                (BigDecimal::from_str(&*sequence.a1().pending_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.b1().pending_reserve().to_string()).unwrap())
                 .to_f64()
                 .unwrap(),
-                sequence.b1().get_symbol(),
-                sequence.b1().get_pending_reserve(),
-                (BigDecimal::from_str(&*sequence.b1().get_pending_reserve().to_string()).unwrap()
-                    / BigDecimal::from_str(&*sequence.a1().get_pending_reserve().to_string()).unwrap())
+                sequence.b1().symbol(),
+                sequence.b1().pending_reserve(),
+                (BigDecimal::from_str(&*sequence.b1().pending_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.a1().pending_reserve().to_string()).unwrap())
                 .to_f64()
                 .unwrap(),
                 delta_b.to_f64().unwrap(),
-                sequence.a2().get_symbol(),
+                sequence.a2().symbol(),
                 delta_c.to_f64().unwrap(),
-                sequence.b2().get_symbol(),
-                ((BigDecimal::from_str(&*sequence.a2().get_pending_reserve().to_string()).unwrap()
+                sequence.b2().symbol(),
+                ((BigDecimal::from_str(&*sequence.a2().pending_reserve().to_string()).unwrap()
                     / BigDecimal::from_str(
-                        &*10_i128.pow(sequence.a2().get_decimal() as u32).to_string()
+                        &*10_i128.pow(sequence.a2().decimal() as u32).to_string()
                     )
                     .unwrap())
-                    / (BigDecimal::from_str(&*sequence.b2().get_pending_reserve().to_string()).unwrap()
+                    / (BigDecimal::from_str(&*sequence.b2().pending_reserve().to_string()).unwrap()
                         / BigDecimal::from_str(
-                            &*10_i128.pow(sequence.b2().get_decimal() as u32).to_string()
+                            &*10_i128.pow(sequence.b2().decimal() as u32).to_string()
                         )
                         .unwrap()))
                 .to_f64()
                 .unwrap(),
-                sequence.a2().get_symbol(),
-                sequence.a2().get_pending_reserve(),
-                (BigDecimal::from_str(&*sequence.a2().get_pending_reserve().to_string()).unwrap()
-                    / BigDecimal::from_str(&*sequence.b2().get_pending_reserve().to_string()).unwrap())
+                sequence.a2().symbol(),
+                sequence.a2().pending_reserve(),
+                (BigDecimal::from_str(&*sequence.a2().pending_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.b2().pending_reserve().to_string()).unwrap())
                 .to_f64()
                 .unwrap(),
-                sequence.b2().get_symbol(),
-                sequence.b2().get_pending_reserve(),
-                (BigDecimal::from_str(&*sequence.b2().get_pending_reserve().to_string()).unwrap()
-                    / BigDecimal::from_str(&*sequence.a2().get_pending_reserve().to_string()).unwrap())
+                sequence.b2().symbol(),
+                sequence.b2().pending_reserve(),
+                (BigDecimal::from_str(&*sequence.b2().pending_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.a2().pending_reserve().to_string()).unwrap())
                 .to_f64()
                 .unwrap(),
                 delta_c.to_f64().unwrap(),
-                sequence.a3().get_symbol(),
+                sequence.a3().symbol(),
                 delta_a_prime.to_f64().unwrap(),
-                sequence.b3().get_symbol(),
-                (BigDecimal::from_str(&*sequence.a3().get_pending_reserve().to_string()).unwrap()
+                sequence.b3().symbol(),
+                (BigDecimal::from_str(&*sequence.a3().pending_reserve().to_string()).unwrap()
                     / BigDecimal::from_str(
-                        &*10_i128.pow(sequence.a3().get_decimal() as u32).to_string()
+                        &*10_i128.pow(sequence.a3().decimal() as u32).to_string()
                     )
                     .unwrap()
-                    / (BigDecimal::from_str(&*sequence.b3().get_pending_reserve().to_string()).unwrap()
+                    / (BigDecimal::from_str(&*sequence.b3().pending_reserve().to_string()).unwrap()
                         / BigDecimal::from_str(
-                            &*10_i128.pow(sequence.b3().get_decimal() as u32).to_string()
+                            &*10_i128.pow(sequence.b3().decimal() as u32).to_string()
                         )
                         .unwrap()))
                 .to_f64()
                 .unwrap(),
-                sequence.a3().get_symbol(),
-                sequence.a3().get_pending_reserve(),
-                (BigDecimal::from_str(&*sequence.a3().get_pending_reserve().to_string()).unwrap()
-                    / BigDecimal::from_str(&*sequence.b3().get_pending_reserve().to_string()).unwrap())
+                sequence.a3().symbol(),
+                sequence.a3().pending_reserve(),
+                (BigDecimal::from_str(&*sequence.a3().pending_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.b3().pending_reserve().to_string()).unwrap())
                 .to_f64()
                 .unwrap(),
-                sequence.b3().get_symbol(),
-                sequence.b3().get_pending_reserve(),
-                (BigDecimal::from_str(&*sequence.b3().get_pending_reserve().to_string()).unwrap()
-                    / BigDecimal::from_str(&*sequence.a3().get_pending_reserve().to_string()).unwrap())
+                sequence.b3().symbol(),
+                sequence.b3().pending_reserve(),
+                (BigDecimal::from_str(&*sequence.b3().pending_reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.a3().pending_reserve().to_string()).unwrap())
                 .to_f64()
                 .unwrap()
             );
 
             let (source_amt, dest_amt) = ThreePathSequence::dec_to_u256(
                 &delta_a.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.a1().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.a1().decimal() as u32)).unwrap(),
                 ),
                 &delta_b.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.b1().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.b1().decimal() as u32)).unwrap(),
                 ),
             )
             .await;
 
             let trade1 = SwapRoute::new(
                 (
-                    sequence.a1().get_id().clone(),
-                    sequence.b1().get_id().clone(),
+                    sequence.a1().id().clone(),
+                    sequence.b1().id().clone(),
                 ),
                 source_amt.clone(),
                 dest_amt,
@@ -371,18 +377,18 @@ impl ThreePathSequence {
 
             let (source_amt, dest_amt) = ThreePathSequence::dec_to_u256(
                 &delta_b.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.a2().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.a2().decimal() as u32)).unwrap(),
                 ),
                 &delta_c.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.b2().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.b2().decimal() as u32)).unwrap(),
                 ),
             )
             .await;
 
             let trade2 = SwapRoute::new(
                 (
-                    sequence.a2().get_id().clone(),
-                    sequence.b2().get_id().clone(),
+                    sequence.a2().id().clone(),
+                    sequence.b2().id().clone(),
                 ),
                 source_amt,
                 dest_amt,
@@ -391,18 +397,18 @@ impl ThreePathSequence {
 
             let (source_amt, dest_amt) = ThreePathSequence::dec_to_u256(
                 &delta_c.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.a3().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.a3().decimal() as u32)).unwrap(),
                 ),
                 &delta_a_prime.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.b3().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.b3().decimal() as u32)).unwrap(),
                 ),
             )
             .await;
 
             let trade3 = SwapRoute::new(
                 (
-                    sequence.a3().get_id().clone(),
-                    sequence.b3().get_id().clone(),
+                    sequence.a3().id().clone(),
+                    sequence.b3().id().clone(),
                 ),
                 source_amt,
                 dest_amt,
@@ -412,10 +418,10 @@ impl ThreePathSequence {
             let trade_vec = vec![trade1, trade2, trade3];
             let (source_amt, dest_amt) = ThreePathSequence::dec_to_u256(
                 &delta_a.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.a1().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.a1().decimal() as u32)).unwrap(),
                 ),
                 &delta_b.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.b1().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.b1().decimal() as u32)).unwrap(),
                 ),
             )
             .await;
@@ -428,12 +434,16 @@ impl ThreePathSequence {
             ).await.unwrap();
 
            println!("Flash Tx: {}", &flash_tx.data().unwrap());
+            
+           let mut tx_vect: Vec<TypedTransaction> = Default::default();
+           
+           // Acquire pending tx
+           if pending {
+                tx_vect = sequence.pending_txs();
+           }
+            tx_vect.push(flash_tx);
 
-            // Acquire pending tx
-            let mut pending_tx = sequence.pending_txs();
-            pending_tx.push(flash_tx);
-
-            let bundle_result = send_flashswap_bundle(pending_tx).await;
+            let bundle_result = send_flashswap_bundle(tx_vect).await;
             if bundle_result.as_ref().is_err() {
                 println!("Flash bundle could not be submitted.  Reason: {:#}", bundle_result.as_ref().err().unwrap());
             } 
@@ -443,7 +453,7 @@ impl ThreePathSequence {
     pub fn pending_txs(&self)->Vec<TypedTransaction> {
         let txs: Vec<TypedTransaction> = Default::default();
 
-        let pair_tx: Vec<TypedTransaction> = self.pairs.iter().map(|pair| pair.get_pending_txs()).flatten().collect_vec();
+        let pair_tx: Vec<TypedTransaction> = self.pairs.iter().map(|pair| pair.pending_txs()).flatten().collect_vec();
         pair_tx
     }
 
@@ -485,29 +495,29 @@ impl PathSequence for ThreePathSequence {
     }
 
     fn arb_index(&self)-> BigDecimal{
-        (BigDecimal::from_str(&*self.a1().get_pending_reserve().to_string()).unwrap()
-            / BigDecimal::from_str(&*self.b1().get_pending_reserve().to_string()).unwrap())
-            * (BigDecimal::from_str(&*self.a2().get_pending_reserve().to_string()).unwrap()
-                / BigDecimal::from_str(&*self.b2().get_pending_reserve().to_string()).unwrap())
-            * (BigDecimal::from_str(&*self.a3().get_pending_reserve().to_string()).unwrap()
-                / BigDecimal::from_str(&*self.b3().get_pending_reserve().to_string()).unwrap())
+        (BigDecimal::from_str(&*self.a1().pending_reserve().to_string()).unwrap()
+            / BigDecimal::from_str(&*self.b1().pending_reserve().to_string()).unwrap())
+            * (BigDecimal::from_str(&*self.a2().pending_reserve().to_string()).unwrap()
+                / BigDecimal::from_str(&*self.b2().pending_reserve().to_string()).unwrap())
+            * (BigDecimal::from_str(&*self.a3().pending_reserve().to_string()).unwrap()
+                / BigDecimal::from_str(&*self.b3().pending_reserve().to_string()).unwrap())
     }
 
      async fn init(&self, arb_ref: Arc<(dyn Any + 'static + Sync + Send)>)->Result<(),anyhow::Error> {
-        let pending_a3_signal = self.a3().get_pending_signal();
-        let pending_b3_signal = self.b3().get_pending_signal();
+        let pending_a3_signal = self.a3().pending_signal();
+        let pending_b3_signal = self.b3().pending_signal();
         
-        let confirmed_a3_signal = self.a3().get_confirmed_signal();
-        let confirmed_b3_signal = self.b3().get_confirmed_signal();
+        let confirmed_a3_signal = self.a3().confirmed_signal();
+        let confirmed_b3_signal = self.b3().confirmed_signal();
         
         let pending_seq = arb_ref.downcast_ref::<ThreePathSequence>().unwrap().clone();
         let confirmed_seq = arb_ref.downcast_ref::<ThreePathSequence>().unwrap().clone();
 
         let pending_update = map_ref! {
-            let a1 = self.a1().get_pending_signal(),
-             let b1 =self.b1().get_pending_signal(),
-             let a2 =  self.a2().get_pending_signal(),
-             let b2 =  self.b2().get_pending_signal(),
+            let a1 = self.a1().pending_signal(),
+             let b1 =self.b1().pending_signal(),
+             let a2 =  self.a2().pending_signal(),
+             let b2 =  self.b2().pending_signal(),
              let a3 = pending_a3_signal,
              let b3 = pending_b3_signal =>
              (BigDecimal::from_str(&a1.to_string()).unwrap()
@@ -519,10 +529,10 @@ impl PathSequence for ThreePathSequence {
         };
 
         let confirmed_update = map_ref! {
-            let a1 = self.a1().get_confirmed_signal(),
-             let b1 =self.b1().get_confirmed_signal(),
-             let a2 =  self.a2().get_confirmed_signal(),
-             let b2 =  self.b2().get_confirmed_signal(),
+            let a1 = self.a1().confirmed_signal(),
+             let b1 =self.b1().confirmed_signal(),
+             let a2 =  self.a2().confirmed_signal(),
+             let b2 =  self.b2().confirmed_signal(),
              let a3 = confirmed_a3_signal,
              let b3 = confirmed_b3_signal =>
              (BigDecimal::from_str(&a1.to_string()).unwrap()
@@ -542,7 +552,7 @@ impl PathSequence for ThreePathSequence {
             );
 
             if v > BigDecimal::from_f64(1.05).unwrap() {
-                spawn(ThreePathSequence::calculate(Arc::new(pending_seq.clone())));
+                spawn(ThreePathSequence::calculate(Arc::new(pending_seq.clone()), true));
             }
             ready(())
         });
@@ -555,7 +565,7 @@ impl PathSequence for ThreePathSequence {
             );
 
             if v > BigDecimal::from_f64(1.05).unwrap() {
-                spawn(ThreePathSequence::calculate(Arc::new(confirmed_seq.clone())));
+                spawn(ThreePathSequence::calculate(Arc::new(confirmed_seq.clone()),false));
             }
             ready(())
         });
@@ -567,7 +577,12 @@ impl PathSequence for ThreePathSequence {
 
 }
 
-/* 
+use crate::utils::conversions::*;
+use crate::utils::u256_decimal::*;
+use crate::utils::ratio_as_decimal::*;
+
+
+/*
 #[test]
 pub fn test_is_arbitrage_pair_false() {
     let pair1 = CryptoPair::new(DexPool {
@@ -645,76 +660,89 @@ pub fn test_is_arbitrage_pair_false() {
     assert!(!three_path_sequence::is_arbitrage_pair(&arb_vec));
 }
 */
-/*
-#[test]
+
+#[tokio::test]
 pub async fn test_cyclic_order() {
+/* 
+        Method: optimize_a_prime  Profit: -4829.110
+                    Trade 4834.97 WETH for 55534.16 FLX at price 0.028
+                                WETH Reserves:  2284 Ratio: 0.03  FLX Reserves:  81847 Ratio: 35.835
+                    Trade 55534.16 FLX for 7043.65 USDC at price 0.000
+                                FLX Reserves:  9704226 Ratio: 7.82  USDC Reserves:  1241578 Ratio: 0.128
+                    Trade 7043.65 USDC for 5.86 WETH at price 1199200326215895.250
+    */
+
+  
+ 
     let pair1 = CryptoPair::new(DexPool {
-        id: Address::from_str("0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45").unwrap(),
+        id: Address::from_str("0xd6f3768e62ef92a9798e5a8cedd2b78907cecef9").unwrap(),
         sqrt_price: U256::zero(),
         liquidity: U256::zero(),
         fee_tier: 0,
         tick: 0,
         dex: "uni_v2".to_string(),
-        router: Address::from_str("0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc22").unwrap(),
+        router: Address::from_str("0x7a250d5630b4cf539739df2c5dacb4c659f2488d").unwrap(),
         token0: UniswapPairsPairsTokens {
-            id: Address::from_str("0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45").unwrap(),
+            id: Address::from_str("0x6243d8cea23066d098a15582d81a598b4e8391f4").unwrap(),
+            symbol: "FLX".to_string(),
+            name: "Flex".to_string(),
+            decimals: 18,
+            reserve: U256::from(0x13fb7),
+        },
+        token1: UniswapPairsPairsTokens {
+            id: Address::from_str("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2").unwrap(),
             symbol: "WETH".to_string(),
             name: "WETH".to_string(),
             decimals: 18,
-            reserve: U256::from(1000000),
-        },
-        token1: UniswapPairsPairsTokens {
-            id: Address::from_str("0x68b3465833fb72A70ecDF485E0e4C7bD8665F000").unwrap(),
-            symbol: "USDT".to_string(),
-            name: "USDT".to_string(),
-            decimals: 18,
-            reserve: U256::from(1000000),
+            reserve: U256::from(0x8ec),
         },
     });
+
     let pair2 = CryptoPair::new(DexPool {
-        id: Address::from_str("0x68b3465833fb72A70ecDF485E0e4C7bD8665FFFF").unwrap(),
+        id: Address::from_str("0xd6ef070951d008f1e6426ad9ca1c4fcf7220ee4d").unwrap(),
         sqrt_price: U256::zero(),
         liquidity: U256::zero(),
         fee_tier: 0,
         tick: 0,
         dex: "uni_v2".to_string(),
-        router: Address::from_str("0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc22").unwrap(),
+        router: Address::from_str("0x7a250d5630b4cf539739df2c5dacb4c659f2488d").unwrap(),
         token0: UniswapPairsPairsTokens {
-            id: Address::from_str("0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45").unwrap(),
+            id: Address::from_str("0x3ea8ea4237344c9931214796d9417af1a1180770").unwrap(),
+            symbol: "FLX".to_string(),
+            name: "FLX".to_string(),
+            decimals: 18,
+            reserve: U256::from(0x941322),
+        },
+        token1: UniswapPairsPairsTokens {
+            id: Address::from_str("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48").unwrap(),
+            symbol: "USDC".to_string(),
+            name: "USDC".to_string(),
+            decimals: 6,
+            reserve: U256::from(0x12f1ea),
+        },
+    });
+
+    let pair3 = CryptoPair::new(DexPool {
+        id: Address::from_str("0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc").unwrap(),
+        sqrt_price: U256::zero(),
+        liquidity: U256::zero(),
+        fee_tier: 0,
+        tick: 0,
+        dex: "uni_v2".to_string(),
+        router: Address::from_str("0x7a250d5630b4cf539739df2c5dacb4c659f2488d").unwrap(),
+        token0: UniswapPairsPairsTokens {
+            id: Address::from_str("0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48").unwrap(),
+            symbol: "USDC".to_string(),
+            name: "USDC".to_string(),
+            decimals: 6,
+            reserve: U256::from(0x35fd409),
+        },
+        token1: UniswapPairsPairsTokens {
+            id: Address::from_str("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2").unwrap(),
             symbol: "WETH".to_string(),
             name: "WETH".to_string(),
             decimals: 18,
-            reserve: U256::from(1000000),
-        },
-        token1: UniswapPairsPairsTokens {
-            id: Address::from_str("0x68b3465833fb72A70ecDF485E0e4C7bD8665F111").unwrap(),
-            symbol: "DAI".to_string(),
-            name: "DAI".to_string(),
-            decimals: 18,
-            reserve: U256::from(1000000),
-        },
-    });
-    let pair3 = CryptoPair::new(DexPool {
-        id: Address::from_str("0x68b3465833fb72A70ecDF485E0e4C7bD8665F222").unwrap(),
-        sqrt_price: U256::zero(),
-        liquidity: U256::zero(),
-        fee_tier: 0,
-        tick: 0,
-        dex: "uni_v2".to_string(),
-        router: Address::from_str("0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc22").unwrap(),
-        token0: UniswapPairsPairsTokens {
-            id: Address::from_str("0x68b3465833fb72A70ecDF485E0e4C7bD8665F000").unwrap(),
-            symbol: "USDT".to_string(),
-            name: "USDT".to_string(),
-            decimals: 18,
-            reserve: U256::from(1000000),
-        },
-        token1: UniswapPairsPairsTokens {
-            id: Address::from_str("0x68b3465833fb72A70ecDF485E0e4C7bD8665F111").unwrap(),
-            symbol: "DAI".to_string(),
-            name: "DAI".to_string(),
-            decimals: 18,
-            reserve: U256::from(1000000),
+            reserve: U256::from(0xb868),
         },
     });
 
@@ -726,23 +754,143 @@ pub async fn test_cyclic_order() {
     crypto_pairs.insert(pair3.pair_id().clone(), Arc::new(pair3.clone()));
 
     let ordered = three_path_sequence::cyclic_order(crypto_paths, &crypto_pairs).await.unwrap();
-   // let arb_path = ArbitragePath::new(ordered.clone());
+    let ordered = ordered.downcast_ref::<ThreePathSequence>().unwrap().clone();
 
     println!(
         "a1: {}, b1: {}, a2: {}, b2: {}, a3: {}, b3: {}",
-        ordered.a1().get_symbol(),
-        ordered.b1().get_symbol(),
-        ordered.a2().get_symbol(),
-        ordered.b2().get_symbol(),
-        ordered.a3().get_symbol(),
-        ordered.b3().get_symbol()
+        ordered.a1().symbol(),
+        ordered.b1().symbol(),
+        ordered.a2().symbol(),
+        ordered.b2().symbol(),
+        ordered.a3().symbol(),
+        ordered.b3().symbol()
     );
-    assert!(ordered.a1().get_symbol() == ordered.b3().get_symbol());
-    assert!(ordered.b1().get_symbol() == ordered.a2().get_symbol());
-    assert!(ordered.b2().get_symbol() == ordered.a3().get_symbol());
+    assert!(ordered.a1().symbol() == ordered.b3().symbol());
+    assert!(ordered.b1().symbol() == ordered.a2().symbol());
+    assert!(ordered.b2().symbol() == ordered.a3().symbol());
+/* 
+    println!(
+        "Pair 1 - {} 
+        \t\t{} - Reserve:{} Decimal:{}
+        \t\t{} - Reserve:{} Decimal:{}
+        Pair 2 - {} 
+        \t\t{} - Reserve:{} Decimal:{}
+        \t\t{} - Reserve:{} Decimal:{}
+        Pair 3 - {} 
+        \t\t{} - Reserve:{} Decimal:{}
+        \t\t{} - Reserve:{} Decimal:{}
+        \r
+        
+        ",
+    &ordered.a1().token.pair_symbol(),
+    
+    &ordered.a1().symbol(),
+    &ordered.a1().pending_reserve(),
+    &ordered.a1().decimal(),
+    &ordered.b1().symbol(),
+    &ordered.b1().pending_reserve(),
+    &ordered.bt().decimal(),
+
+    &ordered.a2().token.pair_symbol(),
+
+    &ordered.a2().symbol(),
+    &ordered.a2().pending_reserve(),
+    &ordered.a2().decimal(),
+    &ordered.b2().symbol(),
+    &ordered.b2().pending_reserve(),
+    &ordered.b2().decimal(),
+
+    &ordered.a3().token.pair_symbol(),
+
+    &ordered.a3().symbol(),
+    &ordered.a3().pending_reserve(),
+    &ordered.a3().decimal(),
+    &ordered.b3().symbol(),
+    &ordered.b3().pending_reserve(),
+    &ordered.b3().decimal(),
+*/
+    /*
+    &sequence.b1().symbol(),
+    (BigDecimal::from_str(&*sequence.a1().pending_reserve().to_string()).unwrap()
+        / BigDecimal::from_str(&*sequence.b1().pending_reserve().to_string()).unwrap())
+    .to_f64()
+    .unwrap(),
+    sequence.a1().symbol(),
+    sequence.a1().pending_reserve(),
+    (BigDecimal::from_str(&*sequence.a1().pending_reserve().to_string()).unwrap()
+        / BigDecimal::from_str(&*sequence.b1().pending_reserve().to_string()).unwrap())
+    .to_f64()
+    .unwrap(),
+    sequence.b1().symbol(),
+    sequence.b1().pending_reserve(),
+    (BigDecimal::from_str(&*sequence.b1().pending_reserve().to_string()).unwrap()
+        / BigDecimal::from_str(&*sequence.a1().pending_reserve().to_string()).unwrap())
+    .to_f64()
+    .unwrap(),
+    delta_b.to_f64().unwrap(),
+    sequence.a2().symbol(),
+    delta_c.to_f64().unwrap(),
+    sequence.b2().symbol(),
+    ((BigDecimal::from_str(&*sequence.a2().pending_reserve().to_string()).unwrap()
+        / BigDecimal::from_str(
+            &*10_i128.pow(sequence.a2().decimal() as u32).to_string()
+        )
+        .unwrap())
+        / (BigDecimal::from_str(&*sequence.b2().pending_reserve().to_string()).unwrap()
+            / BigDecimal::from_str(
+                &*10_i128.pow(sequence.b2().decimal() as u32).to_string()
+            )
+            .unwrap()))
+    .to_f64()
+    .unwrap(),
+    sequence.a2().symbol(),
+    sequence.a2().pending_reserve(),
+    (BigDecimal::from_str(&*sequence.a2().pending_reserve().to_string()).unwrap()
+        / BigDecimal::from_str(&*sequence.b2().pending_reserve().to_string()).unwrap())
+    .to_f64()
+    .unwrap(),
+    sequence.b2().symbol(),
+    sequence.b2().pending_reserve(),
+    (BigDecimal::from_str(&*sequence.b2().pending_reserve().to_string()).unwrap()
+        / BigDecimal::from_str(&*sequence.a2().pending_reserve().to_string()).unwrap())
+    .to_f64()
+    .unwrap(),
+    delta_c.to_f64().unwrap(),
+    sequence.a3().symbol(),
+    delta_a_prime.to_f64().unwrap(),
+    sequence.b3().symbol(),
+    (BigDecimal::from_str(&*sequence.a3().pending_reserve().to_string()).unwrap()
+        / BigDecimal::from_str(
+            &*10_i128.pow(sequence.a3().decimal() as u32).to_string()
+        )
+        .unwrap()
+        / (BigDecimal::from_str(&*sequence.b3().pending_reserve().to_string()).unwrap()
+            / BigDecimal::from_str(
+                &*10_i128.pow(sequence.b3().decimal() as u32).to_string()
+            )
+            .unwrap()))
+    .to_f64()
+    .unwrap(),
+    sequence.a3().symbol(),
+    sequence.a3().pending_reserve(),
+    (BigDecimal::from_str(&*sequence.a3().pending_reserve().to_string()).unwrap()
+        / BigDecimal::from_str(&*sequence.b3().pending_reserve().to_string()).unwrap())
+    .to_f64()
+    .unwrap(),
+    sequence.b3().symbol(),
+    sequence.b3().pending_reserve(),
+    (BigDecimal::from_str(&*sequence.b3().pending_reserve().to_string()).unwrap()
+        / BigDecimal::from_str(&*sequence.a3().pending_reserve().to_string()).unwrap())
+    .to_f64()
+    .unwrap()
+);
+ */
+
+
+
 }
-   // arb_path.calculate();
-    */
+
+    
 
 
 

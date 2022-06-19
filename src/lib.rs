@@ -32,13 +32,6 @@ pub mod path_sequence_factory;
 pub mod confirmed_tx_monitor;
 pub mod transaction_log_utils;
 pub mod transaction_utils;
-
-
-use crate::three_path_sequence::ThreePathSequence;
-use crate::two_path_sequence::TwoPathSequence;
-use crate::path_sequence::PathSequence;
-
-use std::any::*;
 /* 
 fn print_if_two_sequence(s: &dyn Any) {
   if let Some(string) = s.downcast_ref::<String>() {

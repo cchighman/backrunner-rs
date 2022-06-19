@@ -15,22 +15,22 @@ const USDT:&str = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
 const DAI:&str = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
 
 
-pub async fn get_tx_data<M: Middleware + Clone + 'static>(provider: M, tx: TxHash) -> Result<Transaction, anyhow::Error>{
+pub async fn tx_data<M: Middleware + Clone + 'static>(provider: M, tx: TxHash) -> Result<Transaction, anyhow::Error>{
     Ok(provider.get_transaction(tx).await.unwrap().unwrap())
 }
 
-pub async fn get_tx_traces<M: Middleware + Clone + 'static>(provider: M, tx:TxHash) -> Result<Vec<Trace>, anyhow::Error>{
+pub async fn tx_traces<M: Middleware + Clone + 'static>(provider: M, tx:TxHash) -> Result<Vec<Trace>, anyhow::Error>{
     Ok(provider.trace_transaction(tx).await.unwrap())
 }
 
-pub async fn get_tx_receipt<M: Middleware + Clone + 'static>(provider: M, tx:TxHash) -> Result<TransactionReceipt, anyhow::Error> {
+pub async fn tx_receipt<M: Middleware + Clone + 'static>(provider: M, tx:TxHash) -> Result<TransactionReceipt, anyhow::Error> {
     Ok(provider.get_transaction_receipt(tx).await.unwrap().unwrap())
 }
 
 
 // A bot can have a contract (that it initially calls) AND a proxy contract (that the initial contract triggers via DelegateCall)
 // that engage in extracting MEV, We find the proxy implementation (if any) to see tokenflows on them
-fn get_proxy_impl(tx_traces:Vec<Trace>, contract:Address) -> Address {
+fn proxy_impl(tx_traces:Vec<Trace>, contract:Address) -> Address {
     let mut proxy_impl:Address = Address::zero();
     for trace in tx_traces.iter(){
         match &trace.action {
@@ -57,7 +57,7 @@ fn crop_address(s: &mut String, pos: usize) {
 }
 
 
-fn get_ether_flows(tx_traces:Vec<Trace>, eoa: Address, contract: Address, proxy: Address) -> [U256; 2] {
+fn ether_flows(tx_traces:Vec<Trace>, eoa: Address, contract: Address, proxy: Address) -> [U256; 2] {
     let mut eth_inflow= U256::zero();
     let mut eth_outflow = U256::zero();
     for trace in tx_traces.iter(){
@@ -146,7 +146,7 @@ fn get_ether_flows(tx_traces:Vec<Trace>, eoa: Address, contract: Address, proxy:
     return [U256::zero(), U256::zero()];
 }
 
-fn get_stablecoin_flows(tx_traces: Vec<Trace>, eoa:Address, contract: Address, proxy: Address) ->  [U256; 2] {
+fn stablecoin_flows(tx_traces: Vec<Trace>, eoa:Address, contract: Address, proxy: Address) ->  [U256; 2] {
     let mut dollar_inflow= U256::zero();
     let mut dollar_outflow = U256::zero();
     for trace in tx_traces.iter(){
@@ -228,11 +228,11 @@ fn get_stablecoin_flows(tx_traces: Vec<Trace>, eoa:Address, contract: Address, p
 }
 
 
-pub async fn get_tx_flow<M: Middleware + Clone + 'static>(provider: M, tx_hash: H256) {
-    println!("get_tx_flow");
-    let tx_data = get_tx_data(provider.clone(), tx_hash).await;
+pub async fn tx_flow<M: Middleware + Clone + 'static>(provider: M, tx_hash: H256) {
+    println!("tx_flow");
+    let tx_data = tx_data(provider.clone(), tx_hash).await;
     if !tx_data.is_err() { 
-        let tx_receipt = get_tx_receipt(provider.clone(), tx_hash.clone()).await; // receipt to find of if it failed + gas used. 
+        let tx_receipt = tx_receipt(provider.clone(), tx_hash.clone()).await; // receipt to find of if it failed + gas used. 
         if !tx_receipt.is_err() {
             
             let tx_data_impl = tx_data.unwrap();
@@ -244,13 +244,13 @@ pub async fn get_tx_flow<M: Middleware + Clone + 'static>(provider: M, tx_hash: 
             let cost_in_wei = gas_used_in_wei * tx_data_impl.gas_price.unwrap();
             let eoa = tx_data_impl.from; // searcher address
             let contract = tx_data_impl.to.unwrap(); // contract that does the atomic arb or simply arranges txs in a bundle
-            //let tx_traces = get_tx_traces(provider.clone(), tx_hash).await;
-            //let proxy = get_proxy_impl(tx_traces.clone(), contract);
+            //let tx_traces = tx_traces(provider.clone(), tx_hash).await;
+            //let proxy = proxy_impl(tx_traces.clone(), contract);
             println!("EOA: {:?}", eoa);
             println!("Contract: {:?}", contract);
             //println!("Tx proxy: {:?}", proxy);
-            //let ether_flows = get_ether_flows(tx_traces.clone(), eoa, contract, proxy);
-            //println!("Stablecoins inflow/outflow: {:?}", get_stablecoin_flows(tx_traces.clone(), eoa, contract, proxy));
+            //let ether_flows = ether_flows(tx_traces.clone(), eoa, contract, proxy);
+            //println!("Stablecoins inflow/outflow: {:?}", stablecoin_flows(tx_traces.clone(), eoa, contract, proxy));
             //println!("Net ETH profit, Wei {:?}", (ether_flows[0] - ether_flows[1] - cost_in_wei));
 
             //TODO: Convert stablecoin profits to ETH based on historical price
@@ -258,6 +258,6 @@ pub async fn get_tx_flow<M: Middleware + Clone + 'static>(provider: M, tx_hash: 
         }
     }
     else {
-        println!("get_tx_flow error: {:#?}", tx_data.err());
+        println!("tx_flow error: {:#?}", tx_data.err());
     }
 }

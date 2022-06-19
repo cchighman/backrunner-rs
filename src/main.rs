@@ -21,6 +21,7 @@ use async_std::prelude::*;
 use curl::easy::List;
 //use backrunner_rs::two_path_sequence::{is_arbitrage_pair,cyclic_order};
 use ethers::prelude::Address;
+use futures::executor;
 use futures_util::{FutureExt, TryFutureExt};
 use itertools::Itertools;
 use rayon::prelude::*;
@@ -56,6 +57,8 @@ pub mod utils;
 pub mod path_sequence;
 pub mod path_sequence_factory;
 pub mod transaction_utils;
+pub mod transaction_log_utils;
+pub mod confirmed_tx_monitor;
 
 
 /*
@@ -92,9 +95,6 @@ pub mod transaction_utils;
     Webhook:  https://mvdugj7gh2ansfe4jhz65z.hooks.webhookrelay.com
     BlockNative Key: 3b21bf22-0a3e-4908-9b2f-c9ac37c31b7b  - secret: 5e0323d1-80bc-4ec3-a8dc-25cab8ff0706
 */
-
-
-#[allow(dead_code)]
 #[async_std::main]
 async fn main()->Result<(), Report> {
     let args: Vec<String> = env::args().collect();
@@ -236,6 +236,10 @@ async fn main()->Result<(), Report> {
 
         println!("pairs: {}, paths: {}", &crypto_pairs.len(), arb_paths.len());
     }
+    
+    confirmed_tx_monitor::monitor_tx(&mut crypto_pairs.clone());
+
+/* 
     use std::{thread, time};
     loop {
         let ten = time::Duration::from_millis(10000);
@@ -250,5 +254,7 @@ async fn main()->Result<(), Report> {
         */
         println!("Simulated Pair Updated.");
     }
+    */
+    Ok(())
 }
 

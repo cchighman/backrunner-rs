@@ -29,7 +29,7 @@ impl CakeRouter {
     ) -> CakeRouter {
         tracing::info!("instantiating new cake_router");
         CakeRouter {
-            token_contract: util::Util::get_contract(
+            token_contract: util::Util::contract(
                 &token_contract_address,
                 &token_contract_abi_path,
                 provider.clone(),
@@ -39,7 +39,7 @@ impl CakeRouter {
     }
 
     #[instrument]
-    pub async fn get_amounts_out(
+    pub async fn amounts_out(
         &self,
         amount_in: U256,
         token_a: Address,
@@ -72,7 +72,7 @@ impl CakeRouter {
         gas: U256,
         gas_price: U256,
     ) {
-        let max_out = self.get_amounts_out(spend_amount, wbnb, token).await;
+        let max_out = self.amounts_out(spend_amount, wbnb, token).await;
         let u256 = max_out
             .checked_mul(U256::from(100 - slippage))
             .expect("mul_error");
@@ -116,7 +116,7 @@ impl CakeRouter {
         gas: U256,
         gas_price: U256,
     ) {
-        let max_out = self.get_amounts_out(spend_amount, token, wbnb).await;
+        let max_out = self.amounts_out(spend_amount, token, wbnb).await;
         let u256 = max_out
             .checked_mul(U256::from(100 - slippage))
             .expect("mul_error");
@@ -191,7 +191,7 @@ impl CakeRouter {
     }
 
     #[instrument]
-    pub fn get_method_name(&self, selector: Selector) -> String {
+    pub fn method_name(&self, selector: Selector) -> String {
         let (method_name, _) = self
             .token_contract
             .methods

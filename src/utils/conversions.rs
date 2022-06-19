@@ -1,8 +1,10 @@
 use anyhow::{ensure, Result};
-use num::{
-    bigint::Sign, rational::Ratio, BigInt, BigRational, BigUint, ToPrimitive as _, Zero as _,
-};
-use primitive_types::U256;
+use futures_signals::signal::Mutable;
+use num_bigint::{BigInt,Sign, BigUint};
+use num_rational::{Ratio,  BigRational};
+use num_traits::{ToPrimitive as _, Zero as _};
+use ethers::prelude::U256;
+use num_integer::Integer;
 
 pub fn big_rational_to_float(ratio: &BigRational) -> Option<f64> {
     Some(ratio.numer().to_f64()? / ratio.denom().to_f64()?)
@@ -49,7 +51,7 @@ pub trait RatioExt<T> {
     fn new_checked(numerator: T, denominator: T) -> Result<Ratio<T>>;
 }
 
-impl<T: num::Integer + Clone> RatioExt<T> for Ratio<T> {
+impl<T: Integer + Clone> RatioExt<T> for Ratio<T> {
     fn new_checked(numerator: T, denominator: T) -> Result<Ratio<T>> {
         ensure!(
             !denominator.is_zero(),
@@ -67,7 +69,7 @@ pub trait U256Ext: Sized {
     fn ceil_div(&self, other: &Self) -> Self;
 }
 
-impl U256Ext for U256 {
+impl U256Ext for U256{
     fn to_big_int(&self) -> BigInt {
         u256_to_big_int(self)
     }

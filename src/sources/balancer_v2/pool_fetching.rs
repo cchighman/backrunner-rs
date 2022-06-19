@@ -406,7 +406,7 @@ mod tests {
 
         // see what the subgraph says.
         let client = BalancerSubgraphClient::for_chain(chain_id, Client::new()).unwrap();
-        let subgraph_pools = client.get_registered_pools().await.unwrap();
+        let subgraph_pools = client.registered_pools().await.unwrap();
         let subgraph_token_pairs = subgraph_pools_token_pairs(&subgraph_pools.pools).collect();
 
         // fetch all pools and group them by ID.

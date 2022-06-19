@@ -48,10 +48,10 @@ impl BalancerSubgraphClient {
     }
 
     /// Retrieves the list of registered pools from the subgraph.
-    pub async fn get_registered_pools(&self) -> Result<RegisteredPools> {
+    pub async fn registered_pools(&self) -> Result<RegisteredPools> {
         use self::pools_query::*;
 
-        let block_number = self.get_safe_block().await?;
+        let block_number = self.safe_block().await?;
 
         let mut pools = Vec::new();
         let mut last_id = H256::default();
@@ -92,7 +92,7 @@ impl BalancerSubgraphClient {
 
     /// Retrieves a recent block number for which it is safe to assume no
     /// reorgs will happen.
-    async fn get_safe_block(&self) -> Result<u64> {
+    async fn safe_block(&self) -> Result<u64> {
         // Ideally we would want to use block hash here so that we can check
         // that there indeed is no reorg. However, it does not seem possible to
         // retrieve historic block hashes just from the subgraph (it always
@@ -450,7 +450,7 @@ mod tests {
             println!("### {}", network_name);
 
             let client = BalancerSubgraphClient::for_chain(chain_id, Client::new()).unwrap();
-            let result = client.get_registered_pools().await.unwrap();
+            let result = client.registered_pools().await.unwrap();
             println!(
                 "Retrieved {} total pools at block {}",
                 result.pools.len(),

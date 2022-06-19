@@ -5,15 +5,15 @@
 pub mod uniswap_v3_liquidity {
     use bigdecimal::BigDecimal;
 
-    fn get_liquidity_0(x: &BigDecimal, sa: &BigDecimal, sb: &BigDecimal) -> BigDecimal {
+    fn liquidity_0(x: &BigDecimal, sa: &BigDecimal, sb: &BigDecimal) -> BigDecimal {
         return ((x * sa) * sb) / (sb - sa);
     }
 
-    fn get_liquidity_1(y: &BigDecimal, sa: &BigDecimal, sb: &BigDecimal) -> BigDecimal {
+    fn liquidity_1(y: &BigDecimal, sa: &BigDecimal, sb: &BigDecimal) -> BigDecimal {
         return y / (sb - sa);
     }
 
-    fn get_liquidity(
+    fn liquidity(
         x: &BigDecimal,
         y: &BigDecimal,
         sp: &BigDecimal,
@@ -22,14 +22,14 @@ pub mod uniswap_v3_liquidity {
     ) -> BigDecimal {
         let mut liquidity = Default::default();
         if sp <= sa {
-            liquidity = get_liquidity_0(x, sa, sb);
+            liquidity = liquidity_0(x, sa, sb);
         } else {
             if sp < sb {
-                let liquidity0 = get_liquidity_0(x, sp, sb);
-                let liquidity1 = get_liquidity_1(y, sa, sp);
+                let liquidity0 = liquidity_0(x, sp, sb);
+                let liquidity1 = liquidity_1(y, sa, sp);
                 liquidity = liquidity0.min(liquidity1);
             } else {
-                liquidity = get_liquidity_1(y, sa, sb);
+                liquidity = liquidity_1(y, sa, sb);
             }
         }
         return liquidity;
@@ -112,7 +112,7 @@ pub mod uniswap_v3_liquidity {
         let sp = p.sqrt().unwrap();
         let sa = a.sqrt().unwrap();
         let sb = b.sqrt().unwrap();
-        let l = get_liquidity(x, y, &sp, &sa, &sb);
+        let l = liquidity(x, y, &sp, &sa, &sb);
         println!("{:?} ", l);
         let mut ia = calculate_a1(&l, &sp, y);
         let mut error = BigDecimal::from(100) * (BigDecimal::from(1) - (ia / a));
@@ -161,7 +161,7 @@ pub mod uniswap_v3_liquidity {
                let sp = p.pow(0.5);
                let sa = a.pow(0.5);
                let sb = b.pow(0.5);
-               let L = get_liquidity_0(x, sp, sb);
+               let L = liquidity_0(x, sp, sb);
                let y = calculate_y(L, sp, sa, sb);
                println!("{:?} ", "amount of USDC y={:.2f}".format(y));
                let c = (sb / sp);
@@ -205,7 +205,7 @@ pub mod uniswap_v3_liquidity {
                let mut sp = p.pow(0.5);
                let sa = a.pow(0.5);
                let sb = b.pow(0.5);
-               let L = get_liquidity(x, y, sp, sa, sb);
+               let L = liquidity(x, y, sp, sa, sb);
                let P1 = 2500;
                let mut sp1 = P1.pow(0.5);
                let mut x1 = calculate_x(L, sp1, sa, sb);

@@ -63,11 +63,11 @@ impl ArbitragePaths {
                 let right_node_index = visited_map[&right_key];
 
                 let mut left_pool_vec: &mut Vec<NodeIndex> =
-                    node_map.get_mut(&left_symbol).unwrap();
+                    node_map.mut(&left_symbol).unwrap();
                 left_pool_vec.push(left_node_index.clone());
 
                 let mut right_pool_vec: &mut Vec<NodeIndex> =
-                    node_map.get_mut(&right_symbol).unwrap();
+                    node_map.mut(&right_symbol).unwrap();
                 right_pool_vec.push(right_node_index.clone());
 
                 let str1 = left_symbol.clone() + "-" + &right_symbol;

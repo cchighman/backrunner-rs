@@ -74,7 +74,7 @@ pub static from: Lazy<Address> = Lazy::new(|| Address::from_str("0x7a250d5630B4c
 pub static to: Lazy<Address> = Lazy::new(|| Address::from_str("0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D").unwrap());
 pub static max_amount: Lazy<U256> = Lazy::new(|| U256::from_dec_str("9999999999999999999999999999999999").unwrap());
 
-pub fn get_valid_timestamp() -> U256 {
+pub fn valid_timestamp() -> U256 {
     let start = SystemTime::now();
     let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
     let time_millis = since_epoch

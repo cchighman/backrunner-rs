@@ -89,7 +89,7 @@ impl FactoryIndexing for BalancerV2StablePoolFactory {
             BalancerV2StablePool::at(&self.raw_instance().web3(), pool_info.common.address);
 
         let amplification_parameter = pool_contract
-            .get_amplification_parameter()
+            .amplification_parameter()
             .block(block)
             .batch_call(batch);
 
@@ -145,7 +145,7 @@ mod tests {
         let web3 = mock.web3();
 
         let pool = mock.deploy(BalancerV2StablePool::raw_contract().abi.clone());
-        pool.expect_call(BalancerV2StablePool::signatures().get_amplification_parameter())
+        pool.expect_call(BalancerV2StablePool::signatures().amplification_parameter())
             .returns((
                 amplification_parameter.factor,
                 false,

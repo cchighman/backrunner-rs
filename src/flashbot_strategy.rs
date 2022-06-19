@@ -19,7 +19,7 @@ pub mod utils {
     use super::*;
     pub static timestamp_seed: u128 = 30000_u128;    
 
-    pub fn get_valid_timestamp() -> U256 {
+    pub fn valid_timestamp() -> U256 {
         let start = SystemTime::now();
         let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
         let time_millis = since_epoch.as_millis().checked_add(timestamp_seed).unwrap();
@@ -121,7 +121,7 @@ pub mod utils {
             services.MAINNET_BOT_SIGNER.clone()
         );
 
-        let block_number = client.inner().inner().get_block_number().await?;
+        let block_number = client.inner().inner().block_number().await?;
         let signature = client.signer().sign_transaction(&tx).await?;
         let bundle = BundleRequest::new()
             .push_transaction(tx.rlp_signed(client.signer().chain_id(), &signature))
@@ -151,8 +151,8 @@ pub mod utils {
 */
 
  /*
-let bundle = get_bundle_for_test(&client).await?;
-let current_block_number = client.inner().inner().get_block_number().await?;
+let bundle = bundle_for_test(&client).await?;
+let current_block_number = client.inner().inner().block_number().await?;
 let bundle = bundle
     .set_simulation_block(current_block_number)
     .set_simulation_timestamp(1731851886)
@@ -171,7 +171,7 @@ println!("Simulated bundle: {:?}", raw_txs);
 
 // submitting multiple bundles to increase the probability on inclusion
 for x in 0..10 
-    let bundle = get_bundle_for_test(&client).await?;
+    let bundle = bundle_for_test(&client).await?;
     let bundle = bundle.set_block(current_block_number + x);
     println!("Bundle Initialized");
     println!("{}", current_block_number + x);
@@ -212,7 +212,7 @@ async fn test_relay() -> Result<()> {
     );
 
     // get last block number
-    let block_number = client.get_block_number().await?;
+    let block_number = client.block_number().await?;
 
     // Build a custom bundle that pays 0x0000000000000000000000000000000000000000
     let tx = {
@@ -247,10 +247,10 @@ async fn test_relay() -> Result<()> {
     Ok(())
 }
 
-async fn get_bundle_for_test<M: 'static + Middleware, S: 'static + Signer>(
+async fn bundle_for_test<M: 'static + Middleware, S: 'static + Signer>(
     client: &SignerMiddleware<M, S>,
 ) -> Result<BundleRequest> {
-    let mut nounce = client.get_transaction_count(client.address(), None).await?;
+    let mut nounce = client.transaction_count(client.address(), None).await?;
 
     let mut tx: TypedTransaction = TransactionRequest::pay("vitalik.eth", 100).into();
     let bundle = BundleRequest::new();
@@ -305,7 +305,7 @@ pub fn test() {
         .ok_or_else(|| anyhow::format_err!("tx not included"))
         .unwrap();
     let tx = client
-        .get_transaction(receipt.transaction_hash)
+        .transaction(receipt.transaction_hash)
         .await
         .unwrap();
 

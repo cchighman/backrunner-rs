@@ -1,14 +1,26 @@
 use std::fmt;
+use std::ops::Add;
+use std::ops::Div;
+use std::ops::Mul;
 
 
+use bigdecimal::BigDecimal;
+use bigdecimal::FromPrimitive;
 use ethers::prelude::{Address, U256};
 use futures_signals::signal::{Mutable, MutableSignal};
+use num_bigint::BigInt;
 use num_rational::{Ratio, BigRational};
 use serde::{Deserialize, Serialize};
 use ethers::core::types::transaction::eip2718::TypedTransaction;
 
 use crate::dex_pool::DexPool;
 use crate::utils::common::DIRECTION;
+use crate::utils::conversions::*;
+use crate::utils::u256_decimal::*;
+use crate::utils::ratio_as_decimal::*;
+use crate::utils::conversions::U256Ext;
+
+
 
 
 const POOL_SWAP_GAS_COST: usize = 60_000;
@@ -34,10 +46,10 @@ type RelativeReserves = (U256, U256, Address);
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CryptoPair {
     pub(crate) pair: DexPool,
-    pub(crate) pending_left_reserves: Mutable<U256>,
-    pub(crate) pending_right_reserves: Mutable<U256>,
-    pub(crate) confirmed_left_reserves: Mutable<U256>,
-    pub(crate) confirmed_right_reserves: Mutable<U256>,
+    pub(crate) pending_left_reserves: Mutable<ethers::prelude::U256>,
+    pub(crate) pending_right_reserves: Mutable<ethers::prelude::U256>,
+    pub(crate) confirmed_left_reserves: Mutable<ethers::prelude::U256>,
+    pub(crate) confirmed_right_reserves: Mutable<ethers::prelude::U256>,
     pub(crate) pending_txs: Mutable<Vec<TypedTransaction>>,
     pub(crate) fee: Ratio<u32>,
 }
@@ -75,7 +87,7 @@ impl CryptoPair {
     pub fn left_decimal(&self) -> i32 {
         return self.pair.token0.decimals;
     }
-    pub fn get_symbol(&self, direction: DIRECTION) -> &String {
+    pub fn symbol(&self, direction: DIRECTION) -> &String {
         if direction == DIRECTION::Left {
             return &self.pair.token0.symbol;
         } else {
@@ -87,11 +99,19 @@ impl CryptoPair {
         return self.pair.token1.decimals;
     }
 
-    pub fn get_decimal(&self, direction: DIRECTION) -> i32 {
+    pub fn decimal(&self, direction: DIRECTION) -> i32 {
         if direction == DIRECTION::Left {
             return self.pair.token0.decimals;
         } else {
             return self.pair.token1.decimals;
+        }
+    }
+
+    pub fn other_decimal(&self, direction: DIRECTION) -> i32 {
+        if direction == DIRECTION::Left {
+            return self.pair.token1.decimals;
+        } else {
+            return self.pair.token0.decimals;
         }
     }
 
@@ -131,7 +151,7 @@ impl CryptoPair {
         return &self.pair.token1.id;
     }
 
-    pub fn get_id(&self, direction: DIRECTION) -> &Address {
+    pub fn id(&self, direction: DIRECTION) -> &Address {
         if direction == DIRECTION::Left {
             return self.left_id();
         } else {
@@ -167,7 +187,7 @@ impl CryptoPair {
     }
 
 
-    pub fn get_pending_reserves_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
+    pub fn pending_reserves_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
         if direction == DIRECTION::Left {
             return self.pending_left_reserves_signal();
         } else {
@@ -175,7 +195,7 @@ impl CryptoPair {
         }
     }
 
-    pub fn get_confirmed_reserves_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
+    pub fn confirmed_reserves_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
         if direction == DIRECTION::Left {
             return self.confirmed_left_reserves_signal();
         } else {
@@ -183,7 +203,7 @@ impl CryptoPair {
         }
     }
 
-    pub fn get_pending_reserve(&self, direction: DIRECTION) -> U256 {
+    pub fn pending_reserve(&self, direction: DIRECTION) -> U256 {
         if direction == DIRECTION::Left {
             return self.pending_left_reserves();
         } else {
@@ -191,7 +211,7 @@ impl CryptoPair {
         }
     }
 
-    pub fn get_confirmed_reserve(&self, direction: DIRECTION) -> U256 {
+    pub fn confirmed_reserve(&self, direction: DIRECTION) -> U256 {
         if direction == DIRECTION::Left {
             return self.confirmed_left_reserves();
         } else {
@@ -199,7 +219,7 @@ impl CryptoPair {
         }
     }
 
-    pub fn get_reserve(&self, direction: DIRECTION) -> U256 {
+    pub fn reserve(&self, direction: DIRECTION) -> U256 {
         if direction == DIRECTION::Left {
             return self.confirmed_left_reserves();
         } else {
@@ -207,7 +227,7 @@ impl CryptoPair {
         }
     }
 
-    pub fn get_pending_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
+    pub fn pending_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
         if direction == DIRECTION::Left {
             return self.pending_left_reserves_signal();
         } else {
@@ -215,7 +235,7 @@ impl CryptoPair {
         }
     }
 
-    pub fn get_confirmed_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
+    pub fn confirmed_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
         if direction == DIRECTION::Left {
             return self.confirmed_left_reserves_signal();
         } else {
@@ -223,26 +243,70 @@ impl CryptoPair {
         }
     }
     
-    pub fn get_pending_txs(&self)->Vec<TypedTransaction> {
+    pub fn pending_txs(&self)->Vec<TypedTransaction> {
         self.pending_txs.get_cloned()
     }
 
-        /// Given an input amount and token, returns the maximum output amount and address of the other asset.
+
+    /* Reasoning in terms of price exclusively uses reserves */
+    pub fn rational_price(&self, direction: DIRECTION)->Result<Ratio<BigInt>, anyhow::Error> {
+        if direction == DIRECTION::Left {
+            BigRational::new_checked(self.pending_right_reserves.get().to_big_int(), self.pending_left_reserves.get().to_big_int())
+        } else {
+            BigRational::new_checked(self.pending_left_reserves.get().to_big_int(), self.pending_right_reserves.get().to_big_int())
+        }
+    }
+
+    pub fn decimal_price(&self, direction: DIRECTION)->Result<BigDecimal, anyhow::Error> {
+        let rational_price =  self.rational_price(direction)?;
+        let top_bytes = rational_price.numer().to_bytes_le();
+        let top = BigInt::from_bytes_le(top_bytes.0, &top_bytes.1);
+    
+        let bottom_bytes = rational_price.denom().to_bytes_le();
+        let bottom = BigInt::from_bytes_le(bottom_bytes.0, &bottom_bytes.1);
+
+        Ok(BigDecimal::from(top) / BigDecimal::from(bottom))
+    }
+    
+    /* Reasoning in terms of a relative token amount requires consideration of decimal placement */
+    pub fn to_amount(&self, reserve_amt: &U256, direction: DIRECTION)->Result<BigDecimal, anyhow::Error> {
+        let rational_price = self.rational_price(direction.clone()).unwrap().mul(BigInt::from_i128(10_i128.pow((self.decimal(direction.clone()) - self.other_decimal(direction.clone()).abs()).try_into().unwrap())).unwrap());
+        let top_bytes = rational_price.numer().to_bytes_le();
+        let top = BigInt::from_bytes_le(top_bytes.0, &top_bytes.1);
+    
+        let bottom_bytes = rational_price.denom().to_bytes_le();
+        let bottom = BigInt::from_bytes_le(bottom_bytes.0, &bottom_bytes.1);
+
+        Ok(BigDecimal::from(top) / BigDecimal::from(bottom))
+    }    
+ 
+    /* Reasoning in terms of a relative token amount requires consideration of decimal placement */
+    pub fn to_reserve(&self, token_amt: &BigDecimal, direction: DIRECTION)->Result<U256, anyhow::Error> {
+        let (x, exp) = token_amt.clone().into_bigint_and_exponent();
+        let numerator_bytes = x.to_bytes_le();
+        let base = BigInt::from_bytes_le(numerator_bytes.0, &numerator_bytes.1);
+        let ten = BigRational::new(10.into(), 1.into());
+        let numerator = BigRational::new(base, 1.into());
+        let added_exp = ten.pow((exp.add(self.decimal(direction) as i64)) as i32);
+        big_rational_to_u256(&(numerator/added_exp))
+    }    
+
+    /// Given an input amount and token, returns the maximum output amount and address of the other asset.
     /// Returns None if operation not possible due to arithmetic issues (e.g. over or underflow)
-    pub fn get_amount_out(&self, token_in: Address, amount_in: U256) -> Option<(U256, Address)> {
-        let (reserve_in, reserve_out, token_out) = self.get_relative_reserves(token_in);
+    pub fn amount_out(&self, token_in: Address, amount_in: U256) -> Option<(U256, Address)> {
+        let (reserve_in, reserve_out, token_out) = self.relative_reserves(token_in);
         Some((
-            self.amount_out(amount_in, reserve_in, reserve_out)?,
+            self.amount_out_impl(amount_in, reserve_in, reserve_out)?,
             token_out,
         ))
     }
 
     /// Given an output amount and token, returns a required input amount and address of the other asset.
     /// Returns None if operation not possible due to arithmetic issues (e.g. over or underflow, reserve too small)
-    pub fn get_amount_in(&self, token_out: Address, amount_out: U256) -> Option<(U256, Address)> {
-        let (reserve_out, reserve_in, token_in) = self.get_relative_reserves(token_out);
+    pub fn amount_in(&self, token_out: Address, amount_out: U256) -> Option<(U256, Address)> {
+        let (reserve_out, reserve_in, token_in) = self.relative_reserves(token_out);
         Some((
-            self.amount_in(amount_out, reserve_in, reserve_out)?,
+            self.amount_in_impl(amount_out, reserve_in, reserve_out)?,
             token_in,
         ))
     }
@@ -251,8 +315,8 @@ impl CryptoPair {
     /// - the pool's reserve of token provided
     /// - the reserve of the other token
     /// - the pool's other token
-    /// This is essentially a helper method for shuffling values in `get_amount_in` and `get_amount_out`
-    fn get_relative_reserves(&self, token: Address) -> RelativeReserves {
+    /// This is essentially a helper method for shuffling values in `amount_in` and `amount_out`
+    fn relative_reserves(&self, token: Address) -> RelativeReserves {
         // https://github.com/Uniswap/uniswap-v2-periphery/blob/master/contracts/libraries/UniswapV2Library.sol#L53
         if token == *self.left_id() {
             (
@@ -270,7 +334,7 @@ impl CryptoPair {
         }
     }
 
-    fn amount_out(&self, amount_in: U256, reserve_in: U256, reserve_out: U256) -> Option<U256> {
+    fn amount_out_impl(&self, amount_in: U256, reserve_in: U256, reserve_out: U256) -> Option<U256> {
         if amount_in.is_zero() || reserve_in.is_zero() || reserve_out.is_zero() {
             return None;
         }
@@ -287,7 +351,7 @@ impl CryptoPair {
         Some(amount_out)
     }
 
-    fn amount_in(&self, amount_out: U256, reserve_in: U256, reserve_out: U256) -> Option<U256> {
+    fn amount_in_impl(&self, amount_out: U256, reserve_in: U256, reserve_out: U256) -> Option<U256> {
         if amount_out.is_zero() || reserve_in.is_zero() || reserve_out.is_zero() {
             return None;
         }
@@ -384,37 +448,37 @@ mod tests {
     use crate::ethcontract_error;
 
     #[test]
-    fn test_get_amounts_out() {
+    fn test_amounts_out() {
         let sell_token = H160::from_low_u64_be(1);
         let buy_token = H160::from_low_u64_be(2);
 
         // Even Pool
         let pool = Pool::uniswap(TokenPair::new(sell_token, buy_token).unwrap(), (100, 100));
         assert_eq!(
-            pool.get_amount_out(sell_token, 10.into()),
+            pool.amount_out(sell_token, 10.into()),
             Some((9.into(), buy_token))
         );
         assert_eq!(
-            pool.get_amount_out(sell_token, 100.into()),
+            pool.amount_out(sell_token, 100.into()),
             Some((49.into(), buy_token))
         );
         assert_eq!(
-            pool.get_amount_out(sell_token, 1000.into()),
+            pool.amount_out(sell_token, 1000.into()),
             Some((90.into(), buy_token))
         );
 
         //Uneven Pool
         let pool = Pool::uniswap(TokenPair::new(sell_token, buy_token).unwrap(), (200, 50));
         assert_eq!(
-            pool.get_amount_out(sell_token, 10.into()),
+            pool.amount_out(sell_token, 10.into()),
             Some((2.into(), buy_token))
         );
         assert_eq!(
-            pool.get_amount_out(sell_token, 100.into()),
+            pool.amount_out(sell_token, 100.into()),
             Some((16.into(), buy_token))
         );
         assert_eq!(
-            pool.get_amount_out(sell_token, 1000.into()),
+            pool.amount_out(sell_token, 1000.into()),
             Some((41.into(), buy_token))
         );
 
@@ -424,42 +488,42 @@ mod tests {
             (1u128 << 90, 1u128 << 90),
         );
         assert_eq!(
-            pool.get_amount_out(sell_token, 10u128.pow(20).into()),
+            pool.amount_out(sell_token, 10u128.pow(20).into()),
             Some((99_699_991_970_459_889_807u128.into(), buy_token))
         );
 
         // Overflow
-        assert_eq!(pool.get_amount_out(sell_token, U256::max_value()), None);
+        assert_eq!(pool.amount_out(sell_token, U256::max_value()), None);
     }
 
     #[test]
-    fn test_get_amounts_in() {
+    fn test_amounts_in() {
         let sell_token = H160::from_low_u64_be(1);
         let buy_token = H160::from_low_u64_be(2);
 
         // Even Pool
         let pool = Pool::uniswap(TokenPair::new(sell_token, buy_token).unwrap(), (100, 100));
         assert_eq!(
-            pool.get_amount_in(buy_token, 10.into()),
+            pool.amount_in(buy_token, 10.into()),
             Some((12.into(), sell_token))
         );
         assert_eq!(
-            pool.get_amount_in(buy_token, 99.into()),
+            pool.amount_in(buy_token, 99.into()),
             Some((9930.into(), sell_token))
         );
 
         // Buying more than possible
-        assert_eq!(pool.get_amount_in(buy_token, 100.into()), None);
-        assert_eq!(pool.get_amount_in(buy_token, 1000.into()), None);
+        assert_eq!(pool.amount_in(buy_token, 100.into()), None);
+        assert_eq!(pool.amount_in(buy_token, 1000.into()), None);
 
         //Uneven Pool
         let pool = Pool::uniswap(TokenPair::new(sell_token, buy_token).unwrap(), (200, 50));
         assert_eq!(
-            pool.get_amount_in(buy_token, 10.into()),
+            pool.amount_in(buy_token, 10.into()),
             Some((51.into(), sell_token))
         );
         assert_eq!(
-            pool.get_amount_in(buy_token, 49.into()),
+            pool.amount_in(buy_token, 49.into()),
             Some((9830.into(), sell_token))
         );
 
@@ -469,7 +533,7 @@ mod tests {
             (1u128 << 90, 1u128 << 90),
         );
         assert_eq!(
-            pool.get_amount_in(buy_token, 10u128.pow(20).into()),
+            pool.amount_in(buy_token, 10u128.pow(20).into()),
             Some((100_300_910_810_367_424_267u128.into(), sell_token)),
         );
     }

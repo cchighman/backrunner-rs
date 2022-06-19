@@ -81,7 +81,7 @@ pub struct WeightedPoolRef<'a> {
 }
 
 impl BaselineSolvable for WeightedPoolRef<'_> {
-    fn get_amount_out(&self, out_token: H160, (in_amount, in_token): (U256, H160)) -> Option<U256> {
+    fn amount_out(&self, out_token: H160, (in_amount, in_token): (U256, H160)) -> Option<U256> {
         // Note that the output of this function does not depend on the pool
         // specialization. All contract branches compute this amount with:
         // https://github.com/balancer-labs/balancer-v2-monorepo/blob/6c9e24e22d0c46cca6dd15861d3d33da61a60b98/pkg/core/contracts/pools/BaseMinimalSwapInfoPool.sol#L62-L75
@@ -101,7 +101,7 @@ impl BaselineSolvable for WeightedPoolRef<'_> {
         out_reserves.common.downscale_down(out_amount)
     }
 
-    fn get_amount_in(&self, in_token: H160, (out_amount, out_token): (U256, H160)) -> Option<U256> {
+    fn amount_in(&self, in_token: H160, (out_amount, out_token): (U256, H160)) -> Option<U256> {
         // Note that the output of this function does not depend on the pool
         // specialization. All contract branches compute this amount with:
         // https://github.com/balancer-labs/balancer-v2-monorepo/blob/6c9e24e22d0c46cca6dd15861d3d33da61a60b98/pkg/core/contracts/pools/BaseMinimalSwapInfoPool.sol#L75-L88
@@ -146,7 +146,7 @@ impl StablePoolRef<'_> {
     // rounding/precision errors in the functions which operate on this. Specifically,
     // the internal methods
     // - calculate_invariant and
-    // - get_token_balance_given_invariant_and_all_other_balances
+    // - token_balance_given_invariant_and_all_other_balances
     // which perform balancer-arithmetic on the balances array from inside calc_X_given_Y
     // See issue for this task here: https://github.com/gnosis/gp-v2-services/issues/1332
     fn upscale_balances_with_token_indices(
@@ -179,7 +179,7 @@ impl BaselineSolvable for StablePoolRef<'_> {
 
     /// This comes from `swapGivenIn`
     /// https://github.com/balancer-labs/balancer-v2-monorepo/blob/589542001aeca5bdc120404874fe0137f6a4c749/pkg/pool-utils/contracts/BaseGeneralPool.sol#L46-L63
-    fn get_amount_out(&self, out_token: H160, (in_amount, in_token): (U256, H160)) -> Option<U256> {
+    fn amount_out(&self, out_token: H160, (in_amount, in_token): (U256, H160)) -> Option<U256> {
         let in_reserves = self.reserves.get(&in_token)?;
         let out_reserves = self.reserves.get(&out_token)?;
         let BalancesWithIndices {
@@ -201,7 +201,7 @@ impl BaselineSolvable for StablePoolRef<'_> {
 
     /// Comes from `swapGivenOut`:
     /// https://github.com/balancer-labs/balancer-v2-monorepo/blob/589542001aeca5bdc120404874fe0137f6a4c749/pkg/pool-utils/contracts/BaseGeneralPool.sol#L65-L82
-    fn get_amount_in(&self, in_token: H160, (out_amount, out_token): (U256, H160)) -> Option<U256> {
+    fn amount_in(&self, in_token: H160, (out_amount, out_token): (U256, H160)) -> Option<U256> {
         let in_reserves = self.reserves.get(&in_token)?;
         let out_reserves = self.reserves.get(&out_token)?;
         let BalancesWithIndices {
@@ -246,12 +246,12 @@ impl WeightedPool {
 }
 
 impl BaselineSolvable for WeightedPool {
-    fn get_amount_out(&self, out_token: H160, input: (U256, H160)) -> Option<U256> {
-        self.as_pool_ref().get_amount_out(out_token, input)
+    fn amount_out(&self, out_token: H160, input: (U256, H160)) -> Option<U256> {
+        self.as_pool_ref().amount_out(out_token, input)
     }
 
-    fn get_amount_in(&self, in_token: H160, output: (U256, H160)) -> Option<U256> {
-        self.as_pool_ref().get_amount_in(in_token, output)
+    fn amount_in(&self, in_token: H160, output: (U256, H160)) -> Option<U256> {
+        self.as_pool_ref().amount_in(in_token, output)
     }
 
     fn gas_cost(&self) -> usize {
@@ -260,12 +260,12 @@ impl BaselineSolvable for WeightedPool {
 }
 
 impl BaselineSolvable for StablePool {
-    fn get_amount_out(&self, out_token: H160, input: (U256, H160)) -> Option<U256> {
-        self.as_pool_ref().get_amount_out(out_token, input)
+    fn amount_out(&self, out_token: H160, input: (U256, H160)) -> Option<U256> {
+        self.as_pool_ref().amount_out(out_token, input)
     }
 
-    fn get_amount_in(&self, in_token: H160, output: (U256, H160)) -> Option<U256> {
-        self.as_pool_ref().get_amount_in(in_token, output)
+    fn amount_in(&self, in_token: H160, output: (U256, H160)) -> Option<U256> {
+        self.as_pool_ref().amount_in(in_token, output)
     }
 
     fn gas_cost(&self) -> usize {
@@ -360,7 +360,7 @@ mod tests {
     }
 
     #[test]
-    fn weighted_get_amount_out() {
+    fn weighted_amount_out() {
         // Values obtained from this transaction:
         // https://dashboard.tenderly.co/tx/main/0xa9f571c9bfd4289bd4bd270465d73e1b7e010622ed089d54d81ec63a0365ec22/debugger
         let crv = H160::repeat_byte(21);
@@ -377,14 +377,14 @@ mod tests {
         );
 
         assert_eq!(
-            b.get_amount_out(crv, (227_937_106_828_652_254_870_i128.into(), sdvecrv_dao))
+            b.amount_out(crv, (227_937_106_828_652_254_870_i128.into(), sdvecrv_dao))
                 .unwrap(),
             488_192_591_864_344_551_330_i128.into()
         );
     }
 
     #[test]
-    fn weighted_get_amount_in() {
+    fn weighted_amount_in() {
         // Values obtained from this transaction:
         // https://dashboard.tenderly.co/tx/main/0xafc3dd6a636a85d9c1976dfa5aee33f78e6ee902f285c9d4cf80a0014aa2a052/debugger
         let weth = H160::repeat_byte(21);
@@ -398,7 +398,7 @@ mod tests {
         );
 
         assert_eq!(
-            b.get_amount_in(weth, (5_000_000_i128.into(), tusd))
+            b.amount_in(weth, (5_000_000_i128.into(), tusd))
                 .unwrap(),
             1_225_715_511_430_411_i128.into()
         );
@@ -443,7 +443,7 @@ mod tests {
     }
 
     #[test]
-    fn stable_get_amount_out() {
+    fn stable_amount_out() {
         // Test based on actual swap.
         // https://dashboard.tenderly.co/tx/main/0x75be93fff064ad46b423b9e20cee09b0ae7f741087f43e4187d4f4cf59f54229/debugger
         // Token addresses are irrelevant for computation.
@@ -470,12 +470,12 @@ mod tests {
         // https://etherscan.io/tx/0x75be93fff064ad46b423b9e20cee09b0ae7f741087f43e4187d4f4cf59f54229
         let amount_in = 1_886_982_823_746_269_817_650_i128.into();
         let amount_out = 1_887_770_905_i128;
-        let res_out = pool.get_amount_out(usdc, (amount_in, dai));
+        let res_out = pool.amount_out(usdc, (amount_in, dai));
         assert_eq!(res_out.unwrap(), amount_out.into());
     }
 
     #[test]
-    fn stable_get_amount_in() {
+    fn stable_amount_in() {
         // Test based on actual swap.
         // https://dashboard.tenderly.co/tx/main/0x38487122158eef6b63570b5d3754ddc223c63af5c049d7b80acacb9e8ca89a63/debugger
         // Token addresses are irrelevant for computation.
@@ -502,7 +502,7 @@ mod tests {
         // https://etherscan.io/tx/0x38487122158eef6b63570b5d3754ddc223c63af5c049d7b80acacb9e8ca89a63
         let amount_in = 900_816_325_i128;
         let amount_out = 900_000_000_000_000_000_000_u128.into();
-        let res_out = pool.get_amount_in(usdc, (amount_out, dai));
+        let res_out = pool.amount_in(usdc, (amount_out, dai));
         assert_eq!(res_out.unwrap(), amount_in.into());
     }
 }

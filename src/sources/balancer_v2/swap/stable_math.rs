@@ -100,7 +100,7 @@ pub fn calc_out_given_in(
     let invariant = calculate_invariant(amplification_parameter, balances, true)?;
     balances[token_index_in] = balances[token_index_in].add(token_amount_in)?;
 
-    let final_balance_out = get_token_balance_given_invariant_and_all_other_balances(
+    let final_balance_out = token_balance_given_invariant_and_all_other_balances(
         amplification_parameter,
         balances,
         invariant,
@@ -132,7 +132,7 @@ pub fn calc_in_given_out(
     let invariant = calculate_invariant(amplification_parameter, balances, true)?;
     balances[token_index_out] = balances[token_index_out].sub(token_amount_out)?;
 
-    let final_balance_in = get_token_balance_given_invariant_and_all_other_balances(
+    let final_balance_in = token_balance_given_invariant_and_all_other_balances(
         amplification_parameter,
         balances,
         invariant,
@@ -151,7 +151,7 @@ pub fn calc_in_given_out(
 }
 
 /// https://github.com/balancer-labs/balancer-v2-monorepo/blob/ad1442113b26ec22081c2047e2ec95355a7f12ba/pkg/pool-stable/contracts/StableMath.sol#L465-L516
-fn get_token_balance_given_invariant_and_all_other_balances(
+fn token_balance_given_invariant_and_all_other_balances(
     amplification_parameter: U256,
     balances: &[Bfp],
     invariant: U256,
@@ -292,7 +292,7 @@ mod tests {
     }
 
     // https://github.com/balancer-labs/balancer-v2-monorepo/blob/stable-deployment/pvt/helpers/src/models/pools/stable/math.ts#L368
-    fn get_tb_given_inv_and_other_balances(
+    fn tb_given_inv_and_other_balances(
         balances: Vec<f64>,
         amplification_parameter: f64,
         invariant: f64,
@@ -327,7 +327,7 @@ mod tests {
     ) -> f64 {
         let invariant = calculate_invariant_approx(balances.clone(), amplification_parameter);
         balances[token_index_out] -= token_amount_out;
-        let final_balance_in = get_tb_given_inv_and_other_balances(
+        let final_balance_in = tb_given_inv_and_other_balances(
             balances.clone(),
             amplification_parameter,
             invariant,
@@ -346,7 +346,7 @@ mod tests {
     ) -> f64 {
         let invariant = calculate_invariant_approx(balances.clone(), amplification_parameter);
         balances[token_index_in] += token_amount_in;
-        let final_balance_out = get_tb_given_inv_and_other_balances(
+        let final_balance_out = tb_given_inv_and_other_balances(
             balances.clone(),
             amplification_parameter,
             invariant,

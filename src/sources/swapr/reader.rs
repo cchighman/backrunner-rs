@@ -109,7 +109,7 @@ mod tests {
         let transport = create_env_test_transport();
         let web3 = Web3::new(transport);
 
-        let (_, pool_fetcher) = swapr::get_liquidity_source(&web3).await.unwrap();
+        let (_, pool_fetcher) = swapr::liquidity_source(&web3).await.unwrap();
         let pool = pool_fetcher
             .fetch(
                 hashset! {

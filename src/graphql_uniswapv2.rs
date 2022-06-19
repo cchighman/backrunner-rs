@@ -14,7 +14,7 @@ use bigdecimal::BigDecimal;
 pub struct UniswapPairs;
 
 //noinspection ALL
-pub async fn get_pairs(
+pub async fn pairs(
     endpoint: &str,
 ) -> std::result::Result<Response<uniswap_pairs::ResponseData>, reqwest::Error> {
     // let endpoint = "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2";

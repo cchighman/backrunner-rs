@@ -53,10 +53,10 @@ pub async fn cyclic_order(
     let scenario_3 = a1_b1 && a2_b2;  // WETH-DAI-WETH_DAI
     
     let pair_id_1 = crypto_path[0].pair_id();
-    let pair_1 = crypto_pairs.get_key_value(pair_id_1).unwrap().1;
+    let pair_1 = crypto_pairs.key_value(pair_id_1).unwrap().1;
 
     let pair_id_2 = crypto_path[1].pair_id();
-    let pair_2 = crypto_pairs.get_key_value(pair_id_2).unwrap().1;
+    let pair_2 = crypto_pairs.key_value(pair_id_2).unwrap().1;
 
     let token_a1 = if scenario_1 || scenario_3 {
         Option::from(SequenceToken::new(pair_1.clone(), DIRECTION::Left))
@@ -182,7 +182,7 @@ impl TwoPathSequence {
     fn path(&self) -> String {
         let mut path_str: String = Default::default();
         for token in 0..self.sequence.len() {
-            path_str = path_str.to_owned() + " - " + self.sequence[token].get_symbol();
+            path_str = path_str.to_owned() + " - " + self.sequence[token].symbol();
         }
         path_str
     }
@@ -190,12 +190,12 @@ impl TwoPathSequence {
     pub async fn calculate(sequence: Arc<TwoPathSequence>) {
        
         let result = optimize_a_prime(
-            BigDecimal::from_str(&*sequence.a1().get_reserve().to_string()).unwrap(),
-            BigDecimal::from_str(&*sequence.b1().get_reserve().to_string()).unwrap(),
-            BigDecimal::from_str(&*sequence.a2().get_reserve().to_string()).unwrap(),
-            BigDecimal::from_str(&*sequence.b2().get_reserve().to_string()).unwrap(),
-            BigDecimal::from_str(&*sequence.a3().get_reserve().to_string()).unwrap(),
-            BigDecimal::from_str(&*sequence.b3().get_reserve().to_string()).unwrap(),
+            BigDecimal::from_str(&*sequence.a1().reserve().to_string()).unwrap(),
+            BigDecimal::from_str(&*sequence.b1().reserve().to_string()).unwrap(),
+            BigDecimal::from_str(&*sequence.a2().reserve().to_string()).unwrap(),
+            BigDecimal::from_str(&*sequence.b2().reserve().to_string()).unwrap(),
+            BigDecimal::from_str(&*sequence.a3().reserve().to_string()).unwrap(),
+            BigDecimal::from_str(&*sequence.b3().reserve().to_string()).unwrap(),
         );
 
         if !result.is_none() {
@@ -210,69 +210,69 @@ impl TwoPathSequence {
                 method,
                 profit.to_f64().unwrap(),
                 delta_a.to_f64().unwrap(),
-                &sequence.a1().get_symbol(),
+                &sequence.a1().symbol(),
                 delta_b.to_f64().unwrap(),
-                &sequence.b1().get_symbol(),
-                (BigDecimal::from_str(&*sequence.a1().get_reserve().to_string()).unwrap()
-                    / BigDecimal::from_str(&*sequence.b1().get_reserve().to_string()).unwrap())
+                &sequence.b1().symbol(),
+                (BigDecimal::from_str(&*sequence.a1().reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.b1().reserve().to_string()).unwrap())
                 .to_f64()
                 .unwrap(),
-                sequence.a1().get_symbol(),
-                sequence.a1().get_reserve(),
-                (BigDecimal::from_str(&*sequence.a1().get_reserve().to_string()).unwrap()
-                    / BigDecimal::from_str(&*sequence.b1().get_reserve().to_string()).unwrap())
+                sequence.a1().symbol(),
+                sequence.a1().reserve(),
+                (BigDecimal::from_str(&*sequence.a1().reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.b1().reserve().to_string()).unwrap())
                 .to_f64()
                 .unwrap(),
-                sequence.b1().get_symbol(),
-                sequence.b1().get_reserve(),
-                (BigDecimal::from_str(&*sequence.b1().get_reserve().to_string()).unwrap()
-                    / BigDecimal::from_str(&*sequence.a1().get_reserve().to_string()).unwrap())
+                sequence.b1().symbol(),
+                sequence.b1().reserve(),
+                (BigDecimal::from_str(&*sequence.b1().reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.a1().reserve().to_string()).unwrap())
                 .to_f64()
                 .unwrap(),
                 delta_b.to_f64().unwrap(),
-                sequence.a2().get_symbol(),
+                sequence.a2().symbol(),
                 delta_c.to_f64().unwrap(),
-                sequence.b2().get_symbol(),
-                ((BigDecimal::from_str(&*sequence.a2().get_reserve().to_string()).unwrap()
+                sequence.b2().symbol(),
+                ((BigDecimal::from_str(&*sequence.a2().reserve().to_string()).unwrap()
                     / BigDecimal::from_str(
-                        &*10_i128.pow(sequence.a2().get_decimal() as u32).to_string()
+                        &*10_i128.pow(sequence.a2().decimal() as u32).to_string()
                     )
                     .unwrap())
-                    / (BigDecimal::from_str(&*sequence.b2().get_reserve().to_string()).unwrap()
+                    / (BigDecimal::from_str(&*sequence.b2().reserve().to_string()).unwrap()
                         / BigDecimal::from_str(
-                            &*10_i128.pow(sequence.b2().get_decimal() as u32).to_string()
+                            &*10_i128.pow(sequence.b2().decimal() as u32).to_string()
                         )
                         .unwrap()))
                 .to_f64()
                 .unwrap(),
-                sequence.a2().get_symbol(),
-                sequence.a2().get_reserve(),
-                (BigDecimal::from_str(&*sequence.a2().get_reserve().to_string()).unwrap()
-                    / BigDecimal::from_str(&*sequence.b2().get_reserve().to_string()).unwrap())
+                sequence.a2().symbol(),
+                sequence.a2().reserve(),
+                (BigDecimal::from_str(&*sequence.a2().reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.b2().reserve().to_string()).unwrap())
                 .to_f64()
                 .unwrap(),
-                sequence.b2().get_symbol(),
-                sequence.b2().get_reserve(),
-                (BigDecimal::from_str(&*sequence.b2().get_reserve().to_string()).unwrap()
-                    / BigDecimal::from_str(&*sequence.a2().get_reserve().to_string()).unwrap())
+                sequence.b2().symbol(),
+                sequence.b2().reserve(),
+                (BigDecimal::from_str(&*sequence.b2().reserve().to_string()).unwrap()
+                    / BigDecimal::from_str(&*sequence.a2().reserve().to_string()).unwrap())
                 .to_f64()
                 .unwrap()
             );
 
             let (source_amt, dest_amt) = ThreePathSequence::dec_to_u256(
                 &delta_a.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.a1().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.a1().decimal() as u32)).unwrap(),
                 ),
                 &delta_b.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.b1().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.b1().decimal() as u32)).unwrap(),
                 ),
             )
             .await;
 
             let trade1 = SwapRoute::new(
                 (
-                    sequence.a1().get_id().clone(),
-                    sequence.b1().get_id().clone(),
+                    sequence.a1().id().clone(),
+                    sequence.b1().id().clone(),
                 ),
                 source_amt.clone(),
                 dest_amt,
@@ -281,18 +281,18 @@ impl TwoPathSequence {
 
             let (source_amt, dest_amt) = ThreePathSequence::dec_to_u256(
                 &delta_b.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.a2().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.a2().decimal() as u32)).unwrap(),
                 ),
                 &delta_c.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.b2().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.b2().decimal() as u32)).unwrap(),
                 ),
             )
             .await;
 
             let trade2 = SwapRoute::new(
                 (
-                    sequence.a2().get_id().clone(),
-                    sequence.b2().get_id().clone(),
+                    sequence.a2().id().clone(),
+                    sequence.b2().id().clone(),
                 ),
                 source_amt,
                 dest_amt,
@@ -301,18 +301,18 @@ impl TwoPathSequence {
 
             let (source_amt, dest_amt) = ThreePathSequence::dec_to_u256(
                 &delta_c.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.a3().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.a3().decimal() as u32)).unwrap(),
                 ),
                 &delta_a_prime.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.b3().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.b3().decimal() as u32)).unwrap(),
                 ),
             )
             .await;
 
             let trade3 = SwapRoute::new(
                 (
-                    sequence.a3().get_id().clone(),
-                    sequence.b3().get_id().clone(),
+                    sequence.a3().id().clone(),
+                    sequence.b3().id().clone(),
                 ),
                 source_amt,
                 dest_amt,
@@ -322,10 +322,10 @@ impl TwoPathSequence {
             let trade_vec = vec![trade1, trade2, trade3];
             let (source_amt, dest_amt) = ThreePathSequence::dec_to_u256(
                 &delta_a.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.a1().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.a1().decimal() as u32)).unwrap(),
                 ),
                 &delta_b.clone().mul(
-                    BigDecimal::from_i128(10_i128.pow(sequence.b1().get_decimal() as u32)).unwrap(),
+                    BigDecimal::from_i128(10_i128.pow(sequence.b1().decimal() as u32)).unwrap(),
                 ),
             )
             .await;
@@ -362,19 +362,19 @@ impl PathSequence for TwoPathSequence {
  */
 /* 
     fn arb_index(&self)-> BigDecimal {
-        (BigDecimal::from_str(&*self.a1().get_reserve().to_string()).unwrap()
-            / BigDecimal::from_str(&*self.b1().get_reserve().to_string()).unwrap())
-            * (BigDecimal::from_str(&*self.a2().get_reserve().to_string()).unwrap()
-                / BigDecimal::from_str(&*self.b2().get_reserve().to_string()).unwrap())
+        (BigDecimal::from_str(&*self.a1().reserve().to_string()).unwrap()
+            / BigDecimal::from_str(&*self.b1().reserve().to_string()).unwrap())
+            * (BigDecimal::from_str(&*self.a2().reserve().to_string()).unwrap()
+                / BigDecimal::from_str(&*self.b2().reserve().to_string()).unwrap())
     }
 
     async fn init(&self, arb_ref: Arc<(dyn Any + 'static + Sync + Send)>)->Result<(),anyhow::Error> {
         let seq = arb_ref.downcast_ref::<TwoPathSequence>().unwrap().clone();
         let t = map_ref! {
-            let a1 = self.a1().get_signal(),
-             let b1 =self.b1().get_signal(),
-             let a2 =  self.a2().get_signal(),
-             let b2 =  self.b2().get_signal() =>
+            let a1 = self.a1().signal(),
+             let b1 =self.b1().signal(),
+             let a2 =  self.a2().signal(),
+             let b2 =  self.b2().signal() =>
              (BigDecimal::from_str(&a1.to_string()).unwrap()
             / BigDecimal::from_str(&*b1.to_string()).unwrap())
             * (BigDecimal::from_str(&*a2.to_string()).unwrap()
@@ -477,18 +477,18 @@ async fn test_cyclic_order() {
 
         println!(
             "a1: {}, b1: {}, a2: {}, b2: {}",
-            ordered.a1().get_symbol(),
-            ordered.b1().get_symbol(),
-            ordered.a2().get_symbol(),
-            ordered.b2().get_symbol()
+            ordered.a1().symbol(),
+            ordered.b1().symbol(),
+            ordered.a2().symbol(),
+            ordered.b2().symbol()
         );
         /* Scenario 1 Ordering */
-        assert!(ordered.a1().get_symbol() == ordered.b2().get_symbol());
-        assert!(ordered.b1().get_symbol() == ordered.a2().get_symbol());
+        assert!(ordered.a1().symbol() == ordered.b2().symbol());
+        assert!(ordered.b1().symbol() == ordered.a2().symbol());
 
         /* Scenario 1 Ordering */
-        assert!(ordered.b1().get_symbol() == ordered.a2().get_symbol());
-        assert!(ordered.a1().get_symbol() == ordered.b2().get_symbol());
+        assert!(ordered.b1().symbol() == ordered.a2().symbol());
+        assert!(ordered.a1().symbol() == ordered.b2().symbol());
         Ok(())
     
 }

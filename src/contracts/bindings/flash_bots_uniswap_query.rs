@@ -54,7 +54,7 @@ mod flashbotsuniswapquery_mod {
             Self(contract)
         }
         #[doc = "Calls the contract's `getPairsByIndexRange` (0xab2217e4) function"]
-        pub fn get_pairs_by_index_range(
+        pub fn pairs_by_index_range(
             &self,
             uniswap_factory: ethers::core::types::Address,
             start: ethers::core::types::U256,
@@ -68,7 +68,7 @@ mod flashbotsuniswapquery_mod {
                 .expect("method not found (this should never happen)")
         }
         #[doc = "Calls the contract's `getReservesByPairs` (0x4dbf0f39) function"]
-        pub fn get_reserves_by_pairs(
+        pub fn reserves_by_pairs(
             &self,
             pairs: ::std::vec::Vec<ethers::core::types::Address>,
         ) -> ethers::contract::builders::ContractCall<

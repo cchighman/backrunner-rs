@@ -12,7 +12,7 @@ use ethers::providers::{Middleware, Provider};
 
 use std::sync::Arc;
 use std::{collections::HashMap, fs::File, io, thread, time};
-use crate::transaction_utils::{get_tx_flow, get_tx_receipt};
+use crate::transaction_utils::{tx_flow, tx_receipt};
 use ethers::prelude::*;
 use super::transaction_log_utils::*;
 use super::transaction_log_utils;
@@ -24,11 +24,6 @@ use crate::crypto_pair::CryptoPair;
 
 use super::uniswap_providers::*;
 
-
-#[tokio::main]
-pub async fn main () {
-
-}
 use ethers::{prelude::*, utils::Ganache};
 use std::time::Duration;
 use ethereum_types::H160;
@@ -41,7 +36,7 @@ async fn test_main() -> eyre::Result<()> {
     let provider = Provider::new(ws).interval(Duration::from_millis(2000));
     let mut stream = provider.watch_blocks().await?.take(5);
     while let Some(block) = stream.next().await {
-        let block = provider.get_block(block).await?.unwrap();
+        let block = provider.block(block).await?.unwrap();
         println!(
             "Ts: {:?}, block number: {} -> {:?}",
             block.timestamp,
@@ -54,7 +49,14 @@ async fn test_main() -> eyre::Result<()> {
 }
 
 
-async fn monitor_tx(pair_map: HashMap<Address, Arc<CryptoPair>>) -> Result<(), anyhow::Error> {
+#[tokio::main]
+pub async fn monitor_tx(pair_map: &mut HashMap<Address, Arc<CryptoPair>>) {
+    use tokio::runtime::Runtime;
+    println!("[777]");
+    let rt = Runtime::new()
+        .unwrap();
+    
+    let handle = rt.handle();
     let client =
     Provider::<Ws>::connect("wss://eth-mainnet.alchemyapi.io/v2/EcNibd4j6LaA9r9pJJRkyAVRvZ_MvKk7")    
     //Provider::<Ws>::connect("wss://mainnet.infura.io/ws/v3/20ca45667c5d4fa6b259b9a36babe5c3")
@@ -62,7 +64,7 @@ async fn monitor_tx(pair_map: HashMap<Address, Arc<CryptoPair>>) -> Result<(), a
     
     let client = Arc::new(client);
     
-    let last_block = client.get_block(BlockNumber::Latest).await?.unwrap().number.unwrap();
+    let last_block = client.get_block(BlockNumber::Latest).await.unwrap().unwrap().number.unwrap();
     println!("last_block: {}", last_block);
  
     /* Subscribe to Pairs */
@@ -70,7 +72,7 @@ async fn monitor_tx(pair_map: HashMap<Address, Arc<CryptoPair>>) -> Result<(), a
     let addy_next: Vec<Address>= addresses.iter().map(|addy| addy.parse::<Address>().unwrap()).collect::<Vec<Address>>();    
     
     let address_filter = Filter::new().address(ValueOrArray::Array(addy_next));
-    let mut stream = client.subscribe_logs(&address_filter).await?;
+    let mut stream = client.subscribe_logs(&address_filter).await.unwrap();
     while let Some(log) = stream.next().await {
         let topic = log.topics[0];
         if !topic_map.contains_key(&topic) {
@@ -81,17 +83,17 @@ async fn monitor_tx(pair_map: HashMap<Address, Arc<CryptoPair>>) -> Result<(), a
         let method = trace.0;
         let signature = trace.1;
 
-        let current_block = client.get_block(BlockNumber::Latest).await?.unwrap().number.unwrap();
+        let current_block = client.get_block(BlockNumber::Latest).await.unwrap().unwrap().number.unwrap();
         let block_number = log.block_number.unwrap();
         let address = log.address;
         let tx_hash = log.transaction_hash;
         let status = if tx_hash.is_none() { "Pending" } else { "Confirmed"};    
         let decoded_event = transaction_log_utils::decode_uniswap_event((method.clone(), signature.clone()),log.topics.clone(),log.data.clone()).await;
-        //let receipt = get_tx_receipt((*mainnet::alchemy_http_client).clone(), tx_hash.clone().unwrap()).await.unwrap();
+        //let receipt = tx_receipt((*mainnet::alchemy_http_client).clone(), tx_hash.clone().unwrap()).await.unwrap();
         
         println!("Current Block: {} Target Block: {}, Event: {} Address: {} Status: {} Tx Hash: {:#?} Params: {:#?}",current_block, block_number, &method, &address, &status,  tx_hash.clone().unwrap(), decoded_event);
         
-        let mut pair = pair_map.get(&log.address).unwrap().as_ref();
+        let pair = pair_map.get_mut(&log.address).unwrap();
         if method.eq("Sync") {
             for param in decoded_event.params.iter() {
                 let log_param : ethabi::LogParam = (*param).clone();
@@ -148,8 +150,8 @@ async fn monitor_tx(pair_map: HashMap<Address, Arc<CryptoPair>>) -> Result<(), a
                     }
                 }
             }
-        }
     }
-      Ok(())
+}
+  
 }
 

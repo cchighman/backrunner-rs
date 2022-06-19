@@ -64,7 +64,7 @@ impl FactoryIndexing for BalancerV2WeightedPoolFactory {
         let pool_contract = BalancerV2WeightedPool::at(&self.raw_instance().web3(), pool.address);
         let weights = pool_contract
             .methods()
-            .get_normalized_weights()
+            .normalized_weights()
             .call()
             .await?
             .into_iter()
@@ -185,7 +185,7 @@ mod tests {
         let web3 = mock.web3();
 
         let pool = mock.deploy(BalancerV2WeightedPool::raw_contract().abi.clone());
-        pool.expect_call(BalancerV2WeightedPool::signatures().get_normalized_weights())
+        pool.expect_call(BalancerV2WeightedPool::signatures().normalized_weights())
             .returns(weights.iter().copied().map(Bfp::as_uint256).collect());
 
         let factory = BalancerV2WeightedPoolFactory::at(&web3, H160([0xfa; 20]));

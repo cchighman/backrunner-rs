@@ -46,7 +46,7 @@ impl SwapRoute {
                     self.pair.1
                 ],
                 mainnet::to.clone(),
-                mainnet::get_valid_timestamp(),
+                mainnet::valid_timestamp(),
             ).calldata().unwrap();
             Ok(payload)
             
@@ -63,7 +63,7 @@ impl SwapRoute {
                     Address::from_str(&*self.pair.1.to_string()).unwrap(),
                 ],
                 *TO_ADDRESS,
-                self.get_valid_timestamp(),
+                self.valid_timestamp(),
             )
             .calldata()
             .unwrap()
@@ -79,7 +79,7 @@ impl SwapRoute {
                     Address::from_str(&*self.pair.1.to_string()).unwrap(),
                 ],
                 *TO_ADDRESS,
-                self.get_valid_timestamp(),
+                self.valid_timestamp(),
             )
             .calldata()
             .unwrap()
@@ -96,7 +96,7 @@ impl SwapRoute {
                     Address::from_str(&*self.pair.1.to_string()).unwrap(),
                 ],
                 *TO_ADDRESS,
-                self.get_valid_timestamp(),
+                self.valid_timestamp(),
             )
             .calldata()
             .unwrap()
@@ -108,8 +108,8 @@ impl SwapRoute {
     pub async fn calldata(&self) -> Result<Bytes, anyhow::Error> {
         /*
         match (
-            self.pair.0.get_symbol().as_str(),
-            self.pair.1.get_symbol().as_str(),
+            self.pair.0.symbol().as_str(),
+            self.pair.1.symbol().as_str(),
         ) {
             ("WETH", _) => self.swap_tokens_for_exact_tokens(),
             ("ETH", _) => self.swap_eth_for_exact_tokens(),
