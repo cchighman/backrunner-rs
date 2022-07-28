@@ -1,9 +1,9 @@
+use crate::crypto_pair::CryptoPair;
 use std::borrow::Borrow;
 use std::collections::HashMap;
 use std::string::String;
 use std::sync::Arc;
-use crate::crypto_pair::CryptoPair;
-/* 
+/*
 impl ArbitragePaths {
     pub fn new() -> ArbitragePaths {
         ArbitragePaths {}

@@ -6,11 +6,10 @@ use bigdecimal::BigDecimal;
 use ethereum_types::U512;
 use ethers::prelude::U256;
 use num_traits::real::Real;
-use num_traits::{FromPrimitive, Pow, ToPrimitive, Zero};
+use num_traits::{CheckedDiv, FromPrimitive, Pow, ToPrimitive, Zero};
 
 use crate::crypto_pair::CryptoPair;
-
-// given an input amount of an asset and pair reserves, returns the maximum output amount of the other asset
+/* // given an input amount of an asset and pair reserves, returns the maximum output amount of the other asset
 pub fn amount_out(amountIn: U512, reserveIn: U512, reserveOut: U512) -> U512 {
     let amountInWithFee = amountIn.mul(U512::from(997));
     let numerator: U512 = amountInWithFee.mul(reserveOut);
@@ -186,7 +185,9 @@ pub fn mul_div(x: U512, y: U512, d: U512) -> U512 {
     println!("full_div");
     return full_div(l, h, d);
 }
+*/
 
+/*
 #[test]
 pub fn test_mul_div() {
     let a = U512::from(5);
@@ -197,11 +198,11 @@ pub fn test_mul_div() {
     println!("mul_div: {}", res);
 }
 pub fn compute_profit_maximizing_trade_2(
-    truePrice1: &BigDecimal,
-    truePrice2: &BigDecimal,
-    reserve_first: &BigDecimal,
-    reserve_second: &BigDecimal,
-) -> Option<(bool, BigDecimal)> {
+    truePrice1: &U256,
+    truePrice2: &U256,
+    reserve_first: &U256,
+    reserve_second: &U256,
+) -> Option<(bool, U256)> {
     /*
      if reserve_first == U512::zero()
          || reserve_second == U512::zero()
@@ -220,17 +221,17 @@ pub fn compute_profit_maximizing_trade_2(
     let denominator = if atob { truePrice2 } else { &truePrice1 };
 
     let rightSide = if atob {
-        reserve_first.mul(BigDecimal::from(1000))
+        reserve_first.mul(U256::from(1000_u16))
     } else {
         reserve_second
-            .mul(BigDecimal::from(1000))
-            .div(BigDecimal::from(997))
+            .mul(U256::from(1000_u16))
+            .div(U256::from(997_u16))
     };
     let leftSide = (invariant * (numerator / denominator))
-        .mul(BigDecimal::from(1000))
-        .div(BigDecimal::from(997))
-        .sqrt()
-        .unwrap();
+        .mul(U256::from(1000_u16))
+        .div(U256::from(997_u16))
+        .integer_sqrt()
+
 
     if &leftSide < &rightSide {
         return None;
@@ -241,7 +242,7 @@ pub fn compute_profit_maximizing_trade_2(
     let str = dec_str.split_once(".").unwrap();
     let res = U512::from_dec_str(str.0).unwrap();
 
-    return Some((atob, BigDecimal::from_str(str.0).unwrap()));
+    return Some((atob, U256::from_str(str.0).unwrap()));
 }
 
 // computes the direction and magnitude of the profit-maximizing trade
@@ -300,7 +301,6 @@ pub fn amount_out_2(amount_out: f64, reserve_in: f64, reserve_out: f64) -> f64 {
 pub fn amount_in_2(amount_out: f64, reserve_in: f64, reserve_out: f64) -> f64 {
     return (0.997 * amount_out * reserve_in / (reserve_out - amount_out * 0.997)).add(1.0);
 }
-
 /*
    // q = R0a * R1b
    // r = R1a * R0b
@@ -313,38 +313,39 @@ pub fn amount_in_2(amount_out: f64, reserve_in: f64, reserve_out: f64) -> f64 {
    // p = (q * x_opt) / (r +s * x_opt) - x_opt;
 
 */
+/*
 pub fn estimated_profit(
     buyAReserves: U512,
     buyBReserves: U512,
     sellAReserves: U512,
     sellBReserves: U512,
 ) {
-    let kBuy = BigDecimal::from_str(&*(buyAReserves * buyBReserves).to_string())
+    let kBuy = U256::from_str(&*(buyAReserves * buyBReserves).to_string())
         .unwrap()
-        .to_f64()
+        .as_f64()
         .unwrap();
-    let kSell = BigDecimal::from_str(&*(sellAReserves * sellBReserves).to_string())
+    let kSell = U256::from_str(&*(sellAReserves * sellBReserves).to_string())
         .unwrap()
-        .to_f64()
+        .as_f64()
         .unwrap();
     let gamma = 0.997;
     let one = 1.0;
 
-    let buy_a_reserves = BigDecimal::from_str(&*buyAReserves.to_string())
+    let buy_a_reserves = U256::from_str(&*buyAReserves.to_string())
         .unwrap()
-        .to_f64()
+        .as_f64()
         .unwrap();
-    let buy_b_reserves = BigDecimal::from_str(&*buyBReserves.to_string())
+    let buy_b_reserves = U256::from_str(&*buyBReserves.to_string())
         .unwrap()
-        .to_f64()
+        .as_f64()
         .unwrap();
-    let sell_a_reserves = BigDecimal::from_str(&*sellAReserves.to_string())
+    let sell_a_reserves = U256::from_str(&*sellAReserves.to_string())
         .unwrap()
-        .to_f64()
+        .as_f64()
         .unwrap();
-    let sell_b_reserves = BigDecimal::from_str(&*sellBReserves.to_string())
+    let sell_b_reserves = U256::from_str(&*sellBReserves.to_string())
         .unwrap()
-        .to_f64()
+        .as_f64()
         .unwrap();
 
     let numeratorA = kSell.sqrt() * buy_a_reserves;
@@ -394,9 +395,109 @@ pub fn estimated_profit(
         _deltaBetaPrime
     );
 }
-
+*/
 #[test]
 pub fn test_method_b() {}
+ */
+
+pub fn optimize_a_prime_2(
+    a1: &U256,
+    b1: &U256,
+    a2: &U256,
+    b2: &U256,
+    a3: &U256,
+    b3: &U256,
+) -> Option<(U256, U256, U256, U256, U256)> {
+    let one = U256::from(1000_u16);
+    let nine_seven = U256::from(997_u16);
+
+    let Ea_checked: Option<U256> = (&one * a1 * a2).checked_div(one * a2 + &nine_seven * b1);
+    let Eb_checked: Option<U256> = (&nine_seven * b1 * b2).checked_div(one * a2 + &nine_seven * b1);
+
+    if Ea_checked.is_none() || Eb_checked.is_none() {
+        println!("Ea/Eb is none.");
+        return None;
+    }
+    let Ea = Ea_checked.unwrap();
+    let Eb = Eb_checked.unwrap();
+
+    
+    if Ea < Eb {
+        return None;
+    }
+        let optimal_checked: Option<U256> =
+        ((&Ea * &Eb * &nine_seven * &one).checked_sub(&Ea * &one))?.checked_div(nine_seven);
+    if optimal_checked.is_none() {
+        println!("optimal_checked is none.");
+        return None;
+    }
+
+    let delta_a = optimal_checked.unwrap().integer_sqrt();
+    let delta_b_checked = (b1 * nine_seven * &delta_a).checked_div(a1 + nine_seven * &delta_a);
+    if delta_b_checked.is_none() {
+        println!("delta_b_checked is none.");
+        return None;
+    }
+    let delta_b = delta_b_checked.unwrap();
+
+    let delta_c_checked = (b2 * nine_seven * &delta_b).checked_div(a2 + nine_seven * &delta_b);
+    if delta_c_checked.is_none() {
+        println!("delta_c_checked is none.");
+        return None;
+    }
+    let delta_c = delta_c_checked.unwrap();
+
+    let delta_a_prime_checked =
+        (b3 * nine_seven * &delta_c).checked_div(a3 + nine_seven * &delta_c);
+    if delta_a_prime_checked.is_none() {
+        println!("delta_a_prime_checked is none.");
+        return None;
+    }
+    let delta_a_prime = delta_a_prime_checked.unwrap();
+
+    let profit_calc = &delta_a_prime.checked_sub(delta_a);
+    let mut profit = U256::zero();
+
+    if !profit_calc.is_none() {
+        profit = profit_calc.unwrap();
+    }
+
+    let eq1 = (a1 + nine_seven * &delta_a) * (b1 - &delta_b);
+    let comp_1 = a1.mul(b1);
+
+    let eq2 = (a2 + nine_seven * &delta_b) * (b2 - &delta_c);
+    let comp_2 = a2.mul(b2);
+
+    let eq3 = (a3 + nine_seven * &delta_c) * (b3 - &delta_a_prime);
+    let comp_3 = a3.mul(b3);
+
+    let ten = U256::from(10_u8);
+    let first_eq = eq1.clone() - comp_1.clone();
+    let second_eq = eq2.clone() - comp_2.clone();
+    let third_eq = eq3.clone() - comp_3.clone();
+   // println!("-a- eq1: {} comp1: {} eq2: {} comp2: {} eq3: {} comp3: {}", eq1,comp_1,eq2,comp_2,eq3,comp_3);
+
+    if delta_a.gt(a1) || delta_b.gt(b1) || delta_c.gt(b2) || delta_a_prime.gt(b3) {
+ 
+        return None;
+    }
+
+    Some((delta_a, delta_b, delta_c, delta_a_prime, profit))
+}
+/*
+#3152608723197619.091028508885
+    #print(getAmountIn(328603343612018688,2039158248026467355383,709807159118001694))	#4183
+    print(getAmountOut(1752511055746585067520,2039158248026467355383,709807159118001694))	#289.43
+   # 160680834880208109568, 965768531694947896201 , 12254321112618715815737
+    print(getAmountOut(160680834880208109568,965768531694947896201,12254321112618715815737))	#289.43 
+    #  712017110000000000 202240247581107059883819 , 898159767606160372277
+    #
+    print(getAmountOut(712017110000000000,202240247581107059883819,898159767606160372277))	#289.43
+   */  
+#[test]
+pub fn test_optimize_a_prime_2() {
+   
+}
 
 pub fn optimize_a_prime(
     a1: BigDecimal,
@@ -406,8 +507,8 @@ pub fn optimize_a_prime(
     a3: BigDecimal,
     b3: BigDecimal,
 ) -> Option<(BigDecimal, BigDecimal, BigDecimal, BigDecimal, BigDecimal)> {
-    let one = BigDecimal::from_f64(1.000).unwrap();
-    let nine_seven = BigDecimal::from_f64(0.997).unwrap();
+    let one = BigDecimal::from_f64(1000.0).unwrap();
+    let nine_seven = BigDecimal::from_f64(997.0).unwrap();
 
     let Ea = (&one * &a1 * &a2) / (&one * &a2 + &nine_seven * &b1);
     let Eb = (&nine_seven * &b1 * &b2) / (&one * &a2 + &nine_seven * &b1);
@@ -428,26 +529,26 @@ pub fn optimize_a_prime(
             .to_u128()
             .unwrap(),
     )
-    .div(U256::from(100));
-    let comp_1 = U256::from((&a1.clone().mul(&b1)).to_u128().unwrap()).div(U256::from(100));
+    .div(U256::from(100_u8));
+    let comp_1 = U256::from((&a1.clone().mul(&b1)).to_u128().unwrap()).div(U256::from(100_u8));
 
     let eq2 = U256::from(
         ((&a2 + &nine_seven * &delta_b) * (&b2 - &delta_c))
             .to_u128()
             .unwrap(),
     )
-    .div(U256::from(100));
-    let comp_2 = U256::from((&a2.clone().mul(&b2)).to_u128().unwrap()).div(U256::from(100));
+    .div(U256::from(100_u8));
+    let comp_2 = U256::from((&a2.clone().mul(&b2)).to_u128().unwrap()).div(U256::from(100_u8));
 
     let eq3 = U256::from(
         ((&a3 + &nine_seven * &delta_c) * (&b3 - &delta_a_prime))
             .to_u128()
             .unwrap(),
     )
-    .div(U256::from(100));
-    let comp_3 = U256::from((&a3.clone().mul(&b3)).to_u128().unwrap()).div(U256::from(100));
+    .div(U256::from(100_u8));
+    let comp_3 = U256::from((&a3.clone().mul(&b3)).to_u128().unwrap()).div(U256::from(100_u8));
 
-    let ten = U256::from(10);
+    let ten = U256::from(10_u8);
     let first_eq = (eq1.clone() - comp_1.clone()) < ten.clone();
     let second_eq = (eq2.clone() - comp_2.clone()) < ten.clone();
     let third_eq = (eq3.clone() - comp_3.clone()) < ten.clone();
@@ -455,32 +556,34 @@ pub fn optimize_a_prime(
     Some((delta_a, delta_b, delta_c, delta_a_prime, profit))
 }
 
+/*
+
 pub fn method_c(token_a_left: U512, token_a_right: U512, token_b_left: U512, token_b_right: U512) {
     // Uniswap return U112
-    let q = BigDecimal::from_str(&*(token_a_left * token_b_right).to_string())
+    let q = U256::from_str(&*(token_a_left * token_b_right).to_string())
         .unwrap()
-        .to_f64()
+        .as_f64()
         .unwrap();
-    let r = BigDecimal::from_str(&*(token_b_left * token_a_right).to_string())
+    let r = U256::from_str(&*(token_b_left * token_a_right).to_string())
         .unwrap()
-        .to_f64()
+        .as_f64()
         .unwrap();
-    let s = BigDecimal::from_str(&*(token_a_left + token_b_left).to_string())
+    let s = U256::from_str(&*(token_a_left + token_b_left).to_string())
         .unwrap()
-        .to_f64()
+        .as_f64()
         .unwrap();
 
     let r2 = r.pow(2i32);
 
     let x_opt = (r2 + ((q * r - r2) / s)).sqrt() - r;
 
-    let token_a_left_dec = BigDecimal::from_str(&*(token_a_left).to_string())
+    let token_a_left_dec = U256::from_str(&*(token_a_left).to_string())
         .unwrap()
-        .to_f64()
+        .as_f64()
         .unwrap();
-    let token_a_right_dec = BigDecimal::from_str(&*(token_a_right).to_string())
+    let token_a_right_dec = U256::from_str(&*(token_a_right).to_string())
         .unwrap()
-        .to_f64()
+        .as_f64()
         .unwrap();
     let alt_amount = token_a_left_dec * x_opt / token_a_right_dec + x_opt;
     let p = (q * x_opt) / (r + s * x_opt) - x_opt;
@@ -771,3 +874,4 @@ fn test1() {
 }
 
  */
+*/

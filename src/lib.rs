@@ -19,20 +19,19 @@ pub mod sequence_token;
 pub mod sources;
 pub mod swap_route;
 pub mod three_path_sequence;
+pub mod uniswap_providers;
 pub mod uniswap_transaction;
 pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
 pub mod utils;
-pub mod uniswap_providers;
 
-
-pub mod two_path_sequence;
+pub mod confirmed_tx_monitor;
 pub mod path_sequence;
 pub mod path_sequence_factory;
-pub mod confirmed_tx_monitor;
 pub mod transaction_log_utils;
 pub mod transaction_utils;
-/* 
+pub mod two_path_sequence;
+/*
 fn print_if_two_sequence(s: &dyn Any) {
   if let Some(string) = s.downcast_ref::<String>() {
       println!("It's a string({}): '{}'", string.len(), string);
@@ -54,11 +53,11 @@ fn test_main() {
     dbg!(  std::any::type_name::<Option<String>>());
   // Now there's an edge case that uses the original type..
   // How do you change it back?
-  let printer: &TwoSequence = 
+  let printer: &TwoSequence =
         x.as_any()
          .downcast_ref::<TwoSequence>()
          .expect("Failed to turn into");
-         
+
   printer.start_printing();
 }
 

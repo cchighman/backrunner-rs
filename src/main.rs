@@ -13,7 +13,7 @@
 use std::collections::HashMap;
 use std::env;
 use std::fs::File;
-use std::io::{BufReader, BufWriter, stdout};
+use std::io::{stdout, BufReader, BufWriter};
 use std::io::{Read, Write};
 use std::sync::Arc;
 
@@ -26,19 +26,20 @@ use futures_util::{FutureExt, TryFutureExt};
 use itertools::Itertools;
 use rayon::prelude::*;
 
-
+use color_eyre::{eyre::eyre, eyre::Report, Section};
 use crypto_pair::{CryptoPair, CryptoPairs};
 use utils::uniswapv2_utils::{populate_sushiswap_pairs, populate_uniswapv2_pairs};
-use color_eyre::{eyre::eyre, eyre::Report, Section};
 
 use std::any::Any;
 
-use backrunner_rs::three_path_sequence::{cyclic_order as other_cyclic_order, is_arbitrage_pair as other_is_arbitrage_pair};
-pub mod uniswap_providers;
+use backrunner_rs::three_path_sequence::{
+    cyclic_order as other_cyclic_order, is_arbitrage_pair as other_is_arbitrage_pair,
+};
 pub mod arb_signal;
 pub mod arb_thread_pool;
 pub mod arbitrage_path;
 pub mod arbitrage_paths;
+pub mod confirmed_tx_monitor;
 pub mod contracts;
 pub mod crypto_math;
 pub mod crypto_pair;
@@ -46,20 +47,19 @@ pub mod dex_pool;
 pub mod flashbot_strategy;
 pub mod graphql_uniswapv2;
 pub mod graphql_uniswapv3;
+pub mod path_sequence;
+pub mod path_sequence_factory;
 pub mod sequence_token;
 pub mod swap_route;
-pub mod two_path_sequence;
 pub mod three_path_sequence;
+pub mod transaction_log_utils;
+pub mod transaction_utils;
+pub mod two_path_sequence;
+pub mod uniswap_providers;
 pub mod uniswap_transaction;
 pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
 pub mod utils;
-pub mod path_sequence;
-pub mod path_sequence_factory;
-pub mod transaction_utils;
-pub mod transaction_log_utils;
-pub mod confirmed_tx_monitor;
-
 
 /*
    Grafana API Key: eyJrIjoiVjY3bzNoWTFnTTNyTUpCVXRoUUJxcXZPTXJGbE1nVmUiLCJuIjoiYmFja3J1bm5lciIsImlkIjoxfQ==
@@ -82,24 +82,29 @@ pub mod confirmed_tx_monitor;
     To configure relay CLI, run the following command:
     relay login -k 59877d4b-3f52-4df2-95e4-e03da24954cd -s JxTuoYxDo0QJ
     To use credentials as an environment variables:
-                
+
     export RELAY_KEY=59877d4b-3f52-4df2-95e4-e03da24954cd
     export RELAY_SECRET=JxTuoYxDo0QJ
 
-                
+
     To create Kubernetes Secret:
-                
+
     kubectl create secret generic whr-credentials \
         --from-literal=key=59877d4b-3f52-4df2-95e4-e03da24954cd \
         --from-literal=secret=JxTuoYxDo0QJ
     Webhook:  https://mvdugj7gh2ansfe4jhz65z.hooks.webhookrelay.com
     BlockNative Key: 3b21bf22-0a3e-4908-9b2f-c9ac37c31b7b  - secret: 5e0323d1-80bc-4ec3-a8dc-25cab8ff0706
+
+    /* ArchiveNode */
+    https://api.archivenode.io/b8a38a29-9114-4201-8136-44f7eccbbe38
+    API Key: b8a38a29-9114-4201-8136-44f7eccbbe38
+
 */
 #[async_std::main]
-async fn main()->Result<(), Report> {
+async fn main() -> Result<(), Report> {
     let args: Vec<String> = env::args().collect();
     color_eyre::install()?;
-  
+
     /*
     TODO
     1.) Populate paths from GraphQL
@@ -145,46 +150,57 @@ async fn main()->Result<(), Report> {
             y.push(crypto_paths[2].clone());
 
             if three_path_sequence::is_arbitrage_pair(&y) {
-                println!("{}-{:.?} {}-{:.?} {}-{:.?}", crypto_paths[0].pair_symbol(), crypto_paths[0].pair_id(), crypto_paths[1].pair_symbol(), crypto_paths[1].pair_id(), crypto_paths[2].pair_symbol(), crypto_paths[2].pair_id());
+              /*   println!(
+                    "{}-{:.?} {}-{:.?} {}-{:.?}",
+                    crypto_paths[0].pair_symbol(),
+                    crypto_paths[0].pair_id(),
+                    crypto_paths[1].pair_symbol(),
+                    crypto_paths[1].pair_id(),
+                    crypto_paths[2].pair_symbol(),
+                    crypto_paths[2].pair_id()
+                );*/
                 let mut y_2 = Vec::default();
                 y_2.push(crypto_paths[0].clone());
                 y_2.push(crypto_paths[1].clone());
                 y_2.push(crypto_paths[2].clone());
 
-       
-                    r.insert(crypto_paths[0].pair_id().clone());                    
-                    r.insert(crypto_paths[1].pair_id().clone());
-                    r.insert(crypto_paths[2].pair_id().clone());
-                    ser_pairs.pairs.push(y_2);
-            }        
+                r.insert(crypto_paths[0].pair_id().clone());
+                r.insert(crypto_paths[1].pair_id().clone());
+                r.insert(crypto_paths[2].pair_id().clone());
+                ser_pairs.pairs.push(y_2);
+            }
         });
-    
-    for a in r {
-    
-    let watch_addy = json!({"apiKey":"3b21bf22-0a3e-4908-9b2f-c9ac37c31b7b","address": a,"blockchain":"ethereum","networks":["main"]});
+/*
+        for a in r {
+            let watch_addy = json!({"apiKey":"3b21bf22-0a3e-4908-9b2f-c9ac37c31b7b","address": a,"blockchain":"ethereum","networks":["main"]});
 
-    use curl::easy::Easy;
-    let mut easy = Easy::new();
-    
-    easy.url("https://api.blocknative.com/address").unwrap();
-    easy.post(true).unwrap();
-    let mut list = List::new();
-    list.append("Content-type: application/json").unwrap();
-    easy.http_headers(list).unwrap();
-    easy.post_field_size(watch_addy.to_string().as_bytes().len() as u64).unwrap();
+            use curl::easy::Easy;
+            let mut easy = Easy::new();
 
-    let mut transfer = easy.transfer();
-    transfer.write_function(|data| {
-        stdout().write_all(data).unwrap();
-        Ok(data.len())
-    })?;
+            easy.url("https://api.blocknative.com/address").unwrap();
+            easy.post(true).unwrap();
+            let mut list = List::new();
+            list.append("Content-type: application/json").unwrap();
+            easy.http_headers(list).unwrap();
+            easy.post_field_size(watch_addy.to_string().as_bytes().len() as u64)
+                .unwrap();
 
-    transfer.read_function(|buf| {
-    Ok(std::io::Read::read(&mut watch_addy.to_string().as_bytes(), buf).unwrap_or(0))
-    }).unwrap();
-    transfer.perform().unwrap();
-    
-    }
+            let mut transfer = easy.transfer();
+            transfer.write_function(|data| {
+                stdout().write_all(data).unwrap();
+                Ok(data.len())
+            })?;
+
+            transfer
+                .read_function(|buf| {
+                    Ok(
+                        std::io::Read::read(&mut watch_addy.to_string().as_bytes(), buf)
+                            .unwrap_or(0),
+                    )
+                })
+                .unwrap();
+            transfer.perform().unwrap();
+        }*/
 
         println!("ser_pairs: {}", ser_pairs.pairs.len());
         let file = File::create("pairs_2_500.json").unwrap();
@@ -194,7 +210,7 @@ async fn main()->Result<(), Report> {
         writer.flush().unwrap();
     }
 
-    if args.contains(&"run".to_string()) || args.len() == 1 {
+    if args.contains(&"run".to_string()) {
         println!("Running..");
         /* Read Pairs from file */
         let path = if args.len() > 2 && !args.contains(&"RUST_BACKTRACE=full".to_string()) {
@@ -229,17 +245,18 @@ async fn main()->Result<(), Report> {
          */
         for unordered_pair in cached_pairs.pairs {
             let sequence = path_sequence_factory::create(unordered_pair.clone(), &crypto_pairs)
-                .await
-                .unwrap();
-            arb_paths.push(sequence);
+                .await;
+            if !sequence.is_err() {
+                arb_paths.push(sequence.unwrap());
+            }
         }
 
         println!("pairs: {}, paths: {}", &crypto_pairs.len(), arb_paths.len());
     }
-    
+
     confirmed_tx_monitor::monitor_tx(&mut crypto_pairs.clone());
 
-/* 
+    /*
     use std::{thread, time};
     loop {
         let ten = time::Duration::from_millis(10000);
@@ -257,4 +274,3 @@ async fn main()->Result<(), Report> {
     */
     Ok(())
 }
-

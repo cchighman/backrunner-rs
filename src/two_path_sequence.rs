@@ -4,42 +4,41 @@ use std::ops::Mul;
 use std::str::FromStr;
 use std::sync::Arc;
 
-use async_trait::async_trait;
-use bigdecimal::{BigDecimal, FromPrimitive, ToPrimitive};
-use ethers::prelude::Address;
-use ethers::prelude::U256;
-use futures_signals::map_ref;
-use futures_signals::signal::SignalExt;
-use ethers::types::transaction::eip2718::TypedTransaction;
+use super::uniswap_providers::*;
 use crate::arb_thread_pool::spawn;
 use crate::crypto_pair::CryptoPair;
 use crate::dex_pool::DexPool;
+use crate::flashbot_strategy::utils::*;
 use crate::path_sequence::PathSequence;
 use crate::sequence_token::SequenceToken;
 use crate::swap_route::SwapRoute;
 use crate::three_path_sequence;
+use crate::uniswap_transaction::*;
 use crate::uniswapv2_pairs::uniswap_pairs::UniswapPairsPairsTokens;
 use crate::utils::common::DIRECTION;
-use super::uniswap_providers::*;
-use crate::uniswap_transaction::*;
-use crate::flashbot_strategy::utils::*;
+use async_trait::async_trait;
+use bigdecimal::{BigDecimal, FromPrimitive, ToPrimitive};
+use ethers::prelude::Address;
+use ethers::prelude::U256;
+use ethers::types::transaction::eip2718::TypedTransaction;
+use futures_signals::map_ref;
+use futures_signals::signal::SignalExt;
 use std::any::Any;
 
- 
 #[derive(Debug, Clone)]
 pub struct TwoPathSequence {
     pub(crate) sequence: Vec<SequenceToken>,
 }
-/* 
+/*
 pub async fn cyclic_order(
     crypto_path: Vec<CryptoPair>,
     crypto_pairs: &HashMap<Address, Arc<CryptoPair>>
 )->Result<Arc<(dyn Any + 'static + Sync + Send)>, anyhow::Error>  {
-    
+
     /* Scenario 1 */
     let a1_b2 = crypto_path[0].left_symbol() == crypto_path[1].right_symbol();
     let b1_a2 = crypto_path[0].right_symbol() == crypto_path[1].left_symbol();
-    
+
     /* Scenario 2 */
     let b1_a2 = crypto_path[0].right_symbol() == crypto_path[1].left_symbol();
     let a1_b2 = crypto_path[0].left_symbol() == crypto_path[1].right_symbol();
@@ -47,11 +46,11 @@ pub async fn cyclic_order(
     /* Scenario 3 */
     let a1_b1 = crypto_path[0].left_symbol() == crypto_path[1].left_symbol();
     let a2_b2 = crypto_path[0].right_symbol() == crypto_path[1].right_symbol();
-  
+
     let scenario_1 = a1_b2 && b1_a2;  // WETH-DAI-DAI-WETH (a1-b2 alike), (b1-a2 alike)
     let scenario_2 = b1_a2 && a1_b2;  // DAI-WETH-WETH-DAI  (a2-b1 alike), (a1-b2 alike)
     let scenario_3 = a1_b1 && a2_b2;  // WETH-DAI-WETH_DAI
-    
+
     let pair_id_1 = crypto_path[0].pair_id();
     let pair_1 = crypto_pairs.key_value(pair_id_1).unwrap().1;
 
@@ -81,24 +80,22 @@ pub async fn cyclic_order(
     } else {
         Option::from(SequenceToken::new(pair_2.clone(), DIRECTION::Right))
     };
-/* 
+/*
     let path = TwoPathSequence::new(vec![
         token_a1.unwrap(),
         token_b1.unwrap(),
         token_a2.unwrap(),
         token_b2.unwrap()]);
   Ok(path.await)*/
-  
+
 }
 */
 
-
-
-pub fn is_arbitrage_pair(crypto_path: &Vec<CryptoPair>)->bool {
+pub fn is_arbitrage_pair(crypto_path: &Vec<CryptoPair>) -> bool {
     /* Scenario 1 */
     let a1_b2 = crypto_path[0].left_symbol() == crypto_path[1].right_symbol();
     let b1_a2 = crypto_path[0].right_symbol() == crypto_path[1].left_symbol();
-    
+
     /* Scenario 2 */
     let b1_a2 = crypto_path[0].right_symbol() == crypto_path[1].left_symbol();
     let a1_b2 = crypto_path[0].left_symbol() == crypto_path[1].right_symbol();
@@ -107,15 +104,14 @@ pub fn is_arbitrage_pair(crypto_path: &Vec<CryptoPair>)->bool {
     let a1_b1 = crypto_path[0].left_symbol() == crypto_path[1].left_symbol();
     let a2_b2 = crypto_path[0].right_symbol() == crypto_path[1].right_symbol();
 
-    let scenario_1 = a1_b2 && b1_a2;  // WETH-DAI-DAI-WETH (a1-b2 alike), (b1-a2 alike)
-    let scenario_2 = b1_a2 && a1_b2;  // DAI-WETH-WETH-DAI  (a2-b1 alike), (a1-b2 alike)    
+    let scenario_1 = a1_b2 && b1_a2; // WETH-DAI-DAI-WETH (a1-b2 alike), (b1-a2 alike)
+    let scenario_2 = b1_a2 && a1_b2; // DAI-WETH-WETH-DAI  (a2-b1 alike), (a1-b2 alike)
     let scenario_3 = a1_b1 && a2_b2; // WETH-DAI-WETH_DAI
-    if scenario_1.clone() 
-    || scenario_2.clone() || scenario_3.clone() {
-    true
-} else {
-    false
-}
+    if scenario_1.clone() || scenario_2.clone() || scenario_3.clone() {
+        true
+    } else {
+        false
+    }
 }
 
 /*
@@ -167,7 +163,7 @@ pub(crate) async fn test_is_arbitrage_pair_true() {
             reserve: U256::from(1000000),
         }
     });
-   
+
     let arb_vec = vec![pair1, pair2];
     println!("Result: {}", two_path_sequence::is_arbitrage_pair(&arb_vec).await.unwrap());
     assert!(two_path_sequence::is_arbitrage_pair(&arb_vec).await.unwrap());
@@ -178,7 +174,6 @@ pub(crate) async fn test_is_arbitrage_pair_true() {
 */
 
 impl TwoPathSequence {
- 
     fn path(&self) -> String {
         let mut path_str: String = Default::default();
         for token in 0..self.sequence.len() {
@@ -186,9 +181,9 @@ impl TwoPathSequence {
         }
         path_str
     }
-    /* 
+    /*
     pub async fn calculate(sequence: Arc<TwoPathSequence>) {
-       
+
         let result = optimize_a_prime(
             BigDecimal::from_str(&*sequence.a1().reserve().to_string()).unwrap(),
             BigDecimal::from_str(&*sequence.b1().reserve().to_string()).unwrap(),
@@ -329,7 +324,7 @@ impl TwoPathSequence {
                 ),
             )
             .await;
-               
+
             let flash_tx: TypedTransaction = flash_swap_v2(
                 sequence.a1().token.pair_id().clone(),
                 source_amt,
@@ -345,22 +340,20 @@ impl TwoPathSequence {
                 let bundle_hash = bundle_result.as_ref().unwrap();
                 println!("### Successful Bundle - tx hash: {:#}", &bundle_hash);
             }
-        
+
         }
-        */ 
-    }
-
-
+        */
+}
 
 /*
 #[async_trait]
 impl PathSequence for TwoPathSequence {
     async fn new(path: Vec<SequenceToken>)->Arc<(dyn Any + 'static + Sync + Send)> {
         Arc::new(Self{sequence: path})
-    }      
-} 
+    }
+}
  */
-/* 
+/*
     fn arb_index(&self)-> BigDecimal {
         (BigDecimal::from_str(&*self.a1().reserve().to_string()).unwrap()
             / BigDecimal::from_str(&*self.b1().reserve().to_string()).unwrap())
@@ -380,14 +373,14 @@ impl PathSequence for TwoPathSequence {
             * (BigDecimal::from_str(&*a2.to_string()).unwrap()
                 / BigDecimal::from_str(&*b2.to_string()).unwrap())
         };
-    
+
         let future = t.for_each(move |v| {
             println!(
                 "Arb Index -- path: {} Index: {:.3?}",
                 seq.path(),
                 v.to_f64().unwrap()
             );
-    
+
             if v > BigDecimal::from_f64(1.05).unwrap() {
                 spawn(TwoPathSequence::calculate(Arc::new(seq.clone())));
             }
@@ -395,7 +388,7 @@ impl PathSequence for TwoPathSequence {
         });
         Ok(spawn(future))
     }
-    
+
     fn as_any(&self)->&dyn Any {
         self
     }
@@ -406,7 +399,7 @@ impl PathSequence for TwoPathSequence {
     fn b1(&self) -> &SequenceToken {
         &self.sequence[1]
     }
-   
+
     fn a2(&self) -> &SequenceToken {
         &self.sequence[2]
     }
@@ -469,10 +462,10 @@ async fn test_cyclic_order() {
 
         let mut crypto_pairs: HashMap<Address, Arc<CryptoPair>> = HashMap::new();
         let mut crypto_paths = vec![pair1.clone(), pair2.clone()];
-    
+
         crypto_pairs.insert(pair1.pair_id().clone(), Arc::new(pair1.clone()));
         crypto_pairs.insert(pair2.pair_id().clone(), Arc::new(pair2.clone()));
-    
+
         let ordered = self.cyclic_order(crypto_paths, &crypto_pairs).await.unwrap();
 
         println!(
@@ -490,6 +483,6 @@ async fn test_cyclic_order() {
         assert!(ordered.b1().symbol() == ordered.a2().symbol());
         assert!(ordered.a1().symbol() == ordered.b2().symbol());
         Ok(())
-    
+
 }
   */

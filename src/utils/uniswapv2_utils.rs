@@ -21,14 +21,14 @@ pub async fn uniswapv2_unpack_pairs(
                 name: pair.token0.name.clone(),
                 decimals: pair.token0.decimals.parse::<i32>().unwrap(),
                 symbol: pair.token0.symbol.clone(),
-                reserve: U256::from_dec_str(&*pair.reserve0.round(0).to_string()).unwrap(),
+                reserve: U256::from_dec_str(&*pair.reserve0.to_string().replace(".","")).unwrap(),
             },
             token1: UniswapPairsPairsTokens {
                 id: Address::from_str(&*pair.token1.id.clone()).unwrap(),
                 name: pair.token1.name.clone(),
                 decimals: pair.token1.decimals.parse::<i32>().unwrap(),
                 symbol: pair.token1.symbol.clone(),
-                reserve: U256::from_dec_str(&*pair.reserve1.round(0).to_string()).unwrap(),
+                reserve: U256::from_dec_str(&*pair.reserve1.to_string().replace(".","")).unwrap(),
             },
             id: Address::from_str(&pair.id).unwrap(),
             sqrt_price: Default::default(),
@@ -64,12 +64,13 @@ pub async fn populate_uniswapv2_pairs(pair_map: &mut HashMap<Address, CryptoPair
     .await;
 }
 
+
 pub async fn populate_sushiswap_pairs(pair_map: &mut HashMap<Address, CryptoPair>) {
     let pairs =
         graphql_uniswapv2::pairs("https://api.thegraph.com/subgraphs/name/sushiswap/exchange")
             .await
             .unwrap();
-    //dbg!("sushi - {#:?}", pairs);
+
     uniswapv2_unpack_pairs(
         pairs,
         pair_map,
@@ -78,4 +79,3 @@ pub async fn populate_sushiswap_pairs(pair_map: &mut HashMap<Address, CryptoPair
     )
     .await;
 }
-

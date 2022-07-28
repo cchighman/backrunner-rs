@@ -1,10 +1,11 @@
 use anyhow::{ensure, Result};
-use futures_signals::signal::Mutable;
-use num_bigint::{BigInt,Sign, BigUint};
-use num_rational::{Ratio,  BigRational};
-use num_traits::{ToPrimitive as _, Zero as _};
+use bigdecimal::BigDecimal;
 use ethers::prelude::U256;
+use futures_signals::signal::Mutable;
+use num_bigint::{BigInt, BigUint, Sign};
 use num_integer::Integer;
+use num_rational::{BigRational, Ratio};
+use num_traits::{ToPrimitive as _, Zero as _};
 
 pub fn big_rational_to_float(ratio: &BigRational) -> Option<f64> {
     Some(ratio.numer().to_f64()? / ratio.denom().to_f64()?)
@@ -12,7 +13,7 @@ pub fn big_rational_to_float(ratio: &BigRational) -> Option<f64> {
 
 pub fn big_rational_to_u256(ratio: &BigRational) -> Result<U256> {
     ensure!(
-        !ratio.denom().is_zero(),   
+        !ratio.denom().is_zero(),
         "Division by 0 in BigRational to U256 conversion"
     );
     big_int_to_u256(&(ratio.numer() / ratio.denom()))
@@ -69,7 +70,7 @@ pub trait U256Ext: Sized {
     fn ceil_div(&self, other: &Self) -> Self;
 }
 
-impl U256Ext for U256{
+impl U256Ext for U256 {
     fn to_big_int(&self) -> BigInt {
         u256_to_big_int(self)
     }

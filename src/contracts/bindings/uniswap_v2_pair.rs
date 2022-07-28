@@ -123,9 +123,7 @@ mod uniswapv2pair_mod {
                 .expect("method not found (this should never happen)")
         }
         #[doc = "Calls the contract's `getReserves` (0x0902f1ac) function"]
-        pub fn reserves(
-            &self,
-        ) -> ethers::contract::builders::ContractCall<M, (u128, u128, u32)> {
+        pub fn reserves(&self) -> ethers::contract::builders::ContractCall<M, (u128, u128, u32)> {
             self.0
                 .method_hash([9, 2, 241, 172], ())
                 .expect("method not found (this should never happen)")

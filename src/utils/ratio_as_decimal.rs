@@ -61,7 +61,9 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use num::{BigRational, Zero};
+    use num::Zero;
+    use num_rational::BigRational;
+
     use serde_json::json;
     use serde_json::value::Serializer;
 

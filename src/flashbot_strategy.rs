@@ -1,23 +1,22 @@
-use std::sync::Arc;
-use std::time::SystemTime;
-use std::time::UNIX_EPOCH;
+use super::uniswap_providers::*;
 use anyhow;
 use anyhow::Result;
 use ethers::core::k256::ecdsa::SigningKey;
 use ethers::core::types::transaction::eip2718::TypedTransaction;
 use ethers::prelude::*;
 use ethers::prelude::{Signer, SignerMiddleware, U256};
-use ethers_flashbots::{BundleRequest, FlashbotsMiddleware};
 use ethers_flashbots::PendingBundleError;
-use super::uniswap_providers::*;
-
+use ethers_flashbots::{BundleRequest, FlashbotsMiddleware};
+use std::sync::Arc;
+use std::time::SystemTime;
+use std::time::UNIX_EPOCH;
 
 use std::str::FromStr;
 
 use url::Url;
 pub mod utils {
     use super::*;
-    pub static timestamp_seed: u128 = 30000_u128;    
+    pub static timestamp_seed: u128 = 30000_u128;
 
     pub fn valid_timestamp() -> U256 {
         let start = SystemTime::now();
@@ -26,8 +25,8 @@ pub mod utils {
         return U256::from(time_millis);
     }
 
-     /// Return a new flashbots bundle request for this block
-     pub async fn new_bundle_request() -> Result<BundleRequest> {
+    /// Return a new flashbots bundle request for this block
+    pub async fn new_bundle_request() -> Result<BundleRequest> {
         let block = mainnet::flashbots_client.get_block_number().await?;
         let mut bundle = BundleRequest::new();
         bundle = bundle.set_simulation_block(block);
@@ -37,45 +36,67 @@ pub mod utils {
         Ok(bundle)
     }
 
-    pub async fn send_flashswap_bundle(txs: Vec<TypedTransaction>) -> Result<H256,anyhow::Error> {
-        println!("do_flashbot_mainnet");
+    pub async fn send_flashswap_bundle(txs: Vec<TypedTransaction>) -> Result<H256, anyhow::Error> {
 
-        let nonce = mainnet::flashbots_client.get_transaction_count(mainnet::wallet.address().clone(), Some(BlockId::from(BlockNumber::Latest))).await?;
-    
-        let block_number = mainnet::flashbots_client.inner().inner().get_block_number().await.unwrap();
-        println!("Block Number: {}", block_number);
-        
+        let nonce = mainnet::flashbots_client
+            .get_transaction_count(
+                mainnet::wallet.address().clone(),
+                Some(BlockId::from(BlockNumber::Latest)),
+            )
+            .await?;
+
+        let block_number = mainnet::flashbots_client
+            .inner()
+            .inner()
+            .get_block_number()
+            .await
+            .unwrap();
+        //println!("Block Number: {}", block_number);
+
         let mut bundle = new_bundle_request().await?;
-        
-        for mut tx in txs {
 
+        for mut tx in txs {
             if tx.nonce().is_none() {
                 tx.set_nonce(nonce);
                 tx.set_gas_price(U256::from(300000000000u64));
                 tx.set_gas(U256::from(400000));
             }
-            
-            let signature = mainnet::flashbots_client.signer().sign_transaction(&tx).await?;
-            bundle = bundle.push_transaction(tx.rlp_signed(mainnet::flashbots_client.signer().chain_id(), &signature));          
+
+            let signature = mainnet::flashbots_client
+                .signer()
+                .sign_transaction(&tx)
+                .await?;
+            bundle = bundle.push_transaction(
+                tx.rlp_signed(mainnet::flashbots_client.signer().chain_id(), &signature),
+            );
         }
 
         // Simulate it
-        let simulated_bundle = mainnet::flashbots_client.inner().simulate_bundle(&bundle).await?;
+        let simulated_bundle = mainnet::flashbots_client
+            .inner()
+            .simulate_bundle(&bundle)
+            .await?;
         println!("Simulated bundle: {:?}", simulated_bundle);
 
         // Send it
-        let pending_bundle = mainnet::flashbots_client.inner().send_bundle(&bundle).await?;
+        let pending_bundle = mainnet::flashbots_client
+            .inner()
+            .send_bundle(&bundle)
+            .await?;
 
         match pending_bundle.await {
             Ok(bundle_hash) => {
-                println!("Bundle with hash {:?} was included in target block",bundle_hash);
-                Ok(bundle_hash)   
-            },
+                println!(
+                    "Bundle with hash {:?} was included in target block",
+                    bundle_hash
+                );
+                Ok(bundle_hash)
+            }
             Err(PendingBundleError::BundleNotIncluded) => {
                 println!("Bundle was not included in target block.");
                 Err(anyhow::anyhow!("Bundle not included"))
             }
-            Err(e) => Err(anyhow::anyhow!("PendingBundleError occured: {:#}",e))
+            Err(e) => Err(anyhow::anyhow!("PendingBundleError occured: {:#}", e)),
         }
     }
 }
@@ -150,7 +171,7 @@ pub mod utils {
     }
 */
 
- /*
+/*
 let bundle = bundle_for_test(&client).await?;
 let current_block_number = client.inner().inner().block_number().await?;
 let bundle = bundle
@@ -170,7 +191,7 @@ let simulated_bundle = client.inner().simulate_bundle(&bundle).await?;
 println!("Simulated bundle: {:?}", raw_txs);
 
 // submitting multiple bundles to increase the probability on inclusion
-for x in 0..10 
+for x in 0..10
     let bundle = bundle_for_test(&client).await?;
     let bundle = bundle.set_block(current_block_number + x);
     println!("Bundle Initialized");

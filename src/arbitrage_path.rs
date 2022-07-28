@@ -13,15 +13,15 @@ use futures::{future, StreamExt};
 use futures_signals::{map_ref, signal::SignalExt};
 use rayon::prelude::*;
 
+use super::path_sequence::PathSequence;
+use super::uniswap_providers::*;
 use crate::arb_thread_pool::spawn;
 use crate::crypto_math::*;
+use crate::flashbot_strategy::utils::*;
 use crate::swap_route::SwapRoute;
 use crate::three_path_sequence::ThreePathSequence;
 use crate::two_path_sequence::TwoPathSequence;
-use super::uniswap_providers::*;
 use crate::uniswap_transaction::*;
-use crate::flashbot_strategy::utils::*;
-use super::path_sequence::PathSequence;
 use std::any::*;
 /*
 #[derive(Debug, Clone)]
@@ -29,15 +29,15 @@ pub struct ArbitragePath {
     sequence: Arc<(dyn Any + 'static + Sync + Send)>
 }
 
-impl ArbitragePath {  
+impl ArbitragePath {
     pub async fn new(sequence:Arc<(dyn Any + 'static + Sync + Send)>)-> Result<Arc<Self>,anyhow::Error> {
         if sequence.is::<ThreePathSequence>() {
-            let path = sequence.downcast_ref::<ThreePathSequence>().unwrap(); 
+            let path = sequence.downcast_ref::<ThreePathSequence>().unwrap();
             path.init(sequence.clone()).await;
             return Ok(Arc::new(Self{sequence: Arc::new(*path) }));
-        } 
+        }
         else if sequence.is::<TwoPathSequence>() {
-            let path = sequence.downcast_ref::<TwoPathSequence>().unwrap(); 
+            let path = sequence.downcast_ref::<TwoPathSequence>().unwrap();
             path.init(Arc::new(path.clone())).await;
             return Ok(Arc::new(Self{sequence: Arc::new(*path) }));
         }
