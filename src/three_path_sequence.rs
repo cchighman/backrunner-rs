@@ -1179,10 +1179,12 @@ pub async fn test_calculate() {
         //        let d_b = U256::from(1752511055746585067520_u128);
 
         let delta_a_amt_out = SequenceToken::get_amount_out(delta_a, a1, b1);
-        //  let delta_a_amt_in = SequenceToken::get_amount_in(delta_b, b1, a1);
-        let delta_b_amt_out = SequenceToken::get_amount_out(delta_b, a2, b2);
-        let delta_b_amt_in = SequenceToken::get_amount_in(delta_a, a2, b2);
-        let delta_c_amt_out = SequenceToken::get_amount_out(delta_c, a3, b3);
+        let delta_a_amt_in = SequenceToken::get_amount_in(delta_a_amt_out.unwrap(), a1, b1);
+        
+        let delta_b_amt_out = SequenceToken::get_amount_out(delta_a_amt_out.unwrap(), a2, b2);
+        let delta_b_amt_in = SequenceToken::get_amount_in(delta_b_amt_out.unwrap(), a2, b2);
+
+        let delta_c_amt_out = SequenceToken::get_amount_out(delta_b_amt_out.unwrap(), a3, b3);
         let delta_c_amt_in = SequenceToken::get_amount_in(delta_c_amt_out.unwrap(), a3, b3);
 
         /*
@@ -1246,32 +1248,33 @@ pub async fn test_calculate() {
 
         dbg!(
             delta_a_amt_out,
-            delta_b_amt_in,
+            delta_a_amt_in,
             delta_b_amt_out,
+            delta_b_amt_in,
+            delta_c_amt_out,
             delta_c_amt_in,
-            delta_c_amt_out
         );
 
         let trade1 = SwapRoute::new(
             (dai_id.clone(), usdc_id.clone()),
-            delta_a.clone(),
-            delta_b.clone(),
+            delta_a,
+            delta_a_amt_out.unwrap(),
             kovan::router_v2.clone(),
             dai_usdc_pair.clone()
         );
  
         let trade2 = SwapRoute::new(
             (usdc_id.clone(), weth_id.clone()),
-            delta_b.clone(),
-            delta_c.clone(),
+            delta_a_amt_out.unwrap(),
+            delta_b_amt_out.unwrap(),
             kovan::router_v2.clone(),
             usdc_weth_pair.clone()
         );
 
         let trade3 = SwapRoute::new(
             (weth_id.clone(), dai_id.clone()),
-            delta_c.clone(),
-            delta_a_prime.clone(),
+            delta_b_amt_out.unwrap(),
+            delta_c_amt_out.unwrap(),
             kovan::router_v2.clone(),
             dai_weth_pair.clone()
         );

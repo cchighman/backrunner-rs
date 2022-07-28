@@ -18,7 +18,8 @@ rand = "0.8.4"
 tracing = "0.1.26"
 futures = { version = "0.3.21", features = ["thread-pool"]}
 futures-util = "*"
-tracing-subscriber = {version ="0.2.19", features = ["fmt"]}
+
+
 blocknative = {path = "./blocknative", version = "0.1.0" }
 ethers-flashbots = "*"
 ethereum-types = "*"
@@ -35,7 +36,7 @@ num-bigint ={ version = "*", features = ["serde"] }
 bigdecimal = { version = "*", features = ["serde"] }
 anyhow = "*"
 reqwest = { version = "^0.11", features = ["json", "blocking"] }
-clap = { version = "3.1.18", features = ["derive"] }
+
 log = "^0.4"
 sim = "*"
 
