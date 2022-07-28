@@ -10,7 +10,7 @@ pub fn route_cfmms(cfmms: &Vec<String>) -> Vec<String> {
         Ok(o) => unsafe {
             let out = String::from_utf8_unchecked(o.stdout);
             println!("Str: {}", out);
-            let out_vec: Vec<String> = out.split("|").map(|s| s.to_string()).collect();
+            let out_vec: Vec<String> = out.split('|').map(|s| s.to_string()).collect();
 
             dbg!("Out: {#:?}", out_vec.clone());
             return out_vec;
@@ -19,7 +19,7 @@ pub fn route_cfmms(cfmms: &Vec<String>) -> Vec<String> {
             println!("There was an error {}", e);
         }
     }
-    return Default::default();
+    Default::default()
 }
 
 #[test]

@@ -62,10 +62,10 @@ impl CryptoPair {
 
         Self {
             pair: pair.clone(),
-            pending_left_reserves: Mutable::new(pair.token0.reserve.clone()),
-            pending_right_reserves: Mutable::new(pair.token1.reserve.clone()),
-            confirmed_left_reserves: Mutable::new(pair.token0.reserve.clone()),
-            confirmed_right_reserves: Mutable::new(pair.token1.reserve.clone()),
+            pending_left_reserves: Mutable::new(pair.token0.reserve),
+            pending_right_reserves: Mutable::new(pair.token1.reserve),
+            confirmed_left_reserves: Mutable::new(pair.token0.reserve),
+            confirmed_right_reserves: Mutable::new(pair.token1.reserve),
             pending_txs: Default::default(),
             fee: Ratio::new(3, 1000),
         }
@@ -73,85 +73,85 @@ impl CryptoPair {
     }
 
     pub fn left_symbol(&self) -> &String {
-        return &self.pair.token0.symbol;
+        &self.pair.token0.symbol
     }
 
     pub fn right_symbol(&self) -> &String {
-        return &self.pair.token1.symbol;
+        &self.pair.token1.symbol
     }
 
     pub fn left_decimal(&self) -> i32 {
-        return self.pair.token0.decimals;
+        self.pair.token0.decimals
     }
     pub fn symbol(&self, direction: DIRECTION) -> &String {
         if direction == DIRECTION::Left {
-            return &self.pair.token0.symbol;
+            &self.pair.token0.symbol
         } else {
-            return &self.pair.token1.symbol;
+            &self.pair.token1.symbol
         }
     }
 
     pub fn right_decimal(&self) -> i32 {
-        return self.pair.token1.decimals;
+        self.pair.token1.decimals
     }
 
     pub fn decimal(&self, direction: DIRECTION) -> i32 {
         if direction == DIRECTION::Left {
-            return self.pair.token0.decimals;
+            self.pair.token0.decimals
         } else {
-            return self.pair.token1.decimals;
+            self.pair.token1.decimals
         }
     }
 
     pub fn other_decimal(&self, direction: DIRECTION) -> i32 {
         if direction == DIRECTION::Left {
-            return self.pair.token1.decimals;
+            self.pair.token1.decimals
         } else {
-            return self.pair.token0.decimals;
+            self.pair.token0.decimals
         }
     }
 
     pub fn confirmed_left_reserves(&self) -> U256 {
-        return self.confirmed_left_reserves.get();
+        self.confirmed_left_reserves.get()
     }
 
     pub fn confirmed_right_reserves(&self) -> U256 {
-        return self.confirmed_right_reserves.get();
+        self.confirmed_right_reserves.get()
     }
 
     pub fn pending_left_reserves(&self) -> U256 {
-        return self.pending_left_reserves.get();
+        self.pending_left_reserves.get()
     }
 
     pub fn pending_right_reserves(&self) -> U256 {
-        return self.pending_right_reserves.get();
+        self.pending_right_reserves.get()
     }
 
     pub fn pair_id(&self) -> &Address {
-        return &self.pair.id;
+        &self.pair.id
     }
 
     pub fn dex(&self) -> &String {
-        return &self.pair.dex;
+        &self.pair.dex
     }
 
     pub fn router(&self) -> Address {
-        return self.pair.router;
+        self.pair.router
     }
 
     pub fn left_id(&self) -> &Address {
-        return &self.pair.token0.id;
+        &self.pair.token0.id
     }
 
     pub fn right_id(&self) -> &Address {
-        return &self.pair.token1.id;
+        &self.pair.token1.id
     }
 
     pub fn id(&self, direction: DIRECTION) -> &Address {
         if direction == DIRECTION::Left {
-            return self.left_id();
+            self.left_id()
         } else {
-            return self.right_id();
+            self.right_id()
         }
     }
 
@@ -182,57 +182,57 @@ impl CryptoPair {
 
     pub fn pending_reserves_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
         if direction == DIRECTION::Left {
-            return self.pending_left_reserves_signal();
+            self.pending_left_reserves_signal()
         } else {
-            return self.pending_right_reserves_signal();
+            self.pending_right_reserves_signal()
         }
     }
 
     pub fn confirmed_reserves_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
         if direction == DIRECTION::Left {
-            return self.confirmed_left_reserves_signal();
+            self.confirmed_left_reserves_signal()
         } else {
-            return self.confirmed_right_reserves_signal();
+            self.confirmed_right_reserves_signal()
         }
     }
 
     pub fn pending_reserve(&self, direction: DIRECTION) -> U256 {
         if direction == DIRECTION::Left {
-            return self.pending_left_reserves();
+            self.pending_left_reserves()
         } else {
-            return self.pending_right_reserves();
+            self.pending_right_reserves()
         }
     }
 
     pub fn confirmed_reserve(&self, direction: DIRECTION) -> U256 {
         if direction == DIRECTION::Left {
-            return self.confirmed_left_reserves();
+            self.confirmed_left_reserves()
         } else {
-            return self.confirmed_right_reserves();
+            self.confirmed_right_reserves()
         }
     }
 
     pub fn reserve(&self, direction: DIRECTION) -> U256 {
         if direction == DIRECTION::Left {
-            return self.confirmed_left_reserves();
+            self.confirmed_left_reserves()
         } else {
-            return self.confirmed_right_reserves();
+            self.confirmed_right_reserves()
         }
     }
 
     pub fn pending_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
         if direction == DIRECTION::Left {
-            return self.pending_left_reserves_signal();
+            self.pending_left_reserves_signal()
         } else {
-            return self.pending_right_reserves_signal();
+            self.pending_right_reserves_signal()
         }
     }
 
     pub fn confirmed_signal(&self, direction: DIRECTION) -> MutableSignal<U256> {
         if direction == DIRECTION::Left {
-            return self.confirmed_left_reserves_signal();
+            self.confirmed_left_reserves_signal()
         } else {
-            return self.confirmed_right_reserves_signal();
+            self.confirmed_right_reserves_signal()
         }
     }
 
@@ -304,7 +304,7 @@ impl CryptoPair {
         &self,
         direction: DIRECTION,
     ) -> Result<BigDecimal, anyhow::Error> {
-        let rational_price = self.rational_price(direction.clone())?;
+        let rational_price = self.rational_price(direction)?;
         let top_bytes = rational_price.numer().to_bytes_le();
         let top = BigInt::from_bytes_le(top_bytes.0, &top_bytes.1);
 
@@ -359,16 +359,16 @@ impl CryptoPair {
     pub fn amount_out(&self, amount_in: &BigDecimal, direction: DIRECTION) -> Option<(BigRational, Address)> {
         if direction == DIRECTION::Left {
             let (reserve_in, reserve_out, token_out) = self.relative_reserves(*self.left_id());
-            return Some((
+            Some((
                 self.amount_out_impl(amount_in.clone(),self.pair.token0.reserve, self.pair.token1.reserve)?,
                 token_out,
-            ));
+            ))
         } else {
             let (reserve_in, reserve_out, token_out) = self.relative_reserves(*self.right_id());
-            return Some((
+            Some((
                 self.amount_out_impl(amount_in.clone(), self.pair.token0.reserve, self.pair.token1.reserve)?,
                 token_out,
-            ));
+            ))
         }
     }
 
@@ -377,16 +377,16 @@ impl CryptoPair {
     pub fn amount_in(&self, amount_out: &BigDecimal, direction: DIRECTION) -> Option<(BigRational, Address)> {
         if direction == DIRECTION::Left {
             let (reserve_out, reserve_in, token_in) = self.relative_reserves(*self.left_id());
-            return Some((
+            Some((
                 self.amount_in_impl(amount_out.clone(),self.pair.token0.reserve, self.pair.token1.reserve)?,
                 token_in,
-            ));
+            ))
         } else {
             let (reserve_out, reserve_in, token_in) = self.relative_reserves(*self.right_id());
-            return Some((
+            Some((
                 self.amount_in_impl(amount_out.clone(),self.pair.token0.reserve, self.pair.token1.reserve)?,
                 token_in,
-            ));
+            ))
         }
     }
     /// Given one of the pool's two tokens, returns a tuple containing the `RelativeReserves`
@@ -431,7 +431,7 @@ impl CryptoPair {
 
         let amt_in = big_rational_to_u256(&amt_in).unwrap();
         if amt_in.is_zero() || reserve_in.is_zero() || reserve_out.is_zero() {
-            Some(U256::zero());
+            U256::zero();
         }
       // dbg!("amount_out_impl: {#:?} {#:?} {#:?}", amt_in, reserve_in, reserve_out);
 
@@ -470,7 +470,7 @@ impl CryptoPair {
 
         let amt_out = big_rational_to_u256(&amt_out).unwrap();
         if amt_out.is_zero() || reserve_in.is_zero() || reserve_out.is_zero() {
-            Some(U256::zero());
+            U256::zero();
         }
        // dbg!("amount_in_impl: {#:?} {#:?} {#:?}", amt_out, reserve_in, reserve_out);
 
@@ -481,7 +481,7 @@ impl CryptoPair {
             .checked_sub(amt_out)?
             .checked_mul(U256::from(self.fee.denom().checked_sub(*self.fee.numer())?))?;
         let amount_in = numerator.checked_div(denominator)?.checked_add(U256::one())?;
-        return Some(BigRational::new_checked(numerator.to_big_int(), denominator.to_big_int()).unwrap());
+        Some(BigRational::new_checked(numerator.to_big_int(), denominator.to_big_int()).unwrap())
         // println!("amount_in_impl: {} {} {}", amount_in, numerator, denominator);
         //check_final_reserves(amount_in, amount_out, reserve_in, reserve_out)?;
         
@@ -521,7 +521,7 @@ impl CryptoPair {
     }
 
     pub fn a_to_b(a1:U256, b1:U256, a2:U256, b2:U256)->Option<(U256,U256)> {
-      if a1.checked_mul(b2)?.checked_div(b1)? > a2 { return Some((a1,b1));} else { return Some((b1,a1));};
+      if a1.checked_mul(b2)?.checked_div(b1)? > a2 { Some((a1,b1))} else { Some((b1,a1))}
     }
 
 

@@ -118,7 +118,7 @@ pub mod mainnet {
         let start = SystemTime::now();
         let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
         let time_millis = since_epoch.as_millis().checked_add(30000_u128).unwrap();
-        return U256::from(time_millis);
+        U256::from(time_millis)
     }
 }
 
@@ -191,7 +191,7 @@ pub mod kovan {
         let start = SystemTime::now();
         let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
         let time_millis = since_epoch.as_millis().checked_add(30000_u128).unwrap();
-        return U256::from(time_millis);
+        U256::from(time_millis)
     }
 }
 /*

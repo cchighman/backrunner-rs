@@ -22,7 +22,7 @@ pub mod utils {
         let start = SystemTime::now();
         let since_epoch = start.duration_since(UNIX_EPOCH).unwrap();
         let time_millis = since_epoch.as_millis().checked_add(timestamp_seed).unwrap();
-        return U256::from(time_millis);
+        U256::from(time_millis)
     }
 
     /// Return a new flashbots bundle request for this block
@@ -40,7 +40,7 @@ pub mod utils {
 
         let nonce = mainnet::flashbots_client
             .get_transaction_count(
-                mainnet::wallet.address().clone(),
+                mainnet::wallet.address(),
                 Some(BlockId::from(BlockNumber::Latest)),
             )
             .await?;

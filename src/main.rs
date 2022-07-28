@@ -164,9 +164,9 @@ async fn main() -> Result<(), Report> {
                 y_2.push(crypto_paths[1].clone());
                 y_2.push(crypto_paths[2].clone());
 
-                r.insert(crypto_paths[0].pair_id().clone());
-                r.insert(crypto_paths[1].pair_id().clone());
-                r.insert(crypto_paths[2].pair_id().clone());
+                r.insert(*crypto_paths[0].pair_id());
+                r.insert(*crypto_paths[1].pair_id());
+                r.insert(*crypto_paths[2].pair_id());
                 ser_pairs.pairs.push(y_2);
             }
         });
@@ -235,7 +235,7 @@ async fn main() -> Result<(), Report> {
             for crypto_pair in pair_path {
                 if !crypto_pairs.contains_key::<Address>(crypto_pair.pair_id()) {
                     let pair = Arc::new(crypto_pair.clone());
-                    crypto_pairs.insert(crypto_pair.pair_id().clone(), pair);
+                    crypto_pairs.insert(*crypto_pair.pair_id(), pair);
                 }
             }
         }
@@ -246,7 +246,7 @@ async fn main() -> Result<(), Report> {
         for unordered_pair in cached_pairs.pairs {
             let sequence = path_sequence_factory::create(unordered_pair.clone(), &crypto_pairs)
                 .await;
-            if !sequence.is_err() {
+            if sequence.is_ok() {
                 arb_paths.push(sequence.unwrap());
             }
         }

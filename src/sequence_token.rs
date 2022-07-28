@@ -34,10 +34,10 @@ impl SequenceToken {
         };
 
         Self {
-            token: new_token.clone(),
+            token: new_token,
             token_direction: direction,
             token_context: context.clone(),
-            id: context.id.clone(),
+            id: context.id,
         }
     }
 
@@ -74,33 +74,33 @@ impl SequenceToken {
     }
 
     pub fn direction(&self) -> &DIRECTION {
-        return &self.token_direction;
+        &self.token_direction
     }
 
     pub fn decimal_price_18_digits(&self) -> Result<BigDecimal, anyhow::Error> {
-        return self
+        self
             .token
-            .decimal_price_18_digits(self.token_direction.clone());
+            .decimal_price_18_digits(self.token_direction.clone())
     }
 
     pub fn rational_price(&self) -> Result<Ratio<BigInt>, anyhow::Error> {
-        return self.token.rational_price(self.token_direction.clone());
+        self.token.rational_price(self.token_direction.clone())
     }
 
     pub fn decimal_price(&self) -> Result<BigDecimal, anyhow::Error> {
-        return self.token.decimal_price_2(self.token_direction.clone());
+        self.token.decimal_price_2(self.token_direction.clone())
     }
 
     pub fn to_amount(&self, reserve_amt: &U256) -> Result<BigDecimal, anyhow::Error> {
-        return self
+        self
             .token
-            .to_amount(reserve_amt, self.token_direction.clone());
+            .to_amount(reserve_amt, self.token_direction.clone())
     }
 
     pub fn to_reserve(&self, token_amt: &BigDecimal) -> Result<U256, anyhow::Error> {
-        return self
+        self
             .token
-            .to_reserve(token_amt, self.token_direction.clone());
+            .to_reserve(token_amt, self.token_direction.clone())
     }
 
     pub fn amount_in(&self, amount_out: &BigDecimal) -> Option<(BigDecimal, Address)> {
@@ -130,7 +130,7 @@ impl SequenceToken {
         if swap_reserve.gt(&reserve) {
             return false;
         }
-        return true;
+        true
     }
 
     pub fn has_enough_confirmed_reserve(&self, swap_reserve: U256) -> bool {
@@ -138,7 +138,7 @@ impl SequenceToken {
         if swap_reserve.gt(&reserve) {
             return false;
         }
-        return true;
+        true
     }
 
     pub fn router(&self) -> Address {

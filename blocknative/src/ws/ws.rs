@@ -450,11 +450,10 @@ mod tests {
             "contractCall.params.path".to_string(),
             "0xC250e9987A032ACAC293d838726C511E6E1C029d".to_string(),
         );
-        let abi;
+      
         let config = WatchConfig {
             scope: "".to_string(),
             filters: vec![filters],
-            abi,
             watch_address: true,
         };
 

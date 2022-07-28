@@ -65,7 +65,7 @@ pub fn evaluate_symbols(left_symbol: &str, right_symbol: &str, context: Option<S
     if matches!(scenario, SCENARIO::DIFFERENT_COIN) {
         return true;
     }
-    return false;
+    false
 }
 
 pub async fn cyclic_order(
@@ -310,19 +310,13 @@ pub fn is_arbitrage_pair(crypto_path: &Vec<CryptoPair>) -> bool {
     let scenario_7 = a1_a3 && b1_b2 && a2_b3;
     let scenario_8 = a1_b2 && b1_a3 && a2_b3;
 
-    if scenario_1
+    scenario_1
         || scenario_2
         || scenario_3
         || scenario_4
         || scenario_5
         || scenario_6
-        || scenario_7
-        || scenario_8
-    {
-        true
-    } else {
-        false
-    }
+        || scenario_7 || scenario_8
 }
 
 /*
@@ -417,7 +411,7 @@ impl ThreePathSequence {
         for token in 0..self.sequence.len() {
             path_str = path_str.to_owned() + self.sequence[token].symbol();
             if token < self.sequence.len() - 1 {
-                path_str = path_str + " - ";
+                path_str += " - ";
             }
         }
         path_str
@@ -437,7 +431,7 @@ impl ThreePathSequence {
             &sequence.b3().pending_reserve(),
         );
 
-        if !result.is_none() {
+        if result.is_some() {
             let (delta_a, delta_b, delta_c, delta_a_prime, profit) = result.unwrap();
 
             if profit > U256::zero() {
@@ -582,26 +576,26 @@ impl ThreePathSequence {
                             );
 
                             let trade1 = SwapRoute::new(
-                                (sequence.a1().id().clone(), sequence.b1().id().clone()),
+                                (*sequence.a1().id(), *sequence.b1().id()),
                                 delta_a_amt_out.unwrap(),
                                 delta_a_amt_in.unwrap(),
-                                sequence.a1().token.pair.router.clone(),
+                                sequence.a1().token.pair.router,
                                 *sequence.a1().pair_id(),
                             );
 
                             let trade2 = SwapRoute::new(
-                                (sequence.a2().id().clone(), sequence.b2().id().clone()),
+                                (*sequence.a2().id(), *sequence.b2().id()),
                                 delta_b_amt_in.unwrap(),
                                 delta_b_amt_out.unwrap(),
-                                sequence.a2().token.pair.router.clone(),
+                                sequence.a2().token.pair.router,
                                 *sequence.a2().pair_id(),
                             );
 
                             let trade3 = SwapRoute::new(
-                                (sequence.a3().id().clone(), sequence.b3().id().clone()),
+                                (*sequence.a3().id(), *sequence.b3().id()),
                                 delta_c_amt_in.unwrap(),
                                 delta_c_amt_out.unwrap(),
-                                sequence.a3().token.pair.router.clone(),
+                                sequence.a3().token.pair.router,
                                 *sequence.a3().pair_id(),
                             );
 
@@ -718,7 +712,7 @@ impl ThreePathSequence {
                             > = vec![flash_repayment];
 
                             let flash_tx: TypedTransaction = flash_swap_v2(
-                                sequence.a1().token.pair_id().clone(),
+                                *sequence.a1().token.pair_id(),
                                 delta_a,
                                 delta_b,
                                 SwapRoute::route_calldata(trade_vec, calls).await.unwrap(),
@@ -756,16 +750,15 @@ impl ThreePathSequence {
         let pair_tx: Vec<TypedTransaction> = self
             .pairs
             .iter()
-            .map(|pair| pair.pending_txs())
-            .flatten()
+            .flat_map(|pair| pair.pending_txs())
             .collect_vec();
         pair_tx
     }
 
     pub async fn dec_to_u256(delta_a: &BigDecimal, delta_b: &BigDecimal) -> (U256, U256) {
         (
-            U256::from_dec_str(&*delta_a.to_string().split_once(".").unwrap().0).unwrap(),
-            U256::from_dec_str(&*delta_b.to_string().split_once(".").unwrap().0).unwrap(),
+            U256::from_dec_str(&*delta_a.to_string().split_once('.').unwrap().0).unwrap(),
+            U256::from_dec_str(&*delta_b.to_string().split_once('.').unwrap().0).unwrap(),
         )
     }
 
@@ -790,7 +783,7 @@ impl ThreePathSequence {
                 .mul(pair3.unwrap())
                 .to_big_rational();
         }
-        return Ratio::from_float(1_0_f64).unwrap();
+        Ratio::from_float(1_0_f64).unwrap()
     }
 }
 
@@ -883,7 +876,7 @@ impl PathSequence for ThreePathSequence {
         let pending_future = pending_update.for_each(move |v| {
             println!(
                 "Pending Tx - Arb Index -- path: {} Arb Index: {:.3?}",
-                pending_seq.clone().path().clone(),
+                pending_seq.clone().path(),
                 v.to_f64().unwrap()
             );
 
@@ -1152,7 +1145,7 @@ pub async fn test_calculate() {
     let result = optimize_a_prime_2(&a1, &b1, &a2, &b2, &a3, &b3);
 
     println!("Is None? {}", result.is_none());
-    if !result.is_none() {
+    if result.is_some() {
         let (delta_a, delta_b, delta_c, delta_a_prime, profit) = result.unwrap();
 
         let eq1 = (a1 + nine_seven * d_a) * (b1.checked_sub(d_b).unwrap());
@@ -1256,32 +1249,32 @@ pub async fn test_calculate() {
         );
 
         let trade1 = SwapRoute::new(
-            (dai_id.clone(), usdc_id.clone()),
+            (dai_id, usdc_id),
             delta_a,
             delta_a_amt_out.unwrap(),
-            kovan::router_v2.clone(),
-            dai_usdc_pair.clone()
+            *kovan::router_v2,
+            dai_usdc_pair
         );
  
         let trade2 = SwapRoute::new(
-            (usdc_id.clone(), weth_id.clone()),
+            (usdc_id, weth_id),
             delta_a_amt_out.unwrap(),
             delta_b_amt_out.unwrap(),
-            kovan::router_v2.clone(),
-            usdc_weth_pair.clone()
+            *kovan::router_v2,
+            usdc_weth_pair
         );
 
         let trade3 = SwapRoute::new(
-            (weth_id.clone(), dai_id.clone()),
+            (weth_id, dai_id),
             delta_b_amt_out.unwrap(),
             delta_c_amt_out.unwrap(),
-            kovan::router_v2.clone(),
-            dai_weth_pair.clone()
+            *kovan::router_v2,
+            dai_weth_pair
         );
 
-        let flash_token = IERC20::new(dai_id.clone(), kovan::client.clone());
+        let flash_token = IERC20::new(dai_id, kovan::client.clone());
         let flash_repayment =
-            flash_token.transfer(link_usdc_pair.clone(), delta_a.mul(U256::from(997_i16)));
+            flash_token.transfer(link_usdc_pair, delta_a.mul(U256::from(997_i16)));
 
         let trade_vec = vec![trade1,trade2, trade3];
         let calls: Vec<
@@ -1387,9 +1380,9 @@ pub async fn test_cyclic_order() -> Result<(), anyhow::Error> {
     let mut crypto_pairs: HashMap<Address, Arc<CryptoPair>> = HashMap::new();
     let crypto_paths = vec![pair1.clone(), pair2.clone(), pair3.clone()];
 
-    crypto_pairs.insert(pair1.pair_id().clone(), Arc::new(pair1.clone()));
-    crypto_pairs.insert(pair2.pair_id().clone(), Arc::new(pair2.clone()));
-    crypto_pairs.insert(pair3.pair_id().clone(), Arc::new(pair3.clone()));
+    crypto_pairs.insert(*pair1.pair_id(), Arc::new(pair1.clone()));
+    crypto_pairs.insert(*pair2.pair_id(), Arc::new(pair2.clone()));
+    crypto_pairs.insert(*pair3.pair_id(), Arc::new(pair3.clone()));
 
     let sequence = three_path_sequence::cyclic_order(crypto_paths, &crypto_pairs)
         .await

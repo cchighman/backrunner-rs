@@ -107,11 +107,7 @@ pub fn is_arbitrage_pair(crypto_path: &Vec<CryptoPair>) -> bool {
     let scenario_1 = a1_b2 && b1_a2; // WETH-DAI-DAI-WETH (a1-b2 alike), (b1-a2 alike)
     let scenario_2 = b1_a2 && a1_b2; // DAI-WETH-WETH-DAI  (a2-b1 alike), (a1-b2 alike)
     let scenario_3 = a1_b1 && a2_b2; // WETH-DAI-WETH_DAI
-    if scenario_1.clone() || scenario_2.clone() || scenario_3.clone() {
-        true
-    } else {
-        false
-    }
+    scenario_1 || scenario_2 || scenario_3
 }
 
 /*

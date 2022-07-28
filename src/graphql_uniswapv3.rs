@@ -23,7 +23,6 @@ pub fn pools(
         .build()
         .unwrap();
 
-    let response_body =
-        post_graphql::<UniswapPools, _>(&client, endpoint, uniswap_pools::Variables);
-    return response_body;
+    
+    post_graphql::<UniswapPools, _>(&client, endpoint, uniswap_pools::Variables)
 }

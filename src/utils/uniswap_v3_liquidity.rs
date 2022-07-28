@@ -6,11 +6,11 @@ pub mod uniswap_v3_liquidity {
     use bigdecimal::BigDecimal;
 
     fn liquidity_0(x: &BigDecimal, sa: &BigDecimal, sb: &BigDecimal) -> BigDecimal {
-        return ((x * sa) * sb) / (sb - sa);
+        ((x * sa) * sb) / (sb - sa)
     }
 
     fn liquidity_1(y: &BigDecimal, sa: &BigDecimal, sb: &BigDecimal) -> BigDecimal {
-        return y / (sb - sa);
+        y / (sb - sa)
     }
 
     fn liquidity(
@@ -23,16 +23,14 @@ pub mod uniswap_v3_liquidity {
         let mut liquidity = Default::default();
         if sp <= sa {
             liquidity = liquidity_0(x, sa, sb);
+        } else if sp < sb {
+            let liquidity0 = liquidity_0(x, sp, sb);
+            let liquidity1 = liquidity_1(y, sa, sp);
+            liquidity = liquidity0.min(liquidity1);
         } else {
-            if sp < sb {
-                let liquidity0 = liquidity_0(x, sp, sb);
-                let liquidity1 = liquidity_1(y, sa, sp);
-                liquidity = liquidity0.min(liquidity1);
-            } else {
-                liquidity = liquidity_1(y, sa, sb);
-            }
+            liquidity = liquidity_1(y, sa, sb);
         }
-        return liquidity;
+        liquidity
     }
     /*
     /* Calculate x and y given liquidity and price range */

@@ -18,7 +18,7 @@ pub fn valid_timestamp(future_millis: U256) -> U256 {
         .checked_add(u128::try_from(future_millis).unwrap())
         .unwrap();
 
-    return U256::from(time_millis);
+    U256::from(time_millis)
 }
 
 pub async fn flash_swap_v2(
@@ -30,7 +30,7 @@ pub async fn flash_swap_v2(
     let pair_contract = UniswapV2Pair::new(pair_id, mainnet::client.clone());
 
     let contract_call =
-        pair_contract.swap(in_amt, out_amt, mainnet::flash_contract.clone(), calldata);
+        pair_contract.swap(in_amt, out_amt, *mainnet::flash_contract, calldata);
 
     Ok(contract_call.tx)
 }

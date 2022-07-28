@@ -17,17 +17,17 @@ use num_traits::{FromPrimitive, One, Signed, ToPrimitive, Zero};
 
 pub fn encode_price_sqrt(amount1: BigInt, amount0: BigInt) -> BigInt {
     let numerator = amount1 << 192;
-    let ratio_x192: BigInt = BigInt::from(numerator / amount0);
-    return ratio_x192.sqrt();
+    let ratio_x192: BigInt = numerator / amount0;
+    ratio_x192.sqrt()
 }
 
 fn mul_shift(val: BigInt, mul_by: &[u8]) -> BigInt {
     let mul_by = BigInt::parse_bytes(mul_by, 16).unwrap();
-    return (val * mul_by) >> 128;
+    (val * mul_by) >> 128
 }
 
 pub fn sqrt_ratio_at_tick(tick: BigInt) -> BigInt {
-    let min_tick: BigInt = -887272.to_bigint().unwrap();
+    let min_tick: BigInt = -(887272.to_bigint().unwrap());
 
     let max_tick: BigInt = -(min_tick.clone());
 
@@ -39,7 +39,7 @@ pub fn sqrt_ratio_at_tick(tick: BigInt) -> BigInt {
 
     let q32: BigInt = 2i32.to_bigint().unwrap().pow(32);
 
-    assert!(tick >= min_tick.clone() && tick <= max_tick);
+    assert!(tick >= min_tick && tick <= max_tick);
     let abs_tick = tick.abs();
     let mut ratio = if abs_tick.clone() & BigInt::parse_bytes(b"1", 16).unwrap() != BigInt::zero() {
         BigInt::parse_bytes(b"fffcb933bd6fad37aa2d162d1a594001", 16).unwrap()
@@ -136,13 +136,13 @@ pub fn sqrt_ratio_at_tick(tick: BigInt) -> BigInt {
     } else {
         ratio
     };
-    ratio = if (abs_tick.clone() & BigInt::parse_bytes(b"80000", 16).unwrap()) != BigInt::zero() {
+    ratio = if (abs_tick & BigInt::parse_bytes(b"80000", 16).unwrap()) != BigInt::zero() {
         mul_shift(ratio, b"48a170391f7dc42444e8fa2")
     } else {
         ratio
     };
 
-    ratio = if tick.clone() > BigInt::zero() {
+    ratio = if tick > BigInt::zero() {
         max_uint_256 / ratio
     } else {
         ratio
@@ -153,7 +153,7 @@ pub fn sqrt_ratio_at_tick(tick: BigInt) -> BigInt {
     } else {
         ratio / q32
     };
-    return ratio;
+    ratio
 }
 
 pub fn tick_at_sqrt_ratio(sqrt_ratio_x96: BigInt) -> i32 {
@@ -169,7 +169,7 @@ pub fn tick_at_sqrt_ratio(sqrt_ratio_x96: BigInt) -> i32 {
     let msb = most_significant_bit(sqrt_ratio_x128.clone());
 
     let mut r = if msb >= 128 {
-        sqrt_ratio_x128.clone() >> (msb - 127)
+        sqrt_ratio_x128 >> (msb - 127)
     } else {
         sqrt_ratio_x128 << (127 - msb)
     };
@@ -179,8 +179,8 @@ pub fn tick_at_sqrt_ratio(sqrt_ratio_x96: BigInt) -> i32 {
     for i in 0..14 {
         r = (r.clone() * r) >> 127i32;
         let f: BigInt = r.clone() >> 128i32;
-        log_2 = log_2 | (f.clone() << (63 - i));
-        r = r >> f.clone().to_i64().unwrap();
+        log_2 |= f.clone() << (63 - i);
+        r >>= f.clone().to_i64().unwrap();
     }
 
     let val: BigInt = "255738958999603826347141".parse().unwrap();
@@ -192,20 +192,20 @@ pub fn tick_at_sqrt_ratio(sqrt_ratio_x96: BigInt) -> i32 {
 
     let val: BigInt = "291339464771989622907027621153398088495".parse().unwrap();
 
-    let tick_high: BigInt = (loq_sqrt0001.clone() + val) >> 128;
+    let tick_high: BigInt = (loq_sqrt0001 + val) >> 128;
     let tick_high = tick_high.to_i32().unwrap();
 
-    return if tick_low == tick_high {
+    if tick_low == tick_high {
         tick_low
     } else if sqrt_ratio_at_tick(tick_high.to_bigint().unwrap()) <= sqrt_ratio_x96 {
         tick_high
     } else {
         tick_low
-    };
+    }
 }
 
 pub fn most_significant_bit(mut x: BigInt) -> u32 {
-    assert!(x.clone() >= BigInt::zero());
+    assert!(x >= BigInt::zero());
     let two: BigInt = 2.to_bigint().unwrap();
     let powers_of_2: Vec<(u32, BigInt)> = [128u32, 64u32, 32u32, 16u32, 8u32, 4u32, 2u32, 1u32]
         .iter()
@@ -217,17 +217,17 @@ pub fn most_significant_bit(mut x: BigInt) -> u32 {
         10,
     )
     .unwrap();
-    assert!(x.clone() < max_uint_256);
+    assert!(x < max_uint_256);
     let mut msb = 0;
 
     for (power, min) in powers_of_2 {
         if x >= min {
-            x = x >> (power as i32);
+            x >>= power as i32;
             msb += power;
         }
     }
 
-    return msb;
+    msb
 }
 
 #[derive(Clone, Debug)]
@@ -301,7 +301,7 @@ pub fn tick_to_price(base_token: Token, quote_token: Token, tick: BigInt) -> Pri
     let sqrt_ratio_x96 = sqrt_ratio_at_tick(tick);
     let ratio_x192 = sqrt_ratio_x96.clone() * sqrt_ratio_x96;
 
-    return if base_token.sorts_before(&quote_token) {
+    if base_token.sorts_before(&quote_token) {
         Price {
             token_0: base_token,
             token_1: quote_token,
@@ -315,7 +315,7 @@ pub fn tick_to_price(base_token: Token, quote_token: Token, tick: BigInt) -> Pri
             amount_0: ratio_x192,
             amount_1: q192,
         }
-    };
+    }
 }
 
 pub fn price_to_tick(price: Price) -> i32 {
@@ -334,15 +334,13 @@ pub fn price_to_tick(price: Price) -> i32 {
         tick + BigInt::one(),
     );
     if sorted {
-        if !(price < next_tick_price) {
-            tick = tick + 1;
+        if price >= next_tick_price {
+            tick += 1;
         }
-    } else {
-        if !(price > next_tick_price) {
-            tick = tick + 1;
-        }
+    } else if price <= next_tick_price {
+        tick += 1;
     }
-    return tick;
+    tick
 }
 
 /// @notice Computes the amount of liquidity received for a given amount of token0 and price range
@@ -365,7 +363,7 @@ pub fn max_liquidity_for_amount0(
 
     let numerator = (amount0 * sqrt_ratio_ax96.clone()) * sqrt_ratio_bx96.clone();
     let denominator = (sqrt_ratio_bx96 - sqrt_ratio_ax96) * q96;
-    return numerator / denominator;
+    numerator / denominator
 }
 /// @notice Computes the amount of liquidity received for a given amount of token1 and price range
 /// @dev Calculates amount1 / (sqrt(upper) - sqrt(lower)).
@@ -384,7 +382,7 @@ pub fn max_liquidity_for_amount1(
     } else {
         (sqrt_ratio_ax96, sqrt_ratio_bx96)
     };
-    return (amount1 * q96) / (sqrt_ratio_bx96 - sqrt_ratio_ax96);
+    (amount1 * q96) / (sqrt_ratio_bx96 - sqrt_ratio_ax96)
 }
 
 /// @notice Computes the maximum amount of liquidity received for a given amount of token0, token1, the current
@@ -407,7 +405,7 @@ pub fn max_liquidity_for_amounts(
     } else {
         (sqrt_ratio_ax96, sqrt_ratio_bx96)
     };
-    return if sqrt_ratio_current_x96 <= sqrt_ratio_ax96 {
+    if sqrt_ratio_current_x96 <= sqrt_ratio_ax96 {
         max_liquidity_for_amount0(sqrt_ratio_ax96, sqrt_ratio_bx96, amount0)
     } else if sqrt_ratio_current_x96 < sqrt_ratio_bx96 {
         let liquidity0 =
@@ -421,7 +419,7 @@ pub fn max_liquidity_for_amounts(
         }
     } else {
         max_liquidity_for_amount1(sqrt_ratio_ax96, sqrt_ratio_bx96, amount1)
-    };
+    }
 }
 
 /**
@@ -453,15 +451,15 @@ pub fn amounts_for_liquidity(
     let mut amount1 = BigInt::from(0);
 
     if sqrt_ratio <= sqrt_ratio_a {
-        amount0 = amount0for_liquidity(&sqrt_ratio_a, &sqrt_ratio_b, &liquidity);
+        amount0 = amount0for_liquidity(sqrt_ratio_a, sqrt_ratio_b, &liquidity);
     } else if sqrt_ratio < sqrt_ratio_b {
-        amount0 = amount0for_liquidity(&sqrt_ratio, &sqrt_ratio_b, &liquidity);
-        amount1 = amount1for_liquidity(&sqrt_ratio_a, &sqrt_ratio, &liquidity);
+        amount0 = amount0for_liquidity(sqrt_ratio, sqrt_ratio_b, &liquidity);
+        amount1 = amount1for_liquidity(sqrt_ratio_a, sqrt_ratio, &liquidity);
     } else {
-        amount1 = amount1for_liquidity(&sqrt_ratio_a, &sqrt_ratio_b, &liquidity);
+        amount1 = amount1for_liquidity(sqrt_ratio_a, sqrt_ratio_b, &liquidity);
     }
 
-    return [amount0, amount1];
+    [amount0, amount1]
 }
 
 /// @notice Computes the amount of token0 for a given amount of liquidity and a price range
@@ -492,9 +490,9 @@ pub fn amount0for_liquidity(
     let multiplied_res = left_shifted_liquidity * sqrt_diff;
     let numerator = multiplied_res / (sqrt_ratio_b.clone());
 
-    let amount0 = numerator / sqrt_ratio_a.clone();
+    
 
-    return amount0;
+    numerator / sqrt_ratio_a.clone()
 }
 
 /**
@@ -519,11 +517,11 @@ pub fn amount1for_liquidity(
     }
 
     let sqrt_diff = sqrt_ratio_b - sqrt_ratio_a.clone();
-    let multiplied_res = BigInt::from_str(&*liquidity.to_string()).unwrap() * sqrt_diff.clone();
+    let multiplied_res = BigInt::from_str(&*liquidity.to_string()).unwrap() * sqrt_diff;
 
-    let amount1 = multiplied_res / BigInt::from(2).pow(96);
+    
 
-    return amount1;
+    multiplied_res / BigInt::from(2).pow(96)
 }
 
 /**
@@ -566,9 +564,9 @@ pub fn amounts_for_current_liquidity(
     let fraction0 = [token0raw_liquidity, tok0dec];
     let fraction1 = [token1raw_liquidity, tok1dec];
 
-    dbg!("high - {}", tick_high.clone());
-    dbg!("low - {}", tick_low.clone());
-    return [fraction0, fraction1];
+    dbg!("high - {}", tick_high);
+    dbg!("low - {}", tick_low);
+    [fraction0, fraction1]
 }
 
 pub fn tick_range(tick: i32, tick_spacing: i32, tick_step: i32) -> [BigInt; 2] {
@@ -578,11 +576,9 @@ pub fn tick_range(tick: i32, tick_spacing: i32, tick_step: i32) -> [BigInt; 2] {
     let calc = ratio * tick_spacing - tick_spacing_stepped;
 
     let tick_low = BigInt::from_i32(calc).unwrap();
-    let tick_high = BigInt::from(
-        tick_low.clone() + BigInt::from(tick_spacing) + BigInt::from(tick_spacing_stepped * 2),
-    );
+    let tick_high = tick_low.clone() + BigInt::from(tick_spacing) + BigInt::from(tick_spacing_stepped * 2);
 
-    return [tick_low, tick_high];
+    [tick_low, tick_high]
 }
 
 pub enum FeeAmount {
@@ -601,24 +597,24 @@ lazy_static! {
 }
 
 pub fn min_tick(tick_spacing: i32) -> i32 {
-    return ceil(-887272 as f64 / tick_spacing as f64, 0)
+    ceil(-887272_f64 / tick_spacing as f64, 0)
         .to_i32()
         .unwrap()
-        * tick_spacing;
+        * tick_spacing
 }
 
 pub fn max_tick(tick_spacing: i32) -> i32 {
-    return floor(887272 as f64 / tick_spacing as f64, 0)
+    floor(887272_f64 / tick_spacing as f64, 0)
         .to_i32()
         .unwrap()
-        * tick_spacing;
+        * tick_spacing
 }
 
 pub fn max_liquidity_per_tick(tick_spacing: i32) -> i128 {
     let numerator = i128::from(2).pow(128) - i128::from(1);
     let denominator =
         (max_tick(tick_spacing as i32) - min_tick(tick_spacing as i32)) / tick_spacing + 1;
-    return numerator / denominator as i128;
+    numerator / denominator as i128
 }
 
 pub fn apply_sqrt_ratio_bips_hundredths_delta(
@@ -692,7 +688,7 @@ mod tests {
     #[test]
     fn sqrt_ratio_at_tick_2() {
         let min_tick = -887272i32;
-        let max_tick = -min_tick.clone();
+        let max_tick = -min_tick;
 
         let max_sqrt_ratio: BigInt =
             BigInt::parse_bytes(b"1461446703485210103287273052203988822378723970342", 10).unwrap();
@@ -704,7 +700,7 @@ mod tests {
     #[test]
     fn tick_at_sqrt_ratio_1() {
         let min_tick = -887272i32;
-        let _max_tick = -min_tick.clone();
+        let _max_tick = -min_tick;
 
         let min_sqrt_ratio: BigInt = 4295128739i64.to_bigint().unwrap();
 
@@ -715,7 +711,7 @@ mod tests {
     #[test]
     fn tick_at_sqrt_ratio_2() {
         let min_tick = -887272i32;
-        let max_tick = -min_tick.clone();
+        let max_tick = -min_tick;
 
         let max_sqrt_ratio: BigInt =
             BigInt::parse_bytes(b"1461446703485210103287273052203988822378723970342", 10).unwrap();
@@ -764,7 +760,7 @@ mod tests {
             symbol: "TestToken1".to_string(),
             address: "0x0".to_string(),
         };
-        let price = tick_to_price(t0, t1, -276225.to_bigint().unwrap());
+        let price = tick_to_price(t0, t1, -(276225.to_bigint().unwrap()));
 
         let scalar = BigRational::new(
             10.to_bigint().unwrap().pow(18),
@@ -789,7 +785,7 @@ mod tests {
             symbol: "TestToken1".to_string(),
             address: "0x0".to_string(),
         };
-        let price = tick_to_price(t0, t1, -276423.to_bigint().unwrap());
+        let price = tick_to_price(t0, t1, -(276423.to_bigint().unwrap()));
 
         let scalar = BigRational::new(
             10.to_bigint().unwrap().pow(18),
@@ -878,8 +874,8 @@ mod tests {
         let sqrt_price_bx96 = encode_price_sqrt(BigInt::from(110), BigInt::from(100));
 
         let liquidity = max_liquidity_for_amounts(
-            sqrt_price_x96.clone(),
-            sqrt_price_ax96.clone(),
+            sqrt_price_x96,
+            sqrt_price_ax96,
             sqrt_price_bx96,
             100,
             200,
@@ -894,8 +890,8 @@ mod tests {
 
         let liquidity = max_liquidity_for_amounts(
             sqrt_price_x96,
-            sqrt_price_ax96.clone(),
-            sqrt_price_bx96.clone(),
+            sqrt_price_ax96,
+            sqrt_price_bx96,
             100,
             200,
         );

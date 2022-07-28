@@ -24,10 +24,9 @@ pub async fn pairs(
         .build()
         .unwrap();
 
-    let response_body =
-        post_graphql::<UniswapPairs, _>(&client, endpoint, uniswap_pairs::Variables);
+    
     //   let response_body2 = (response_body.as_ref());
     // dbg!("{:#?}", response_body2);
 
-    return response_body;
+    post_graphql::<UniswapPairs, _>(&client, endpoint, uniswap_pairs::Variables)
 }

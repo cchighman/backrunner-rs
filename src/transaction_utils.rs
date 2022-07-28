@@ -54,7 +54,7 @@ fn proxy_impl(tx_traces: Vec<Trace>, contract: Address) -> Address {
             _ => continue, // we skip over other action types as we only care about the proxy (if any)
         }
     }
-    return proxy_impl;
+    proxy_impl
 }
 
 fn crop_address(s: &mut String, pos: usize) {
@@ -190,7 +190,7 @@ fn ether_flows(
     if eth_outflow > U256::zero() && eth_inflow > U256::zero() {
         return [eth_inflow, eth_outflow];
     }
-    return [U256::zero(), U256::zero()];
+    [U256::zero(), U256::zero()]
 }
 
 fn stablecoin_flows(
@@ -305,15 +305,15 @@ fn stablecoin_flows(
     if dollar_outflow > U256::zero() && dollar_inflow > U256::zero() {
         return [dollar_inflow, dollar_outflow];
     }
-    return [U256::zero(), U256::zero()];
+    [U256::zero(), U256::zero()]
 }
 
 pub async fn tx_flow<M: Middleware + Clone + 'static>(provider: M, tx_hash: H256) {
     println!("tx_flow");
     let tx_data = tx_data(provider.clone(), tx_hash).await;
-    if !tx_data.is_err() {
-        let tx_receipt = tx_receipt(provider.clone(), tx_hash.clone()).await; // receipt to find of if it failed + gas used.
-        if !tx_receipt.is_err() {
+    if tx_data.is_ok() {
+        let tx_receipt = tx_receipt(provider.clone(), tx_hash).await; // receipt to find of if it failed + gas used.
+        if tx_receipt.is_ok() {
             let tx_data_impl = tx_data.unwrap();
             let tx_receipt_impl = tx_receipt.unwrap();
             dbg!(tx_data_impl.clone());

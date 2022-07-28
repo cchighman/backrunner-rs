@@ -21,30 +21,30 @@ pub async fn uniswapv2_unpack_pairs(
                 name: pair.token0.name.clone(),
                 decimals: pair.token0.decimals.parse::<i32>().unwrap(),
                 symbol: pair.token0.symbol.clone(),
-                reserve: U256::from_dec_str(&*pair.reserve0.to_string().replace(".","")).unwrap(),
+                reserve: U256::from_dec_str(&*pair.reserve0.to_string().replace('.',"")).unwrap(),
             },
             token1: UniswapPairsPairsTokens {
                 id: Address::from_str(&*pair.token1.id.clone()).unwrap(),
                 name: pair.token1.name.clone(),
                 decimals: pair.token1.decimals.parse::<i32>().unwrap(),
                 symbol: pair.token1.symbol.clone(),
-                reserve: U256::from_dec_str(&*pair.reserve1.to_string().replace(".","")).unwrap(),
+                reserve: U256::from_dec_str(&*pair.reserve1.to_string().replace('.',"")).unwrap(),
             },
             id: Address::from_str(&pair.id).unwrap(),
             sqrt_price: Default::default(),
             liquidity: Default::default(),
             tick: Default::default(),
             dex: dex.clone(),
-            router: router,
+            router,
             fee_tier: Default::default(),
         };
 
         if !pair_map.contains_key::<Address>(&uni_pair.id) {
             let pair = CryptoPair::new(uni_pair.clone());
-            pair_map.insert(uni_pair.id.clone(), pair);
+            pair_map.insert(uni_pair.id, pair);
         } else {
             let pair = pair_map.get_key_value(&uni_pair.id).unwrap();
-            pair_map.insert(uni_pair.id.clone(), CryptoPair::new(uni_pair));
+            pair_map.insert(uni_pair.id, CryptoPair::new(uni_pair));
         }
     }
 }

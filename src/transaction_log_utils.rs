@@ -80,7 +80,7 @@ pub async fn decode_uniswap_event(
 
     let method = topic.0;
     let signature = topic.1;
-    decode_event_tx(method, &signature, topics, decoded)
+    decode_event_tx(method, signature, topics, decoded)
 }
 
 pub fn decode_event_tx(
@@ -101,7 +101,7 @@ pub fn decode_event_tx(
      );
      */
     let raw_log = RawLog {
-        topics: topics.clone(),
+        topics,
         data: payload.to_vec(),
     };
     let mut event = "";

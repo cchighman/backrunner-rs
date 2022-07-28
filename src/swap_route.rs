@@ -44,7 +44,7 @@ impl SwapRoute {
         pair_id: Address
     ) -> Self {
         Self {
-            pair: tokens.clone(),
+            pair: tokens,
             source_amount: source,
             dest_amount: dest,
             router,
@@ -54,7 +54,7 @@ impl SwapRoute {
 
     pub async fn swap_tokens_for_exact_tokens(&self) -> Result<Bytes, anyhow::Error> {
         let router_contract =
-            UniswapV2Router02::new(mainnet::router_v2.clone(), mainnet::client.clone());
+            UniswapV2Router02::new(*mainnet::router_v2, mainnet::client.clone());
 /* 
         let pair_contract = UniswapV2Pair::new(self.pair_id, mainnet::client.clone());
         let contract_call = pair_contract.swap(self.source_amount.add(U256::from(1000_i32)), self.dest_amount.add(U256::from(1000_i32)), mainnet::flash_contract.clone(), Bytes::default());
@@ -65,7 +65,7 @@ impl SwapRoute {
                 self.source_amount,
                 U256::zero(),
                 vec![self.pair.0, self.pair.1],
-                mainnet::to.clone(),
+                *mainnet::to,
                 mainnet::valid_timestamp(),
             )
             .calldata()
@@ -141,7 +141,7 @@ impl SwapRoute {
             (_, _) => self.swap_tokens_for_exact_tokens(),
         }
         */
-        Ok(self.swap_tokens_for_exact_tokens().await?)
+        self.swap_tokens_for_exact_tokens().await
     }
 
     pub async fn route_calldata(

@@ -472,9 +472,9 @@ pub fn optimize_a_prime_2(
     let comp_3 = a3.mul(b3);
 
     let ten = U256::from(10_u8);
-    let first_eq = eq1.clone() - comp_1.clone();
-    let second_eq = eq2.clone() - comp_2.clone();
-    let third_eq = eq3.clone() - comp_3.clone();
+    let first_eq = eq1 - comp_1;
+    let second_eq = eq2 - comp_2;
+    let third_eq = eq3 - comp_3;
    // println!("-a- eq1: {} comp1: {} eq2: {} comp2: {} eq3: {} comp3: {}", eq1,comp_1,eq2,comp_2,eq3,comp_3);
 
     if delta_a.gt(a1) || delta_b.gt(b1) || delta_c.gt(b2) || delta_a_prime.gt(b3) {
@@ -530,7 +530,7 @@ pub fn optimize_a_prime(
             .unwrap(),
     )
     .div(U256::from(100_u8));
-    let comp_1 = U256::from((&a1.clone().mul(&b1)).to_u128().unwrap()).div(U256::from(100_u8));
+    let comp_1 = U256::from((&a1.mul(&b1)).to_u128().unwrap()).div(U256::from(100_u8));
 
     let eq2 = U256::from(
         ((&a2 + &nine_seven * &delta_b) * (&b2 - &delta_c))
@@ -538,7 +538,7 @@ pub fn optimize_a_prime(
             .unwrap(),
     )
     .div(U256::from(100_u8));
-    let comp_2 = U256::from((&a2.clone().mul(&b2)).to_u128().unwrap()).div(U256::from(100_u8));
+    let comp_2 = U256::from((&a2.mul(&b2)).to_u128().unwrap()).div(U256::from(100_u8));
 
     let eq3 = U256::from(
         ((&a3 + &nine_seven * &delta_c) * (&b3 - &delta_a_prime))
@@ -546,12 +546,12 @@ pub fn optimize_a_prime(
             .unwrap(),
     )
     .div(U256::from(100_u8));
-    let comp_3 = U256::from((&a3.clone().mul(&b3)).to_u128().unwrap()).div(U256::from(100_u8));
+    let comp_3 = U256::from((&a3.mul(&b3)).to_u128().unwrap()).div(U256::from(100_u8));
 
     let ten = U256::from(10_u8);
-    let first_eq = (eq1.clone() - comp_1.clone()) < ten.clone();
-    let second_eq = (eq2.clone() - comp_2.clone()) < ten.clone();
-    let third_eq = (eq3.clone() - comp_3.clone()) < ten.clone();
+    let first_eq = (eq1 - comp_1) < ten;
+    let second_eq = (eq2 - comp_2) < ten;
+    let third_eq = (eq3 - comp_3) < ten;
 
     Some((delta_a, delta_b, delta_c, delta_a_prime, profit))
 }
