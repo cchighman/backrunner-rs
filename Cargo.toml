@@ -91,7 +91,7 @@ optional = false
 
 [dependencies.serde]
 version = "1.0.136"
-features = ["derive"]
+features = ["derive", "serialize","deserialize"]
 optional = false
 
 [dependencies.tokio]
