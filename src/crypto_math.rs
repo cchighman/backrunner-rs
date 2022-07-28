@@ -513,10 +513,6 @@ pub fn optimize_a_prime(
     let Ea = (&one * &a1 * &a2) / (&one * &a2 + &nine_seven * &b1);
     let Eb = (&nine_seven * &b1 * &b2) / (&one * &a2 + &nine_seven * &b1);
 
-    if Ea > Eb {
-        return None;
-    }
-
     let optimal: BigDecimal = (&Ea * &Eb * &nine_seven * &one) - &Ea * &one / &nine_seven;
     let delta_a = optimal.sqrt().unwrap();
     let delta_b = (&b1 * &nine_seven * &delta_a) / (&a1 + &nine_seven * &delta_a);
@@ -552,6 +548,7 @@ pub fn optimize_a_prime(
     let first_eq = (eq1 - comp_1) < ten;
     let second_eq = (eq2 - comp_2) < ten;
     let third_eq = (eq3 - comp_3) < ten;
+    
 
     Some((delta_a, delta_b, delta_c, delta_a_prime, profit))
 }

@@ -6,6 +6,7 @@ use std::ops::Mul;
 use std::ops::Sub;
 use std::str::FromStr;
 use std::sync::Arc;
+use std::vec;
 
 use super::uniswap_providers::*;
 use crate::arb_thread_pool::spawn;
@@ -316,7 +317,8 @@ pub fn is_arbitrage_pair(crypto_path: &Vec<CryptoPair>) -> bool {
         || scenario_4
         || scenario_5
         || scenario_6
-        || scenario_7 || scenario_8
+        || scenario_7
+        || scenario_8
 }
 
 /*
@@ -1014,111 +1016,19 @@ pub fn ratio_to_dec(value: Ratio<BigInt>) -> BigDecimal {
 pub async fn test_calculate() {
     let nine_seven = U256::from(997_u16);
 
-    /*
-    // Kovan - Block: 32964211
-
-  Pair1: 0x5769e99b0c5dc4f8a1657d9f7c4ef7e7b015583d-
-        dai - 0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa
-        usdc - 0xb7a4F3E9097C08dA09517b5aB877F7a917224ede
-        _reserve0   uint112 :  33855945375163989564 (dai)
-        _reserve1   uint112 :  1819454765041  (usdc)
-
-
-    --Pair 2: 0x44892ab8F7aFfB7e1AdA4Fb956CCE2a2f3049619-
-    usdc - 0xb7a4F3E9097C08dA09517b5aB877F7a917224ede
-    weth - 0xd0A1E359811322d97991E03f863a0C30C2cF029C
-      _reserve0   uint112 :  3747966330136191( (usdc)
-      _reserve1   uint112 :  76174141489217463  (weth)
-
-
-    Pair 3: 0x5ae45101eB47752Ea0068F432735cF00F6C849bD
-        link:0xa36085f69e2889c224210f603d836748e7dc0088
-        weth:0xd0A1E359811322d97991E03f863a0C30C2cF029C
-        _reserve0   uint112 :  10397578570167698679693
-        _reserve1   uint112 :  1654220086545182421
-
-    ---------------------------
-    Pair: 0x5769e99b0c5dc4f8a1657d9f7c4ef7e7b015583d-
-        dai - 0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa
-        usdc - 0xb7a4F3E9097C08dA09517b5aB877F7a917224ede
-        _reserve0   uint112 :  33855945375163989564 (dai)
-        _reserve1   uint112 :  1819454765041  (usdc)
-    -----
-
-    Pair: 0x44892ab8F7aFfB7e1AdA4Fb956CCE2a2f3049619-
-        usdc - 0xb7a4F3E9097C08dA09517b5aB877F7a917224ede
-        weth - 0xd0A1E359811322d97991E03f863a0C30C2cF029C
-        _reserve0   uint112 :  3747966330136191( (usdc)
-        _reserve1   uint112 :  76174141489217463  (weth)
-
-    ----
-    Pair: 0xB10cf58E08b94480fCb81d341A63295eBb2062C2
-        dai - 0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa
-        weth - 0xd0a1e359811322d97991e03f863a0c30c2cf029c
-        _reserve0   uint112 :  2542694953010569227021456 (dai)
-        _reserve1   uint112 :  134572952094767475984 (weth)
-
-    ----
-
-    Pair:0x771fbe887e04536B0a39dFa86ACdbDf1b0bD8BF6
-        uni: 0x075a36ba8846c6b6f53644fdd3bf17e5151789dc
-        link: 0xa36085f69e2889c224210f603d836748e7dc0088
-        _reserve0   uint112 :  25000000000000000000
-        _reserve1   uint112 :  30402500000000000000
-
-    ------
-
-    Pair: 0x144eC5ABF328f8d477Cd6238bAE5aa027bDDfD1E
-        link: 0xa36085f69e2889c224210f603d836748e7dc0088
-        aave: 0xB597cd8D3217ea6477232F9217fa70837ff667Af
-        _reserve0   uint112 :  4000000000000000000
-        _reserve1   uint112 :  308000000000000000
-    ----
-
-    Pair: 0x459125c711a250084a986b9fc698159865f1805e
-        dai:0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa
-        link:0xa36085f69e2889c224210f603d836748e7dc0088
-        _reserve0   uint112 :  4552453415191126545061
-        _reserve1   uint112 :  2308607454100309268919
-    ----
-    Pair: 0x5ae45101eB47752Ea0068F432735cF00F6C849bD
-        link:0xa36085f69e2889c224210f603d836748e7dc0088
-        weth:0xd0A1E359811322d97991E03f863a0C30C2cF029C
-        _reserve0   uint112 :  10397578570167698679693
-        _reserve1   uint112 :  1654220086545182421
-    ----
-    Pair: 0x4341737DE0Cf2746088418Fc2c50F433a38b3d54
-        link:0xa36085f69e2889c224210f603d836748e7dc0088
-        wbtc: 0xD1B98B6607330172f1D991521145A22BCe793277
-        _reserve0   uint112 :  6000000000000000000
-        _reserve1   uint112 :  178260
-    ----
-    Pair: 0xcc997c4593723e69df02e6ffc8937519e3d98200
-        aave: 0xB597cd8D3217ea6477232F9217fa70837ff667Af
-        weth: 0xd0A1E359811322d97991E03f863a0C30C2cF029C
-        _reserve0   uint112 :  409100012097810849
-        _reserve1   uint112 :  81560236
-    ----
-    Pair: 0x5C58BB94b633Fdb7f03bD84781c9d8dBE3F44d37
-        uni: 0x075a36ba8846c6b6f53644fdd3bf17e5151789dc
-        weth:  0xd0A1E359811322d97991E03f863a0C30C2cF029C
-        _reserve0   uint112 :  3431921438720603120554
-        _reserve1   uint112 :  1121766166233
-    -----
-
-    Pair: 0xeb18CF20528a94882c08661D5Ee0bb8A93aC4143
-        link:0xa36085f69e2889c224210f603d836748e7dc0088
-        usdc:0xb7a4F3E9097C08dA09517b5aB877F7a917224ede
-        _reserve0   uint112 :  1000000000000000000
-        _reserve1   uint112 :  6940000
-    ------
-    */
 
     let link_id: Address = Address::from_str("0xa36085f69e2889c224210f603d836748e7dc0088").unwrap();
     let dai_id: Address = Address::from_str("0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa").unwrap();
     let usdc_id: Address = Address::from_str("0xb7a4F3E9097C08dA09517b5aB877F7a917224ede").unwrap();
     let weth_id: Address = Address::from_str("0xd0A1E359811322d97991E03f863a0C30C2cF029C").unwrap();
+    let uni_id: Address = Address::from_str("0x1f9840a85d5af5bf1d1762f925bdaddc4201f984").unwrap();
+    let uni2_id: Address = Address::from_str("0x075a36ba8846c6b6f53644fdd3bf17e5151789dc").unwrap();
+    let aave_id: Address = Address::from_str("0xB597cd8D3217ea6477232F9217fa70837ff667Af").unwrap();
 
+    let aave_weth_pair: Address =
+        Address::from_str("0xcc997c4593723e69df02e6ffc8937519e3d98200").unwrap();
+    let aave_link_pair: Address =
+        Address::from_str("0x144eC5ABF328f8d477Cd6238bAE5aa027bDDfD1E").unwrap();
     let dai_usdc_pair: Address =
         Address::from_str("0x5769e99b0c5dc4f8a1657d9f7c4ef7e7b015583d").unwrap();
     let usdc_weth_pair: Address =
@@ -1127,15 +1037,149 @@ pub async fn test_calculate() {
         Address::from_str("0xB10cf58E08b94480fCb81d341A63295eBb2062C2").unwrap();
     let link_usdc_pair: Address =
         Address::from_str("0xeb18CF20528a94882c08661D5Ee0bb8A93aC4143").unwrap();
+    let dai_link_pair: Address =
+        Address::from_str("0x459125c711a250084a986b9fc698159865f1805e").unwrap();
     let link_weth_pair: Address =
         Address::from_str("0x5ae45101eB47752Ea0068F432735cF00F6C849bD").unwrap();
+    
+    let dai_uni_pair: Address =
+        Address::from_str("0xFA73472326E0e0128E2CA6CeB1964fd77F4AE78d").unwrap();
 
-    let a1 = U256::from(33855945375163989564_u128);
-    let b1 = U256::from(1819454765041_u128);
-    let a2 = U256::from(3747966330136191_u128);
-    let b2 = U256::from(761741414892174639_u128);
-    let a3 = U256::from(1654220086545182421_u128);
-    let b3 = U256::from(10397578570167698679693_u128);
+    let dai_uni2_pair: Address =
+        Address::from_str("0x2D97c3049E6CB27eFf4d40AC0e430Ceca1080129").unwrap();
+
+
+    let uni_weth_pair: Address =
+        Address::from_str("0x5C58BB94b633Fdb7f03bD84781c9d8dBE3F44d37").unwrap();
+    let uni2_usdc_pair: Address =
+        Address::from_str("0x175E6841D63c1a2A23d6d3e79ea93F33a212828D").unwrap();
+
+    let a1 = U256::from(400000000000000000000_u128);
+    let b1 = U256::from(100000000_u128);
+    let a2 = U256::from(1819454765041_u128);
+    let b2 = U256::from(33855945375163989564_u128);
+    let a3 = U256::from(100000000000000000000_u128);
+    let b3 = U256::from(10000000000000000000_u128);
+
+    /*
+      // Kovan - Block: 32964211
+
+       Pair: 0x175E6841D63c1a2A23d6d3e79ea93F33a212828D
+          uni: 0x075a36ba8846c6b6f53644fdd3bf17e5151789dc 
+          usdc: 0xb7a4F3E9097C08dA09517b5aB877F7a917224ede
+        _reserve0   uint112 :  400000000000000000000
+        _reserve1   uint112 :  100000000
+
+   Pair: 0x5769e99b0c5dc4f8a1657d9f7c4ef7e7b015583d-
+          dai - 0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa
+          usdc - 0xb7a4F3E9097C08dA09517b5aB877F7a917224ede
+          _reserve0   uint112 :  33855945375163989564 (dai)
+          _reserve1   uint112 :  1819454765041  (usdc)
+
+       Pair: 0x2D97c3049E6CB27eFf4d40AC0e430Ceca1080129
+          uni:0x075a36ba8846c6b6f53644fdd3bf17e5151789dc 
+          dai:0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa 
+        _reserve0   uint112 :  10000000000000000000
+        _reserve1   uint112 :  100000000000000000000
+
+          
+   Pair: 0xFA73472326E0e0128E2CA6CeB1964fd77F4AE78d
+          uni:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984 
+          dai:0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa 
+            _reserve0   uint112 :  11875934361112000990
+            _reserve1   uint112 :  49991513488463610192891
+
+    Pair: 0x24710bfdc5ff47d461094c0d48fc63d275e26203d274e15532811a03d5e96a44
+        usdt:0x13512979ade267ab5100878e2e0f485b568328a4
+        usdc:0xb7a4f3e9097c08da09517b5ab877f7a917224ede
+        _reserve0   uint112 :  591641604068
+        _reserve1   uint112 :  17063746290902230
+    ----
+
+
+      ----
+      Pair: 0x5769e99b0c5dc4f8a1657d9f7c4ef7e7b015583d-
+          dai - 0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa
+          usdc - 0xb7a4F3E9097C08dA09517b5aB877F7a917224ede
+          _reserve0   uint112 :  33855945375163989564 (dai)
+          _reserve1   uint112 :  1819454765041  (usdc)
+      -----
+
+      Pair: 0x44892ab8F7aFfB7e1AdA4Fb956CCE2a2f3049619-
+          usdc - 0xb7a4F3E9097C08dA09517b5aB877F7a917224ede
+          weth - 0xd0A1E359811322d97991E03f863a0C30C2cF029C
+          _reserve0   uint112 :  3747966330136191( (usdc)
+          _reserve1   uint112 :  76174141489217463  (weth)
+
+      ----
+      Pair: 0xB10cf58E08b94480fCb81d341A63295eBb2062C2
+          dai - 0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa
+          weth - 0xd0a1e359811322d97991e03f863a0c30c2cf029c
+          _reserve0   uint112 :  2542694953010569227021456 (dai)
+          _reserve1   uint112 :  134572952094767475984 (weth)
+
+      ----
+
+      Pair:0x771fbe887e04536B0a39dFa86ACdbDf1b0bD8BF6
+          uni: 0x075a36ba8846c6b6f53644fdd3bf17e5151789dc
+          link: 0xa36085f69e2889c224210f603d836748e7dc0088
+          _reserve0   uint112 :  25000000000000000000
+          _reserve1   uint112 :  30402500000000000000
+
+      ------
+
+      Pair: 0x144eC5ABF328f8d477Cd6238bAE5aa027bDDfD1E
+          link: 0xa36085f69e2889c224210f603d836748e7dc0088
+          aave: 0xB597cd8D3217ea6477232F9217fa70837ff667Af
+          _reserve0   uint112 :  4000000000000000000
+          _reserve1   uint112 :  308000000000000000
+      ----
+
+      Pair: 0x459125c711a250084a986b9fc698159865f1805e
+          dai:0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa
+          link:0xa36085f69e2889c224210f603d836748e7dc0088
+          _reserve0   uint112 :  4552453415191126545061
+          _reserve1   uint112 :  2308607454100309268919
+      ----
+      Pair: 0x5ae45101eB47752Ea0068F432735cF00F6C849bD
+          link:0xa36085f69e2889c224210f603d836748e7dc0088
+          weth:0xd0A1E359811322d97991E03f863a0C30C2cF029C
+          _reserve0   uint112 :  10397578570167698679693
+          _reserve1   uint112 :  1654220086545182421
+      ----
+      Pair: 0x4341737DE0Cf2746088418Fc2c50F433a38b3d54
+          link:0xa36085f69e2889c224210f603d836748e7dc0088
+          wbtc: 0xD1B98B6607330172f1D991521145A22BCe793277
+          _reserve0   uint112 :  6000000000000000000
+          _reserve1   uint112 :  178260
+      ----
+      Pair: 0xcc997c4593723e69df02e6ffc8937519e3d98200
+          aave: 0xB597cd8D3217ea6477232F9217fa70837ff667Af
+          weth: 0xd0A1E359811322d97991E03f863a0C30C2cF029C
+          _reserve0   uint112 :  409100012097810849
+          _reserve1   uint112 :  81560236
+      ----
+      Pair: 0x5C58BB94b633Fdb7f03bD84781c9d8dBE3F44d37
+          uni: 0x075a36ba8846c6b6f53644fdd3bf17e5151789dc
+          weth:  0xd0A1E359811322d97991E03f863a0C30C2cF029C
+          _reserve0   uint112 :  3431921438720603120554
+          _reserve1   uint112 :  1121766166233
+      -----
+
+      Pair: 0xeb18CF20528a94882c08661D5Ee0bb8A93aC4143
+          link:0xa36085f69e2889c224210f603d836748e7dc0088
+          usdc:0xb7a4F3E9097C08dA09517b5aB877F7a917224ede
+          _reserve0   uint112 :  1000000000000000000
+          _reserve1   uint112 :  6940000
+
+    -----
+      Pair: 0xFA73472326E0e0128E2CA6CeB1964fd77F4AE78d
+          uni:0x1f9840a85d5af5bf1d1762f925bdaddc4201f984 
+          dai:0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa 
+            _reserve0   uint112 :  11875934361112000990
+            _reserve1   uint112 :  49991513488463610192891
+      ------
+      */
 
     let d_a = U256::from(20313007541202807157969_u128);
     let d_b = U256::from(6939657_u128);
@@ -1173,7 +1217,7 @@ pub async fn test_calculate() {
 
         let delta_a_amt_out = SequenceToken::get_amount_out(delta_a, a1, b1);
         let delta_a_amt_in = SequenceToken::get_amount_in(delta_a_amt_out.unwrap(), a1, b1);
-        
+
         let delta_b_amt_out = SequenceToken::get_amount_out(delta_a_amt_out.unwrap(), a2, b2);
         let delta_b_amt_in = SequenceToken::get_amount_in(delta_b_amt_out.unwrap(), a2, b2);
 
@@ -1233,8 +1277,16 @@ pub async fn test_calculate() {
             */
 
         //  println!("d_a: {} delta_a_amt_out: {} delta_a_amt_out_dec: {} delta_a_amt_in: {} delta_a_amt_in_dec: {} \nd_b: {} delta_b_amt_out: {} delta_b_amt_out_dec: {} delta_b_amt_in: {} delta_b_amt_in_dec: {} \nd_c: {} delta_c_amt_out: {} delta_c_amt_out_dec: {} delta_c_amt_in: {} delta_c_amt_in_dec: {}", d_a, delta_a_amt_out.unwrap(), delta_a_amt_out_dec, delta_a_amt_in.unwrap(), delta_a_amt_in_dec, d_b, delta_b_amt_out.unwrap(), delta_b_amt_out_dec, delta_b_amt_in.unwrap(), delta_b_amt_in_dec,d_c, delta_c_amt_in.unwrap(), delta_c_amt_out_dec, delta_c_amt_in.unwrap(), delta_c_amt_in_dec);
-        let d_a_prime_minus_a = if d_a > d_a_prime { U256::zero() } else { d_a_prime-d_a}; 
-        let delta_c_minus_a= if delta_a > delta_c_amt_out.unwrap() { U256::zero() } else { delta_c_amt_out.unwrap()-delta_a}; 
+        let d_a_prime_minus_a = if d_a > d_a_prime {
+            U256::zero()
+        } else {
+            d_a_prime - d_a
+        };
+        let delta_c_minus_a = if delta_a > delta_c_amt_out.unwrap() {
+            U256::zero()
+        } else {
+            delta_c_amt_out.unwrap() - delta_a
+        };
         println!(
                     "delta_a: {}\t delta_b: {}\t delta_c: {}\t\t delta_a_prime: {}\t profit: {}\ndelta_a: {}\t delta_b: {}\t delta_c: {}\t\tdelta_a_prime: {}\t profit: {}\ndelta_a: {}\t delta_b: {}\t delta_c: {}\t\t delta_a_prime: {}\t profit: {}\n",
                     delta_a, delta_b, delta_c, delta_a_prime, profit,d_a,d_b,d_c,d_a_prime, d_a_prime_minus_a,delta_a, delta_a_amt_out.unwrap(),delta_b_amt_out.unwrap(), delta_c_amt_out.unwrap(), delta_c_minus_a);
@@ -1249,34 +1301,38 @@ pub async fn test_calculate() {
         );
 
         let trade1 = SwapRoute::new(
-            (dai_id, usdc_id),
+            (uni2_id, usdc_id),
             delta_a,
-            delta_a_amt_out.unwrap(),
+            delta_b,
             *kovan::router_v2,
-            dai_usdc_pair
+            uni2_usdc_pair
         );
- 
+
         let trade2 = SwapRoute::new(
-            (usdc_id, weth_id),
-            delta_a_amt_out.unwrap(),
-            delta_b_amt_out.unwrap(),
+            (usdc_id, dai_id),
+            delta_b,
+            delta_c,
             *kovan::router_v2,
-            usdc_weth_pair
+            dai_usdc_pair,
         );
 
         let trade3 = SwapRoute::new(
-            (weth_id, dai_id),
-            delta_b_amt_out.unwrap(),
-            delta_c_amt_out.unwrap(),
+            (dai_id, uni2_id),
+            delta_c,
+            delta_a_prime,
             *kovan::router_v2,
-            dai_weth_pair
+            dai_uni2_pair,
         );
+   
+        let trade_vec = vec![trade1];
 
-        let flash_token = IERC20::new(dai_id, kovan::client.clone());
-        let flash_repayment =
-            flash_token.transfer(link_usdc_pair, delta_a.mul(U256::from(997_i16)));
+        /*
+                let flash_token = IERC20::new(dai_id, kovan::client.clone());
+                let flash_repayment =
+                    flash_token.transfer(dai_link_pair, delta_a.mul(U256::from(997_i16)));
 
-        let trade_vec = vec![trade1,trade2, trade3];
+                flash_repayment];
+        */
         let calls: Vec<
             ethers::prelude::builders::ContractCall<
                 ethers::prelude::SignerMiddleware<
@@ -1285,7 +1341,8 @@ pub async fn test_calculate() {
                 >,
                 bool,
             >,
-        > = vec![flash_repayment];
+        > = Vec::default();
+
         let tx_out = SwapRoute::route_calldata(trade_vec, calls).await.unwrap();
         println!("{:#02x}", tx_out);
         /*

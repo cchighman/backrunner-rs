@@ -66,9 +66,11 @@ pub mod utils {
                 .signer()
                 .sign_transaction(&tx)
                 .await?;
+                /*
             bundle = bundle.push_transaction(
                 tx.rlp_signed(mainnet::flashbots_client.signer().chain_id(), &signature),
             );
+             */
         }
 
         // Simulate it
