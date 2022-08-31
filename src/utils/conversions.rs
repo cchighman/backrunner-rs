@@ -36,6 +36,12 @@ pub fn u256_to_big_rational(input: &U256) -> BigRational {
     BigRational::new(as_bigint, 1.into())
 }
 
+pub fn u256_to_float(input: &U256) -> Option<f64> {
+    let as_bigint = u256_to_big_int(input);
+    let x = BigRational::new(as_bigint, 1.into());
+    big_rational_to_float(&x)
+}
+
 pub fn big_int_to_u256(input: &BigInt) -> Result<U256> {
     if input.is_zero() {
         return Ok(0.into());

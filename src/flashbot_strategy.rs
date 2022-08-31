@@ -51,7 +51,7 @@ pub mod utils {
             .get_block_number()
             .await
             .unwrap();
-        //println!("Block Number: {}", block_number);
+        println!("Block Number: {}", block_number);
 
         let mut bundle = new_bundle_request().await?;
 
@@ -66,11 +66,12 @@ pub mod utils {
                 .signer()
                 .sign_transaction(&tx)
                 .await?;
-                /*
+                
+            tx.set_chain_id(mainnet::flashbots_client.signer().chain_id());
             bundle = bundle.push_transaction(
-                tx.rlp_signed(mainnet::flashbots_client.signer().chain_id(), &signature),
+                tx.rlp_signed(&signature),
             );
-             */
+             
         }
 
         // Simulate it

@@ -1,5 +1,5 @@
 query UniswapPairs {
-    pairs(first:1000, where: {reserveUSD_gt: "1000000", volumeUSD_gt: "50000"}, orderBy: reserveUSD, orderDirection: desc) {
+    pairs(first:1000, where: {reserveUSD_gt: "500000", volumeUSD_gt: "50000"}, orderBy: reserveUSD, orderDirection: desc) {
         id
         reserveUSD
         volumeUSD

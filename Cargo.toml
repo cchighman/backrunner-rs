@@ -31,6 +31,7 @@ serde_json = "1"
 serde_with = "*"
 tracing = "0.1.26"
 url = "*"
+base64 = "*"
 
 [dependencies.async-std]
 version = "1.11.0"
@@ -65,7 +66,7 @@ optional = false
 
 [dependencies.futures-signals]
 version = "*"
-features = ["debug"]
+features = ["debug","serde"]
 optional = false
 default-features = false
 
@@ -92,7 +93,7 @@ optional = false
 [dependencies.serde]
 version = "1.0.136"
 
-features = ["derive", "serialize"]
+features = ["derive"]
 optional = false
 
 [dependencies.tokio]

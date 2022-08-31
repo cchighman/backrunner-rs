@@ -30,26 +30,45 @@ use crate::contracts::bindings::uniswap_v2_pair::UniswapV2Pair;
 pub struct SwapRoute {
     pub pair: (Address, Address),
     pub source_amount: U256,
+    pub source_amount_0: U256,
+    pub source_amount_1: U256,
+    pub transfer_amt: U256,
     pub dest_amount: U256,
     pub router: Address,
     pair_id: H160,
+    pub pair_id_2: H160
 }
 
 impl SwapRoute {
     pub fn new(
         tokens: (Address, Address),
         source: U256,
+        source0: U256,
+        source1: U256,
         dest: U256,
         router: Address,
-        pair_id: Address
+        pair_id: Address,
+        pair_id_2: Address
     ) -> Self {
+        let mut transfer = if source0.eq(&U256::zero()) { source1 } else { source0 };
         Self {
             pair: tokens,
             source_amount: source,
+            source_amount_0: source0,
+            source_amount_1: source1,
+            transfer_amt: transfer,
             dest_amount: dest,
             router,
-            pair_id
+            pair_id,
+            pair_id_2
         }
+    }
+
+    pub async fn swap(&self)->Result<Bytes, anyhow::Error> {
+        let pair_contract = UniswapV2Pair::new(self.pair_id, mainnet::client.clone());
+        let contract_call = pair_contract.swap(self.source_amount_0, self.source_amount_1 , self.pair_id_2, Bytes::default());
+        
+        Ok(contract_call.calldata().unwrap())
     }
 
     pub async fn swap_tokens_for_exact_tokens(&self) -> Result<Bytes, anyhow::Error> {
@@ -63,8 +82,8 @@ impl SwapRoute {
         let payload = router_contract
             .swap_exact_tokens_for_tokens(
                 self.source_amount,
-                U256::zero(),
-                vec![self.pair.0, self.pair.1,Address::from_str("0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa").unwrap(),Address::from_str("0x075a36ba8846c6b6f53644fdd3bf17e5151789dc").unwrap()],
+                self.dest_amount,
+                vec![self.pair.0, self.pair.1],
                 *mainnet::to,
                 mainnet::valid_timestamp(),
             )
@@ -141,7 +160,8 @@ impl SwapRoute {
             (_, _) => self.swap_tokens_for_exact_tokens(),
         }
         */
-        self.swap_tokens_for_exact_tokens().await
+        self.swap().await
+        //self.swap_tokens_for_exact_tokens().await
     }
 
     pub async fn route_calldata(
@@ -162,25 +182,30 @@ impl SwapRoute {
         let mut trade_routers = Vec::<Token>::new();
         let mut sell_tokens = Vec::<Token>::new();
         let mut call_data = Vec::<Token>::new();
+        let mut transfer_amts = Vec::<Token>::new();
 
         /* Build data */
         for trade in swap_routes {
-            trade_routers.push(Token::Address(trade.router));
+            trade_routers.push(Token::Address(trade.pair_id));
             sell_tokens.push(Token::Address(trade.pair.0));
             sell_tokens.push(Token::Address(trade.pair.1));
             call_data.push(Token::Bytes(trade.calldata().await?.to_vec()));
+            transfer_amts.push(Token::Uint(trade.transfer_amt));
+            
+          
         }
 
         for call in calls {
             call_data.push(Token::Bytes(call.calldata().unwrap().to_vec()));
         }
-
+        dbg!(&transfer_amts);
         /* abi encode data */
         let tokens = vec![
             miner_tip,
             Token::Array(trade_routers),
             Token::Array(sell_tokens),
             Token::Array(call_data),
+            Token::Array(transfer_amts),
         ];
         Ok(Bytes::from(abi::encode(&tokens)))
     }

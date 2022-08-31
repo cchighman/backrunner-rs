@@ -477,7 +477,7 @@ pub fn optimize_a_prime_2(
     let third_eq = eq3 - comp_3;
    // println!("-a- eq1: {} comp1: {} eq2: {} comp2: {} eq3: {} comp3: {}", eq1,comp_1,eq2,comp_2,eq3,comp_3);
 
-    if delta_a.gt(a1) || delta_b.gt(b1) || delta_c.gt(b2) || delta_a_prime.gt(b3) {
+    if delta_a.gt(a1) || delta_b.gt(a2) || delta_c.gt(a3) {
  
         return None;
     }

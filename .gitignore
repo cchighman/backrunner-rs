@@ -1,1 +1,4 @@
 /target
+*.so
+target
+node_modules

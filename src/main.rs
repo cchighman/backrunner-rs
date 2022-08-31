@@ -59,7 +59,15 @@ pub mod uniswap_providers;
 pub mod uniswap_transaction;
 pub mod uniswapv2_pairs;
 pub mod uniswapv3_pools;
+pub mod cfmmrouter;
 pub mod utils;
+use std::os::raw::c_char;
+
+extern "C" {
+    pub fn init_julia(argc: i32, argv: *const *const c_char);
+    pub fn shutdown_julia(retcode: i32);
+}
+
 
 /*
    Grafana API Key: eyJrIjoiVjY3bzNoWTFnTTNyTUpCVXRoUUJxcXZPTXJGbE1nVmUiLCJuIjoiYmFja3J1bm5lciIsImlkIjoxfQ==
@@ -102,6 +110,11 @@ pub mod utils;
 */
 #[async_std::main]
 async fn main() -> Result<(), Report> {
+    unsafe {
+        init_julia(0, &vec![].as_ptr());
+    }
+
+
     let args: Vec<String> = env::args().collect();
     color_eyre::install()?;
 
@@ -122,6 +135,10 @@ async fn main() -> Result<(), Report> {
     populate_uniswapv2_pairs(&mut crypto_pairs_unsafe).await;
     // populate_uniswapv3_pools(&mut crypto_pairs);
     populate_sushiswap_pairs(&mut crypto_pairs_unsafe).await;
+
+    //populate non-graphql pairs
+    
+
 
     if args.contains(&"generate".to_string()) {
         println!("Generating...");
