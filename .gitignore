@@ -2,3 +2,4 @@
 *.so
 target
 node_modules
+cfmmrouter-0.1.0

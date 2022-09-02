@@ -32,6 +32,7 @@ serde_with = "*"
 tracing = "0.1.26"
 url = "*"
 base64 = "*"
+crossbeam = "*"
 
 [dependencies.async-std]
 version = "1.11.0"

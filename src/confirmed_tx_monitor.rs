@@ -156,7 +156,11 @@ pub async fn monitor_tx(pair_map: &mut HashMap<Address, Arc<CryptoPair>>) {
 
         //println!("Current Block: {} Target Block: {}, Event: {} Address: {} Status: {} Tx Hash: {:#?} Params: {:#?}",current_block, block_number, &method, &address, &status,  tx_hash.clone().unwrap(), decoded_event);
 
-        let pair = pair_map.get_mut(&log.address).unwrap();
+        let pair_pre = pair_map.get_mut(&log.address);
+        if pair_pre.is_none() {
+            continue;
+        }
+        let pair = pair_pre.unwrap();
         if method.eq("Sync") {
             for param in decoded_event.params.iter() {
                 let log_param: ethabi::LogParam = (*param).clone();

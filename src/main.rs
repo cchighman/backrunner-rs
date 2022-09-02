@@ -62,6 +62,7 @@ pub mod uniswapv3_pools;
 pub mod cfmmrouter;
 pub mod utils;
 use std::os::raw::c_char;
+use std::thread;
 
 extern "C" {
     pub fn init_julia(argc: i32, argv: *const *const c_char);
@@ -110,10 +111,8 @@ extern "C" {
 */
 #[async_std::main]
 async fn main() -> Result<(), Report> {
-    unsafe {
-        init_julia(0, &vec![].as_ptr());
-    }
 
+    thread::spawn(||{cfmmrouter::init();});
 
     let args: Vec<String> = env::args().collect();
     color_eyre::install()?;

@@ -40,10 +40,8 @@ Base.@ccallable function route(payload::Base.Cstring)::Base.Cstring
     try
         data = unsafe_string(payload)
         decoded = base64decode(data);
-        if !isempty(data)
-            print("[777] -  payload(2): $(payload)\n\ndata: $(data)\n\nDecoded: $(decoded)\n\n")
-
-            result = route_impl(decoded)
+        if !isempty(data)  
+            result = route_impl_2(decoded)
             result_ptr = pointer(result)
             result_c_str = Base.cconvert(Base.Cstring, result_ptr);
             return result_c_str
@@ -55,14 +53,14 @@ Base.@ccallable function route(payload::Base.Cstring)::Base.Cstring
     return Base.Cstring("1")
 end
 
-function route_impl(data::Vector{UInt8})::String
+function route_impl_2(data::Vector{UInt8})::String
 
     routes = Vector{Vector{Float64}}([])
     routes = JSON.parse(String(data), dicttype=Dict, inttype=BigInt)
-
     cfmms = Vector{ProductTwoCoin{Float64}}([])
 
-    Δin = Vector{Float64}([])
+    #Δin = Vector{Float64}([])
+    Δin = [0, 0, 0]
     for cfmm in routes
 
         reverse!(cfmm)
@@ -76,7 +74,7 @@ function route_impl(data::Vector{UInt8})::String
         for i = 1:7
             if i == 1
                 # Amt In
-                push!(parse(Float64, cfmm[i]), Δin)
+               # push!(parse(Float64, cfmm[i]), Δin)
             end
             if i == 2
                 # Src Coin
@@ -88,7 +86,7 @@ function route_impl(data::Vector{UInt8})::String
             end
             if i == 4
                 # Fee
-                fee = parse(Float64,cfmm[i])
+                fee = 0.997
             end
             if i == 5
                 # reserve1
@@ -111,7 +109,7 @@ function route_impl(data::Vector{UInt8})::String
                     push!(cfmms, GeometricMeanTwoCoin([reserve1, reserve2], fee, [src_coin, dest_coin]))
                 end
                 if type == 3
-                    push!(cfmms, Univ3TwoCoin([reserve1, reserve2], fee, [src_coin, dest_coin]))
+                    push!(cfmms, UniV3([reserve1, reserve2], fee, [src_coin, dest_coin]))
                 end
             end
         end
@@ -130,48 +128,51 @@ function route_impl(data::Vector{UInt8})::String
 
     ## Print results
     Ψ = round.(BigInt, netflows(router))
-    println("Input Basket: $(round.(BigInt, Δin))")
-    println("Net trade: $Ψ")
-    println("Amount received: $(Ψ[1])")
 
     #=
-    We can also see the list of individual trades with each CFMM:
+    We can also see the list of individual trades with each CFMM: 
     =#
     ## Print individual trades
     optimal_routes = Dict()
-    for (i, (Δ, Λ)) in enumerate(zip(router.Δs, router.Λs))
-        tokens = router.cfmms[i].Ai
-        println("CFMM $i:")
-        println("\tTendered basket:")
-        cfmm_basket = Dict()
-        cfmm_tendered = Dict()
-        for (ind, δ) in enumerate(Δ)
-            if δ > eps()
-                print("\t  $(tokens[ind]): $(round(BigInt, δ)), ")
-                cfmm_tendered[tokens[ind]] = string(round(BigInt, δ))
+    if Ψ[1] > 0 
+        for (i, (Δ, Λ)) in enumerate(zip(router.Δs, router.Λs))
+            tokens = router.cfmms[i].Ai
+            cfmm_basket = Dict()
+            cfmm_tendered = Dict()
+            for (ind, δ) in enumerate(Δ)
+                if δ > eps()
+                    cfmm_tendered[tokens[ind]] = string(round(BigInt, δ))
+                end
             end
+        
+            cfmm_received = Dict()
+            for (ind, λ) in enumerate(Λ)
+                if λ > eps()
+                    cfmm_received[tokens[ind]] = string(round(BigInt, λ))
+                end 
+            end
+            cfmm_basket["tendered"] = cfmm_tendered
+            cfmm_basket["received"] = cfmm_received
+            optimal_routes[i] = cfmm_basket
         end
-        println("\n\tReceived basket:")
-
-        cfmm_received = Dict()
-        for (ind, λ) in enumerate(Λ)
-            if λ > eps()
-                print("\t  $(tokens[ind]): $(round(BigInt, λ)), ")
-                cfmm_received[tokens[ind]] = string(round(BigInt, λ))
-            end 
-        end
-        print("\n")
-        cfmm_basket["tendered"] = cfmm_tendered
-        cfmm_basket["received"] = cfmm_received
-        optimal_routes[i] = cfmm_basket
+        data_dict = Dict()   
+        data_dict["profit"] = Ψ[1]
+        optimal_routes[0] = data_dict  
     end
-    return JSON.json(optimal_routes)
+    
+    if  (haskey(optimal_routes,1) && haskey(optimal_routes[1]["tendered"],1)) || ( haskey(optimal_routes,3) && haskey(optimal_routes[3]["tendered"],1))
+        println("Net trade: $Ψ")
+        println("$(optimal_routes)") 
+        return JSON.json(optimal_routes)
+    else
+        return JSON.json([])
+    end
 end
 
 
 Base.@ccallable function julia_cfmmrouter()::Cint
     try
-        return 10
+        return 11
     catch
         Base.invokelatest(Base.display_error, Base.catch_stack())
         return 1

@@ -50,7 +50,7 @@ impl SwapRoute {
         pair_id: Address,
         pair_id_2: Address
     ) -> Self {
-        let mut transfer = if source0.eq(&U256::zero()) { source1 } else { source0 };
+        let transfer = if source0.eq(&U256::zero()) { source1 } else { source0 };
         Self {
             pair: tokens,
             source_amount: source,

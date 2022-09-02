@@ -7,6 +7,7 @@ use std::ops::Sub;
 use std::str::FromStr;
 use std::sync::Arc;
 use std::vec;
+use std::cmp;
 
 use super::uniswap_providers::*;
 use crate::arb_thread_pool::spawn;
@@ -34,8 +35,8 @@ use itertools::Itertools;
 use num_bigint::BigInt;
 use num_rational::Ratio;
 use std::any::Any;
-use crate::cfmmrouter::optimal_route;
-
+use crate::cfmmrouter::{OptimalRoute,optimal_route};
+use base64::encode;
 
 #[derive(Debug, Clone)]
 pub struct ThreePathSequence {
@@ -392,10 +393,49 @@ impl ThreePathSequence {
         let a3 = &sequence.a3().pending_reserve();
         let b3 = &sequence.b3().pending_reserve();
 
-        let result = optimize_a_prime_2(&a1, &b1, &a2, &b2, &a3, &b3);
+        let opt2 = optimize_a_prime_2(&a1, &b1, &a2, &b2, &a3, &b3);
+       // [0,193031404173640516668,14420532476509322142170146,1,2,1,0]
+        let mut route_vec: Vec<Vec<U256>> = Vec::default();
+        route_vec.push(vec![
+            U256::zero(),
+            *b1,
+            *a1,
+            U256::from(1),
+            U256::from(2),
+            U256::from(1),
+            U256::zero(),
+        ]);
+        route_vec.push(vec![
+            U256::zero(),
+            *b2,
+            *a2,
+            U256::from(1),
+            U256::from(3),
+            U256::from(2),
+            U256::zero(),
+        ]);
+        route_vec.push(vec![
+            U256::zero(),
+            *b3,
+            *a3,
+            U256::from(1),
+            U256::from(1),
+            U256::from(3),
+            U256::zero(),
+        ]);
+        let route_str = serde_json::to_string(&route_vec).unwrap();
+       
+        let result = optimal_route(encode(serde_json::to_string(&route_vec).unwrap()));     
 
-        if result.is_some() {
-            let (delta_a, delta_b, delta_c, delta_a_prime, profit) = result.unwrap();
+        if result.is_ok() && opt2.is_some() {
+            let res_str = result.unwrap();
+            let (delta_a,delta_b,delta_c,delta_a_prime,profit) = opt2.unwrap();
+            let optimal_json:  Result<OptimalRoute, serde_json::Error> = serde_json::from_str(&res_str);
+            let mut optimal : OptimalRoute = OptimalRoute{routes: Default::default()};
+            if optimal_json.is_ok() {
+                optimal = optimal_json.unwrap();
+            }
+            println!("Optimal: {:?}", &res_str);
 
             if profit > U256::zero() {
                 let one = U256::from(1_i8);
@@ -415,7 +455,6 @@ impl ThreePathSequence {
                 
                 if !delta_a_amt_in.is_none() {
                     
-                
                 
                 let delta_b_amt_out = SequenceToken::get_amount_out(delta_a_amt_out.unwrap(), *a2, *b2);
                 let delta_b_amt_in = SequenceToken::get_amount_in(delta_b_amt_out.unwrap(), *a2, *b2);
@@ -477,7 +516,8 @@ impl ThreePathSequence {
                         Trade {} {} for {} {} at Exchange Rate: 1 {}={:.12} {} - Pair: {:#?}
                         \t\tId: {:#x} - {} \t Id: {:#x} - {}
                         \t\tdelta_c: {:.25}\t\t amount_out: {:.25}\t reserves: {}
-                        \t\tdelta_a_prime: {:.25}\t\t amount_in: {:.25}\t reserves: {}\n",
+                        \t\tdelta_a_prime: {:.25}\t\t amount_in: {:.25}\t reserves: {}\n\n
+                        Optimal: {:?}",
                     method,
                     profit,
                     sequence.arb_index(),
@@ -541,10 +581,11 @@ impl ThreePathSequence {
                     &sequence.a3().pending_reserve(),
                     &delta_a_prime,
                     &delta_c_amt_in.unwrap(),
-                    &sequence.b3().pending_reserve()
+                    &sequence.b3().pending_reserve(),
+                    &optimal
                 );
                 // }
-
+                    /*
                 let first_pair =
                     Address::from_str("0x144eC5ABF328f8d477Cd6238bAE5aa027bDDfD1E").unwrap();
 
@@ -605,9 +646,12 @@ impl ThreePathSequence {
                         bundle_result.as_ref().err().unwrap()
                     );
                 }
+                 */
             }
+            
         }
-    }
+         
+        }
     }
 
     pub fn pending_txs(&self) -> Vec<TypedTransaction> {
@@ -716,12 +760,19 @@ impl PathSequence for ThreePathSequence {
              let b2 =  self.b2().pending_signal(),
              let a3 = pending_a3_signal,
              let b3 = pending_b3_signal =>
-             (BigDecimal::from_str(&a1.to_string()).unwrap()
-            / BigDecimal::from_str(&*b1.to_string()).unwrap())
-            * (BigDecimal::from_str(&*a2.to_string()).unwrap()
-                / BigDecimal::from_str(&*b2.to_string()).unwrap())
-            * (BigDecimal::from_str(&*a3.to_string()).unwrap()
-                / BigDecimal::from_str(&*b3.to_string()).unwrap())
+             cmp::max((BigDecimal::from_str(&*a1.to_string()).unwrap()
+             / BigDecimal::from_str(&*b1.to_string()).unwrap())
+             * (BigDecimal::from_str(&*a2.to_string()).unwrap()
+                 / BigDecimal::from_str(&*b2.to_string()).unwrap())
+             * (BigDecimal::from_str(&*a3.to_string()).unwrap()
+                 / BigDecimal::from_str(&*b3.to_string()).unwrap()),
+                 /* Flipped for cfmmmrouter */
+                 (BigDecimal::from_str(&*b1.to_string()).unwrap()
+             / BigDecimal::from_str(&*a1.to_string()).unwrap())
+             * (BigDecimal::from_str(&*b2.to_string()).unwrap()
+                 / BigDecimal::from_str(&*a2.to_string()).unwrap())
+             * (BigDecimal::from_str(&*b3.to_string()).unwrap()
+                 / BigDecimal::from_str(&*a3.to_string()).unwrap()))
         };
 
         let confirmed_update = map_ref! {
@@ -731,12 +782,19 @@ impl PathSequence for ThreePathSequence {
              let b2 =  self.b2().confirmed_signal(),
              let a3 = confirmed_a3_signal,
              let b3 = confirmed_b3_signal =>
-             (BigDecimal::from_str(&*a1.to_string()).unwrap()
+             cmp::max((BigDecimal::from_str(&*a1.to_string()).unwrap()
             / BigDecimal::from_str(&*b1.to_string()).unwrap())
             * (BigDecimal::from_str(&*a2.to_string()).unwrap()
                 / BigDecimal::from_str(&*b2.to_string()).unwrap())
             * (BigDecimal::from_str(&*a3.to_string()).unwrap()
-                / BigDecimal::from_str(&*b3.to_string()).unwrap())
+                / BigDecimal::from_str(&*b3.to_string()).unwrap()),
+                /* Flipped for cfmmmrouter */
+                (BigDecimal::from_str(&*b1.to_string()).unwrap()
+            / BigDecimal::from_str(&*a1.to_string()).unwrap())
+            * (BigDecimal::from_str(&*b2.to_string()).unwrap()
+                / BigDecimal::from_str(&*a2.to_string()).unwrap())
+            * (BigDecimal::from_str(&*b3.to_string()).unwrap()
+                / BigDecimal::from_str(&*a3.to_string()).unwrap()))
         };
 
         let pending_future = pending_update.for_each(move |v| {

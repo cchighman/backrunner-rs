@@ -103,7 +103,7 @@ function route!(r::R; v=nothing, verbose=false, m=5) where {R<:Router}
     end
 
     find_arb!(r, r.v)
-    _, v = optimizer(fn, g!, r.v, bounds, m=m, factr=1e1, pgtol=1e-5, iprint=verbose ? 1 : -1, maxfun=15000, maxiter=15000)
+    _, v = optimizer(fn, g!, r.v, bounds, m=m, factr=1e1, pgtol=1e-5, iprint=-1, maxfun=15000, maxiter=15000)
     r.v .= v
     find_arb!(r, v)
 end
@@ -127,7 +127,7 @@ end
 
 function update_reserves!(r::Router)
     for (Δ, Λ, c) in zip(r.Δs, r.Λs, r.cfmms)
-        c.R .+= Δ - Λ
+        update_reserves!(c, Δ,Λ,r.v[c.Ai])C
     end
 
     return nothing
